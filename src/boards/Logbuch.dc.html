@@ -89,7 +89,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
     <div style="display: flex; align-items: center; gap: 14px">
       <img src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 96px; width: auto; display: block">
       <svg width="56" height="56" viewBox="0 0 48 48" role="img" aria-label="Wochenziel geschafft: 4 von 4 Tagen"><circle cx="24" cy="24" r="19" fill="none" stroke="#0C7C74" stroke-width="7"></circle><path d="M16 24.5l5.5 5.5L32 19" fill="none" stroke="#0C7C74" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      <p style="margin: 0; font-size: 20px; line-height: 1.35"><strong>Wochenziel geschafft!</strong> Für heute bist du fertig – bis morgen, Elli!</p>
+      <p style="margin: 0; font-size: 20px; line-height: 1.35"><strong>Wochenziel geschafft!</strong> Für heute bist du fertig – bis morgen, {{ name }}!</p>
     </div>
     <a class="btn btn-teal" href="Main.dc.html" style="height: 84px; padding: 0 40px; border-radius: 26px; font-size: 28px">Zurück zur Karte</a>
   </footer>
@@ -105,6 +105,7 @@ class Component extends DCLogic {
     const p = this.state.picked;
     const msg = ['', 'Danke! Morgen gibt es ein paar neue Wörter mehr.', 'Super, dann bleibt es so.', 'Danke! Morgen gibt es mehr Hilfen und weniger neue Wörter.'];
     return {
+      name: window.WSI.name() || 'du',
       c1: p === 1 ? 'btn-picked' : 'btn-soft',
       c2: p === 2 ? 'btn-picked' : 'btn-soft',
       c3: p === 3 ? 'btn-picked' : 'btn-soft',

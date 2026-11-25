@@ -43,6 +43,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
 @media (prefers-reduced-motion: reduce){.pop{animation:none}}
 </style>
 <script>window.__GAPS=[{"cls":"btn","gap":10,"display":"flex"}];</script>
+<script src="wsi.js"></script>
 </head>
 <body>
 <div id="wrap"><div id="stage"></div></div>
@@ -61,7 +62,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
         <div style="display: flex; flex-direction: column; flex: 1">
           <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.1">Meine Lernwoche</h1>
           <p style="margin: 0; font-size: 18px; color: #3E5A6E">{{ weekSub }}</p>
-          <div style="display: flex; align-items: center; gap: 10px; margin-top: 6px"><div style="width: 260px; height: 12px; border-radius: 6px; background: #fff; border: 2px solid #C9DDE4; box-sizing: border-box; overflow: hidden"><div style="height: 100%; width: {{ packPct }}; background: #0C7C74"></div></div><span style="font-size: 14px; font-weight: 800; color: #5C7A2E">{{ packLabel }}</span></div>
+          <sc-if value="{{ hasWords }}" hint-placeholder-val="{{ true }}"><div style="display: flex; align-items: center; gap: 10px; margin-top: 6px"><div style="width: 260px; height: 12px; border-radius: 6px; background: #fff; border: 2px solid #C9DDE4; box-sizing: border-box; overflow: hidden"><div style="height: 100%; width: {{ packPct }}; background: #0C7C74"></div></div><span style="font-size: 14px; font-weight: 800; color: #5C7A2E">{{ packLabel }}</span></div></sc-if>
         </div>
         <sc-if value="{{ chestReady }}" hint-placeholder-val="{{ false }}">
           <button class="btn btn-sun pop" type="button" onClick="{{ toTruhe }}" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px">
@@ -79,10 +80,10 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
             </span>
           </div>
         </sc-if>
-        <button class="btn btn-soft" type="button" onClick="{{ toGate }}" aria-label="Für Eltern: Lernwörter eintragen" style="height: 60px; padding: 0 16px; border-radius: 20px; font-size: 16px">
+        <a class="btn btn-soft" href="Eltern.html" aria-label="Für Eltern: Lernwörter eintragen" style="height: 60px; padding: 0 16px; border-radius: 20px; font-size: 16px">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
           Eltern
-        </button>
+        </a>
       </header>
 
       <section aria-label="Lernwörter der Woche" style="background: #fff; border-radius: 26px; padding: 16px 22px; box-shadow: 0 5px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px">
@@ -90,6 +91,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
           <h2 style="margin: 0; font-size: 16px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #5C7A2E">Lernwörter dieser Woche</h2>
           <span style="display: flex; align-items: center; gap: 10px"><span style="font-size: 15px; font-weight: 800; color: #8A4B08; background: #FFF4D6; border-radius: 999px; padding: 4px 12px">⭐ {{ stars }} · {{ rank }}</span><button class="btn btn-soft" type="button" onClick="{{ toRegal }}" style="height: 36px; padding: 0 14px; border-radius: 999px; font-size: 15px">📚 Lernregal · {{ packCount }}</button><sc-if value="{{ hasShelf }}" hint-placeholder-val="{{ false }}"><span aria-label="Gesammelte Schätze" style="font-size: 22px">{{ shelf }}</span></sc-if><sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; font-weight: 800; color: #0C7C74; background: #E6F5F2; border-radius: 999px; padding: 4px 12px">{{ note }}</span></sc-if></span>
         </div>
+        <sc-if value="{{ noWords }}" hint-placeholder-val="{{ false }}"><p style="margin: 0; font-size: 17px; color: #3E5A6E">Noch keine Lernwörter. Eltern: Im Eltern-Bereich unter „Lernwochen“ eintragen – oder die Lernwoche aus der App wählen.</p></sc-if>
         <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
           <sc-for list="{{ chips }}" as="c" hint-placeholder-count="10">
             <li style="font-family: 'Andika', system-ui, sans-serif; font-size: {{ c.size }}; background: #F2F6E9; border-radius: 14px; padding: 4px 14px">{{ c.w }}</li>
@@ -226,7 +228,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
           <textarea id="edtext" spellcheck="false" autocapitalize="off" value="{{ edText }}" onChange="{{ onEdText }}" placeholder="die Angst&#10;streiten&#10;plötzlich&#10;der Urlaub, die Urlaube" style="height: 200px; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 14px; padding: 10px 12px; font-family: 'Andika', system-ui, sans-serif; font-size: 19px; line-height: 1.4; color: #10304A; resize: none"></textarea>
           <button class="btn btn-sun" type="button" onClick="{{ analyze }}" disabled="{{ edTextEmpty }}" style="height: 52px; border-radius: 16px; font-size: 18px">Wörter übernehmen →</button>
           <label for="edsent" style="font-size: 15px; font-weight: 800; margin-top: 4px">Sätze für „Groß oder klein?“ <span style="font-weight: 600; color: #3E5A6E">(optional)</span></label>
-          <textarea id="edsent" spellcheck="false" value="{{ edSent }}" onChange="{{ onEdSent }}" placeholder="Ein Satz pro Zeile. Leer lassen: Dann übt Elli mit ihren eigenen Sätzen aus der Satz-Werkstatt." style="flex: 1; min-height: 80px; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 14px; padding: 10px 12px; font-family: 'Andika', system-ui, sans-serif; font-size: 17px; line-height: 1.4; color: #10304A; resize: none"></textarea>
+          <textarea id="edsent" spellcheck="false" value="{{ edSent }}" onChange="{{ onEdSent }}" placeholder="Ein Satz pro Zeile. Leer lassen: Dann übt das Kind mit eigenen Sätzen aus der Satz-Werkstatt." style="flex: 1; min-height: 80px; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 14px; padding: 10px 12px; font-family: 'Andika', system-ui, sans-serif; font-size: 17px; line-height: 1.4; color: #10304A; resize: none"></textarea>
         </section>
 
         <section style="background: #fff; border-radius: 24px; padding: 18px 22px; box-shadow: 0 4px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px; min-height: 0">

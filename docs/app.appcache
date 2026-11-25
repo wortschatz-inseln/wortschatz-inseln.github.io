@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version c872626a7a3cd3f318b1a1ee3f4a9b66
+# version 6f5c464b46cced3f4b42ecf5d8b23179
 CACHE:
 index.html
 EchoHoehle.html
@@ -10,6 +10,7 @@ Lernwoche.html
 Logbuch.html
 Main.html
 Sammelbuch.html
+Start.html
 Vokabeltrainer.html
 app.css
 app.js
@@ -23,6 +24,7 @@ assets/truhe.png
 assets/truhe_offen.png
 assets/woerter.json
 boot.js
+data/lernwoche.json
 fonts/andika-latin-400-normal.woff2
 fonts/andika-latin-700-normal.woff2
 fonts/fredoka-latin-500-normal.woff2
@@ -40,6 +42,8 @@ js/Lernwoche.js
 js/Logbuch.js
 js/Main.js
 js/Sammelbuch.js
+js/Start.js
 js/Vokabeltrainer.js
+wsi.js
 NETWORK:
 *

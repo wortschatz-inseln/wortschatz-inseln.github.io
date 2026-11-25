@@ -79,13 +79,38 @@ window.__Component = class Component extends DCLogic {
     this.state = { screen: "hub", i: 0, phase: "ask", input: "", attempt: "", cuts: [], caps: [], picked: [], wrongPick: "", done: [], msg: "", wasWrong: false, results: null, showIdea: false, self1: false, self2: false, written: [], round: 1, missed: [], tries: 0, dictReady: false, rep: 1, errs: [], stufe: 1, pool: [], repRefs: [], lastReward: null, truheOpen: false, done: this.store.progress.done.slice(), gateAns: "", gateWrong: false, edFrom: "", edTo: "", edText: "", edSent: "", rows: [], edMsg: "", edOk: true, hubMsg: "" };
     try {
       if (window.location.hash === "#eintragen") {
-        this.state.screen = "edit";
-        this.state.wantEditor = true;
+        if (window.WSI && window.WSI.isUnlocked() && window.WSI.dev().mode === "own") {
+          this.state.screen = "edit";
+          this.state.wantEditor = true;
+        } else window.location.replace("Eltern.html");
       }
     } catch (e) {
     }
   }
+  syncApp() {
+    if (!window.WSI || window.WSI.dev().mode !== "app") return;
+    fetch("data/lernwoche.json").then((r) => r.json()).then((d) => {
+      const wk = d && d.week;
+      if (!wk || !wk.id) return;
+      const st = this.store, today = this.iso(/* @__PURE__ */ new Date());
+      if (st.current.id === wk.id || st.next && st.next.id === wk.id || (st.shelf || []).some((b) => b.week.id === wk.id)) return;
+      if (wk.from > today) {
+        st.next = wk;
+        this.persist();
+        this.setState({});
+        return;
+      }
+      this.archiveCurrent();
+      st.current = wk;
+      st.progress = { id: wk.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
+      this.persist();
+      this.applyWeek();
+      this.setState(Object.assign({ hubMsg: "Neue Lernwoche aus der App." }, this.reset()));
+    }).catch(() => {
+    });
+  }
   componentDidMount() {
+    this.syncApp();
     try {
       fetch("assets/woerter.json").then((r) => r.json()).then((arr) => {
         this.dict = new Set(arr);
@@ -222,16 +247,16 @@ window.__Component = class Component extends DCLogic {
   loadStore() {
     let st = null;
     try {
-      const raw = window.localStorage.getItem("wsi.lernwoche.v1");
+      const raw = window.WSILS.getItem("wsi.lernwoche.v1");
       if (raw) st = JSON.parse(raw);
     } catch (e) {
       st = null;
     }
-    if (!st || !st.current || !st.current.words || !st.current.words.length) st = { current: this.defaultWeek, next: null, progress: null };
+    if (!st || !st.current || !st.current.words) st = { current: this.emptyWeek(), next: null, progress: null };
     const today = this.iso(/* @__PURE__ */ new Date());
     if (st.next && st.next.from <= today) {
       st.shelf = st.shelf || [];
-      if (st.progress && st.current && st.progress.id === st.current.id) st.shelf.push({ week: st.current, progress: st.progress });
+      if (st.progress && st.current && st.current.words.length && st.progress.id === st.current.id) st.shelf.push({ week: st.current, progress: st.progress });
       st.current = st.next;
       st.next = null;
       st.progress = null;
@@ -247,8 +272,13 @@ window.__Component = class Component extends DCLogic {
     this.store = st;
     this.persist();
   }
+  emptyWeek() {
+    const t = this.iso(/* @__PURE__ */ new Date());
+    return { id: "leer", from: t, to: t, words: [], sentences: [], empty: true };
+  }
   archiveCurrent() {
     const st = this.store;
+    if (!st.current.words || !st.current.words.length) return;
     st.shelf = (st.shelf || []).filter((b) => b.week.id !== st.current.id);
     st.shelf.push({ week: st.current, progress: st.progress });
     if (st.shelf.length > 40) st.shelf = st.shelf.slice(-40);
@@ -280,7 +310,7 @@ window.__Component = class Component extends DCLogic {
   }
   persist() {
     try {
-      window.localStorage.setItem("wsi.lernwoche.v1", JSON.stringify(this.store));
+      window.WSILS.setItem("wsi.lernwoche.v1", JSON.stringify(this.store));
     } catch (e) {
     }
   }
@@ -948,7 +978,7 @@ window.__Component = class Component extends DCLogic {
     const n = this.words.length;
     const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems("silben").length, plural: this.baseItems("plural").length, gross: this.grossList().length, abc: this.baseItems("abc").length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length };
     const metaOf = { satz: "3 Runden \xB7 " + n + " W\xF6rter", diktat: "Rechtschreibung \xB7 " + n + " W\xF6rter", silben: "Silbenb\xF6gen \xB7 " + cnt.silben + " W\xF6rter", plural: "Einzahl / Mehrzahl \xB7 " + cnt.plural + " W\xF6rter", wortart: "Wortarten \xB7 " + n + " W\xF6rter", gross: cnt.gross ? "Gro\xDFschreibung \xB7 " + cnt.gross + " S\xE4tze" : "Erst S\xE4tze in der Satz-Werkstatt schreiben", abc: "Nachschlagen \xB7 " + cnt.abc + " Runden", zeichen: "Satzarten \xB7 " + cnt.zeichen + " S\xE4tze", gefuehl: "Nomen f\xFCr Gef\xFChle \xB7 " + cnt.gefuehl + " S\xE4tze", zerleg: "W\xF6rterbuch \xB7 " + cnt.zerleg + " W\xF6rter" };
-    const shown = keys.filter((k) => cnt[k] > 0 || k === "gross");
+    const shown = keys.filter((k) => cnt[k] > 0 || k === "gross" && n > 0);
     const base = {
       isHub: s.screen === "hub",
       isRegal: s.screen === "regal",
@@ -977,7 +1007,9 @@ window.__Component = class Component extends DCLogic {
       toTruhe: () => this.setState({ screen: "truhe", truheOpen: false }),
       doneCount: 0,
       totalCount: shown.length + 1,
-      weekSub: "Lernw\xF6rter vom " + this.dateLabel(cur.from, cur.to) + " \u2013 starte mit der Satz-Werkstatt!",
+      weekSub: this.words.length ? "Lernw\xF6rter vom " + this.dateLabel(cur.from, cur.to) + " \u2013 starte mit der Satz-Werkstatt!" : "Hier warten die \xDCbungen \u2013 die Lernw\xF6rter tragen die Eltern ein.",
+      noWords: this.words.length === 0,
+      hasWords: this.words.length > 0,
       hasNote: !!(s.hubMsg || nx),
       note: s.hubMsg || (nx ? "Ab " + this.dateLabel(nx.from, nx.to) + " warten " + nx.words.length + " neue W\xF6rter" : ""),
       toGate: () => this.setState({ screen: "gate", gateAns: "", gateWrong: false }),

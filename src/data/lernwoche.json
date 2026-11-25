@@ -1,0 +1,184 @@
+{
+ "version": 1,
+ "week": {
+  "id": "app-2026-11-09",
+  "from": "2026-11-09",
+  "to": "2026-11-13",
+  "words": [
+   {
+    "w": "plötzlich",
+    "idea2": "Denk an etwas Überraschendes.",
+    "forms": "plötzlich",
+    "idea": "Was passiert plötzlich?",
+    "typ": "Adjektiv",
+    "syl": [
+     "plötz",
+     "lich"
+    ],
+    "crit": [
+     4,
+     5
+    ],
+    "tip": "Nach kurzem ö kommt tz."
+   },
+   {
+    "w": "streiten",
+    "idea2": "Denk an Geschwister oder Freunde, die sich nicht einig sind.",
+    "forms": "streit|stritt",
+    "idea": "Wer streitet – und worüber?",
+    "typ": "Verb",
+    "syl": [
+     "strei",
+     "ten"
+    ],
+    "crit": [
+     3,
+     4
+    ],
+    "tip": "Achte auf ei und auf st am Anfang."
+   },
+   {
+    "w": "Angst",
+    "idea2": "Denk an etwas Gruseliges.",
+    "forms": "Angst|Ängst",
+    "idea": "Wovor hat jemand Angst?",
+    "art": "die",
+    "pl": "Ängste",
+    "typ": "Nomen",
+    "syl": [
+     "Angst"
+    ],
+    "crit": [
+     0
+    ],
+    "tip": "Nomen schreibt man groß: die Angst."
+   },
+   {
+    "w": "Urlaub",
+    "idea2": "Denk an Ferien und Reisen.",
+    "forms": "Urlaub",
+    "idea": "Wohin fahrt ihr in den Urlaub?",
+    "art": "der",
+    "pl": "Urlaube",
+    "typ": "Nomen",
+    "syl": [
+     "Ur",
+     "laub"
+    ],
+    "crit": [
+     0,
+     5
+    ],
+    "tip": "Verlängere: die Urlau-be – deshalb b am Ende."
+   },
+   {
+    "w": "immer",
+    "idea2": "Was machst du jeden Tag?",
+    "forms": "immer",
+    "idea": "Was machst du immer?",
+    "typ": "anderes",
+    "syl": [
+     "im",
+     "mer"
+    ],
+    "crit": [
+     1,
+     2
+    ],
+    "tip": "Kurzes i, dann zwei m."
+   },
+   {
+    "w": "Ecke",
+    "idea2": "Denk an dein Zimmer.",
+    "forms": "Ecke",
+    "idea": "Was steht in der Ecke?",
+    "art": "die",
+    "pl": "Ecken",
+    "typ": "Nomen",
+    "syl": [
+     "E",
+     "cke"
+    ],
+    "crit": [
+     0,
+     1,
+     2
+    ],
+    "tip": "Nach kurzem E kommt ck. Und groß, weil Nomen."
+   },
+   {
+    "w": "Spaß",
+    "idea2": "Was machst du richtig gern?",
+    "forms": "Spaß|Späß",
+    "idea": "Was macht dir Spaß?",
+    "art": "der",
+    "pl": "Späße",
+    "typ": "Nomen",
+    "syl": [
+     "Spaß"
+    ],
+    "crit": [
+     0,
+     3
+    ],
+    "tip": "Nach langem a kommt ß. Und groß: der Spaß."
+   },
+   {
+    "w": "ärgern",
+    "idea2": "Was findest du doof?",
+    "forms": "ärger|ärgr",
+    "idea": "Worüber ärgert sich jemand?",
+    "typ": "Verb",
+    "syl": [
+     "är",
+     "gern"
+    ],
+    "crit": [
+     0
+    ],
+    "tip": "ä, weil es von Ärger kommt."
+   },
+   {
+    "w": "spät",
+    "idea2": "Denk an die Uhr und ans Zubettgehen.",
+    "forms": "spät",
+    "idea": "Wer kommt zu spät?",
+    "typ": "Adjektiv",
+    "syl": [
+     "spät"
+    ],
+    "crit": [
+     2,
+     3
+    ],
+    "tip": "spät mit ä – verlängere: später, deshalb t."
+   },
+   {
+    "w": "Unterricht",
+    "idea2": "Denk an die Schule.",
+    "forms": "Unterricht",
+    "idea": "Was macht ihr im Unterricht?",
+    "art": "der",
+    "typ": "Nomen",
+    "syl": [
+     "Un",
+     "ter",
+     "richt"
+    ],
+    "crit": [
+     0,
+     7,
+     8
+    ],
+    "tip": "Groß, weil Nomen. Am Ende: richt mit ch."
+   }
+  ],
+  "sentences": [
+   "Plötzlich hatte der Hund große Angst.",
+   "Im Urlaub haben wir immer viel Spaß.",
+   "Die Kinder streiten in der Ecke.",
+   "Nach dem Unterricht kommt Paul spät nach Hause."
+  ],
+  "source": "app"
+ }
+}

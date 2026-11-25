@@ -4,7 +4,7 @@ import { transformSync } from 'esbuild';
 
 const SRC = 'src', OUT = 'docs';
 fs.rmSync(OUT, { recursive: true, force: true });
-for (const d of ['', '/js', '/assets', '/fonts']) fs.mkdirSync(OUT + d, { recursive: true });
+for (const d of ['', '/js', '/assets', '/fonts', '/data']) fs.mkdirSync(OUT + d, { recursive: true });
 
 // Assets
 const blob = {
@@ -34,6 +34,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
 `;
 fs.writeFileSync(OUT + '/app.css', baseCss);
 
+for (const f of fs.readdirSync(SRC + '/data')) fs.copyFileSync(`${SRC}/data/${f}`, `${OUT}/data/${f}`);
 const esb = (code) => transformSync(code, { target: 'es2015', minify: false, loader: 'js' }).code;
 
 // Boards
@@ -52,7 +53,7 @@ for (const f of fs.readdirSync(SRC + '/boards').filter((x) => x.endsWith('.dc.ht
     if (!blob[id]) throw new Error('unbekanntes Asset ' + id + ' in ' + f);
     return 'assets/' + blob[id];
   });
-  tplHtml = fix(tplHtml); script = fix(script);
+  tplHtml = fix(tplHtml); script = fix(script).replace(/window\.localStorage/g, 'window.WSILS');
   // gap-Regeln aus dem CSS (für alte Safari-Versionen)
   const gaps = [];
   for (const m of css.matchAll(/\.([\w-]+)\s*\{([^{}]*)\}/g)) {
@@ -76,6 +77,7 @@ for (const f of fs.readdirSync(SRC + '/boards').filter((x) => x.endsWith('.dc.ht
 <style>body{background:${bg}}
 ${css}</style>
 <script>window.__GAPS=${JSON.stringify(gaps)};</script>
+<script src="wsi.js"></script>
 </head>
 <body>
 <div id="wrap"><div id="stage"></div></div>
@@ -86,11 +88,12 @@ ${css}</style>
 </body>
 </html>`;
   fs.writeFileSync(`${OUT}/${name}.html`, page);
-  if (name === 'Main') fs.writeFileSync(`${OUT}/index.html`, page);
+  if (name === 'Start') fs.writeFileSync(`${OUT}/index.html`, page);
 }
 // Laufzeit: app.js (DCLogic + Mini-Renderer, boot erst nach Board-Skript)
 let rt = fs.readFileSync(`${SRC}/runtime.js`, 'utf8').replace("if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();", 'window.__boot = boot;');
 fs.writeFileSync(OUT + '/app.js', esb(rt));
+fs.writeFileSync(OUT + '/wsi.js', esb(fs.readFileSync(`${SRC}/wsi.js`, 'utf8')));
 fs.writeFileSync(OUT + '/boot.js', "if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', window.__boot); else window.__boot();\n");
 
 // Appcache (Offline + schneller Start)

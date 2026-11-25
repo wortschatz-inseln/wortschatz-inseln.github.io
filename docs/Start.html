@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="de" manifest="app.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wortschatz-Inseln">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="assets/kiki.png">
+<title>Wortschatz-Inseln</title>
+<link rel="stylesheet" href="app.css">
+<style>body{background:#EEF7F9}
+
+body{margin:0}
+a{color:#0C7C74}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(3px)}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+</style>
+<script>window.__GAPS=[{"cls":"btn","gap":12,"display":"flex"}];</script>
+<script src="wsi.js"></script>
+</head>
+<body>
+<div id="wrap"><div id="stage"></div></div>
+<script type="text/x-tpl" id="tpl">
+
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 40px 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; background: #EEF7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+  <img src="assets/kiki.png" alt="" style="height: 190px; width: auto">
+  <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 52px; line-height: 1.1">Wer lernt heute?</h1>
+  <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px">
+    <sc-for list="{{ kids }}" as="k" hint-placeholder-count="2">
+      <li>
+        <button class="btn btn-sun" type="button" onClick="{{ k.pick }}" style="min-width: 260px; height: 120px; padding: 0 40px; border-radius: 34px; font-size: 40px">{{ k.name }}</button>
+      </li>
+    </sc-for>
+  </ul>
+  <a class="btn btn-soft" href="Eltern.html" style="height: 56px; padding: 0 22px; border-radius: 18px; font-size: 17px; font-family: 'Nunito', system-ui, sans-serif; font-weight: 800">Eltern</a>
+</div>
+</script>
+<script src="app.js"></script>
+<script src="js/Start.js"></script>
+<script src="boot.js"></script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Wortschatz-Inseln</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+a{color:#0C7C74}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(3px)}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 40px 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; background: #EEF7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+  <img src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 190px; width: auto">
+  <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 52px; line-height: 1.1">Wer lernt heute?</h1>
+  <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 24px">
+    <sc-for list="{{ kids }}" as="k" hint-placeholder-count="2">
+      <li>
+        <button class="btn btn-sun" type="button" onClick="{{ k.pick }}" style="min-width: 260px; height: 120px; padding: 0 40px; border-radius: 34px; font-size: 40px">{{ k.name }}</button>
+      </li>
+    </sc-for>
+  </ul>
+  <a class="btn btn-soft" href="Eltern.dc.html" style="height: 56px; padding: 0 22px; border-radius: 18px; font-size: 17px; font-family: 'Nunito', system-ui, sans-serif; font-weight: 800">Eltern</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    const W = window.WSI;
+    this.kids = W.profiles();
+    try {
+      const forced = /[?&]w=1/.test(window.location.search);
+      if (this.kids.length === 0) window.location.replace('Eltern.dc.html#setup');
+      else if (this.kids.length === 1 && !forced) { W.setActive(this.kids[0].id); window.location.replace('Main.dc.html'); }
+    } catch (e) {}
+  }
+  renderVals() {
+    return {
+      kids: this.kids.map((k) => ({ name: k.name, pick: () => { window.WSI.setActive(k.id); window.location.href = 'Main.dc.html'; } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

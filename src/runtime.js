@@ -219,6 +219,7 @@
     comp = new window.__Component({});
     fit();
     render();
+    try { if (comp.componentDidMount) comp.componentDidMount(); } catch (e) { if (window.console) console.error(e); }
     window.addEventListener('resize', fit);
     window.addEventListener('orientationchange', function () { setTimeout(fit, 200); });
     if (window.applicationCache) {

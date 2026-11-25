@@ -20,91 +20,235 @@ a{color:#0C7C74}a:hover{color:#075A54}
 .btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 3px 0 #C9DDE4}
 .btn-soft:hover{color:#10304A}
 .seg-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:none}
+.opt-on{border:3px solid #0C7C74;background:#E6F5F2}
+.opt-off{border:3px solid #C9DDE4;background:#fff}
 .field{box-sizing:border-box;border:2px solid #C9DDE4;border-radius:14px;background:#fff;font-family:'Nunito',system-ui,sans-serif;color:#10304A}
 .field:focus{border-color:#0C7C74;outline:none}
 a:focus-visible,button:focus-visible{outline:3px solid #10304A;outline-offset:3px}
 </style>
 </helmet>
-<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px 32px; display: flex; flex-direction: column; gap: 20px; background: #F4F7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px 28px; display: flex; flex-direction: column; gap: 18px; background: #F4F7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
 
-  <header style="display: flex; align-items: center; justify-content: space-between; height: 64px">
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 56px">
     <div style="display: flex; align-items: center; gap: 18px">
-      <a class="btn btn-soft" href="Main.dc.html" style="height: 52px; padding: 0 18px; border-radius: 14px; font-size: 16px; box-sizing: border-box">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
-        Zurück zu Elli
-      </a>
-      <h1 style="margin: 0; font-size: 28px; font-weight: 800">Eltern-Bereich</h1>
+      <sc-if value="{{ showBack }}" hint-placeholder-val="{{ true }}">
+        <a class="btn btn-soft" href="Start.dc.html" style="height: 52px; padding: 0 18px; border-radius: 14px; font-size: 16px; box-sizing: border-box">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Zurück zur App
+        </a>
+      </sc-if>
+      <h1 style="margin: 0; font-size: 28px; font-weight: 800">{{ title }}</h1>
     </div>
-    <span style="font-size: 15px; font-weight: 700; color: #3E5A6E">Beispieldaten im Prototyp</span>
   </header>
 
-  <sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+  <sc-if value="{{ isGate }}" hint-placeholder-val="{{ true }}">
     <main style="flex: 1; display: flex; align-items: center; justify-content: center">
       <section style="width: 480px; background: #fff; border-radius: 28px; padding: 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center">
         <div style="width: 72px; height: 72px; border-radius: 50%; background: #E4F1F5; display: flex; align-items: center; justify-content: center">
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#10304A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
         </div>
-        <h2 style="margin: 0; font-size: 24px; font-weight: 800">Kurz bestätigen, dass du erwachsen bist</h2>
-        <label for="gate" style="font-size: 20px">Was ist 7 × 8?</label>
-        <input id="gate" class="field" type="text" inputmode="numeric" autocomplete="off" value="{{ answer }}" onChange="{{ onAnswer }}" onKeyDown="{{ onGateKey }}" style="width: 180px; height: 64px; font-size: 30px; text-align: center; font-weight: 800">
+        <h2 style="margin: 0; font-size: 24px; font-weight: 800">{{ gateTitle }}</h2>
+        <label for="gate" style="font-size: 20px">{{ gateLabel }}</label>
+        <input id="gate" class="field" type="{{ gateType }}" inputmode="numeric" autocomplete="off" value="{{ answer }}" onChange="{{ onAnswer }}" onKeyDown="{{ onGateKey }}" style="width: 220px; height: 64px; font-size: 30px; text-align: center; font-weight: 800">
         <sc-if value="{{ gateWrong }}" hint-placeholder-val="{{ false }}">
-          <span style="font-size: 16px; font-weight: 700; color: #B45309">Das stimmt nicht ganz – noch einmal.</span>
+          <span style="font-size: 16px; font-weight: 700; color: #B45309">Das stimmt nicht – noch einmal.</span>
         </sc-if>
         <button class="btn btn-teal" type="button" onClick="{{ unlock }}" style="height: 56px; width: 220px; border-radius: 16px; font-size: 18px">Öffnen</button>
       </section>
     </main>
   </sc-if>
 
-  <sc-if value="{{ unlocked }}" hint-placeholder-val="{{ false }}">
-    <main style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px">
-      <div style="display: flex; flex-direction: column; gap: 20px">
-        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
-          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Lernwörter der Woche eintragen</h2>
-          <p style="margin: 0; font-size: 16px; line-height: 1.45; color: #3E5A6E">Wörter vom Wochenplan abtippen – Wortart, Mehrzahl, Silben und Tipps werden vorgeschlagen und lassen sich ändern. Die Woche startet am gewählten Datum von selbst.</p>
-          <div style="display: flex; flex-direction: column; gap: 6px; background: #F4F7F9; border-radius: 14px; padding: 12px 16px; font-size: 16px; font-weight: 700">
-            <span>Jetzt: {{ curInfo }}</span>
-            <span style="color: {{ nextColor }}">Nächste Woche: {{ nextInfo }}</span>
+  <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ false }}">
+    <main style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 16px">
+      <ol aria-label="Einrichtung" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 10px">
+        <sc-for list="{{ stepDots }}" as="d" hint-placeholder-count="4"><li style="width: 54px; height: 10px; border-radius: 5px; background: {{ d.bg }}"></li></sc-for>
+      </ol>
+
+      <sc-if value="{{ st1 }}" hint-placeholder-val="{{ true }}">
+        <section style="width: 760px; background: #fff; border-radius: 28px; padding: 32px 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 16px">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 800">Willkommen bei den Wortschatz-Inseln</h2>
+          <p style="margin: 0; font-size: 18px; line-height: 1.5; color: #3E5A6E">Alles, was ihr hier übt, bleibt auf diesem Gerät. Es gibt kein Konto und keinen Server. Richtet zuerst kurz alles ein – das dauert zwei Minuten.</p>
+          <h3 style="margin: 8px 0 0; font-size: 20px; font-weight: 800">1 · Eltern-Code festlegen</h3>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">Mit diesem Code öffnet nur ihr den Eltern-Bereich. Vier bis sechs Ziffern.</p>
+          <input id="pin" class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="Code" value="{{ pinA }}" onChange="{{ onPinA }}" style="width: 220px; height: 60px; font-size: 28px; text-align: center; font-weight: 800">
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #B45309">{{ msg }}</span></sc-if>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 6px">
+            <button class="btn btn-soft" type="button" onClick="{{ toRestore }}" style="height: 52px; padding: 0 20px; border-radius: 14px; font-size: 16px">Ich habe eine Sicherung</button>
+            <button class="btn btn-teal" type="button" onClick="{{ next1 }}" style="height: 56px; padding: 0 32px; border-radius: 16px; font-size: 18px">Weiter</button>
           </div>
-          <a class="btn btn-teal" href="Lernwoche.dc.html#eintragen" style="height: 52px; padding: 0 22px; border-radius: 14px; font-size: 16px; align-self: flex-start">Lernwörter eintragen</a>
         </section>
+      </sc-if>
 
+      <sc-if value="{{ stRestore }}" hint-placeholder-val="{{ false }}">
+        <section style="width: 760px; background: #fff; border-radius: 28px; padding: 32px 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 26px; font-weight: 800">Sicherung einspielen</h2>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">Füge den gesamten Sicherungs-Text hier ein.</p>
+          <textarea class="field" spellcheck="false" value="{{ restoreText }}" onChange="{{ onRestore }}" style="height: 220px; padding: 12px 14px; font-size: 14px; font-family: monospace"></textarea>
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #B45309">{{ msg }}</span></sc-if>
+          <div style="display: flex; justify-content: space-between">
+            <button class="btn btn-soft" type="button" onClick="{{ backToSetup }}" style="height: 52px; padding: 0 20px; border-radius: 14px; font-size: 16px">Zurück</button>
+            <button class="btn btn-teal" type="button" onClick="{{ doRestoreSetup }}" style="height: 56px; padding: 0 28px; border-radius: 16px; font-size: 18px">Einspielen</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ st2 }}" hint-placeholder-val="{{ false }}">
+        <section style="width: 760px; background: #fff; border-radius: 28px; padding: 32px 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 26px; font-weight: 800">2 · Wer lernt auf diesem Gerät?</h2>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">Jedes Kind bekommt seinen eigenen Fortschritt. Du kannst später weitere Kinder hinzufügen.</p>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
+            <sc-for list="{{ setupNames }}" as="n" hint-placeholder-count="2">
+              <li><button class="btn btn-soft" type="button" onClick="{{ n.remove }}" aria-label="{{ n.aria }}" style="height: 48px; padding: 0 18px; border-radius: 999px; font-size: 18px">{{ n.name }} ✕</button></li>
+            </sc-for>
+          </ul>
+          <div style="display: flex; gap: 12px">
+            <input id="kid" class="field" type="text" autocomplete="off" placeholder="Vorname des Kindes" value="{{ newName }}" onChange="{{ onNewName }}" onKeyDown="{{ onNewKey }}" style="flex: 1; min-width: 0; height: 56px; padding: 0 16px; font-size: 20px">
+            <button class="btn btn-teal" type="button" onClick="{{ addSetupName }}" style="height: 56px; padding: 0 24px; border-radius: 14px; font-size: 17px">Hinzufügen</button>
+          </div>
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #B45309">{{ msg }}</span></sc-if>
+          <div style="display: flex; justify-content: space-between; margin-top: 6px">
+            <button class="btn btn-soft" type="button" onClick="{{ backTo1 }}" style="height: 52px; padding: 0 20px; border-radius: 14px; font-size: 16px">Zurück</button>
+            <button class="btn btn-teal" type="button" onClick="{{ next2 }}" style="height: 56px; padding: 0 32px; border-radius: 16px; font-size: 18px">Weiter</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ st3 }}" hint-placeholder-val="{{ false }}">
+        <section style="width: 860px; background: #fff; border-radius: 28px; padding: 32px 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 26px; font-weight: 800">3 · Woher kommen die Lernwochen?</h2>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">Das lässt sich später im Eltern-Bereich jederzeit ändern.</p>
+          <div style="display: flex; gap: 16px">
+            <button class="{{ modeOwnCls }}" type="button" onClick="{{ pickOwn }}" style="flex: 1; text-align: left; border-radius: 22px; padding: 18px 20px; font-family: inherit; color: #10304A; cursor: pointer; display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 20px; font-weight: 800">Selber verwalten <span style="font-size: 13px; background: #0C7C74; color: #fff; border-radius: 999px; padding: 2px 10px; margin-left: 6px">empfohlen</span></span>
+              <span style="font-size: 16px; line-height: 1.45; color: #3E5A6E">Ihr tragt die Lernwörter eurer Schule selbst ein. Sie passen genau zu eurem Kind und bleiben nur auf diesem Gerät.</span>
+            </button>
+            <button class="{{ modeAppCls }}" type="button" onClick="{{ pickApp }}" style="flex: 1; text-align: left; border-radius: 22px; padding: 18px 20px; font-family: inherit; color: #10304A; cursor: pointer; display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 20px; font-weight: 800">Lernwoche aus der App</span>
+              <span style="font-size: 16px; line-height: 1.45; color: #3E5A6E">Die App bringt eine fertige Lernwoche mit (Klasse 3, NRW). Ihr müsst nichts eintragen.</span>
+            </button>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: 6px">
+            <button class="btn btn-soft" type="button" onClick="{{ backTo2 }}" style="height: 52px; padding: 0 20px; border-radius: 14px; font-size: 16px">Zurück</button>
+            <button class="btn btn-teal" type="button" onClick="{{ next3 }}" style="height: 56px; padding: 0 32px; border-radius: 16px; font-size: 18px">Weiter</button>
+          </div>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ st4 }}" hint-placeholder-val="{{ false }}">
+        <section style="width: 760px; background: #fff; border-radius: 28px; padding: 32px 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 28px; font-weight: 800">Fertig eingerichtet</h2>
+          <ul style="margin: 0; padding-left: 22px; font-size: 18px; line-height: 1.6">
+            <li>Kinder: {{ sumNames }}</li>
+            <li>Lernwochen: {{ sumMode }}</li>
+            <li>Eltern-Code: {{ sumPin }}</li>
+          </ul>
+          <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3E5A6E; background: #FFF4D6; border-radius: 14px; padding: 12px 16px">Tipp: Erstellt ab und zu eine Sicherung (Eltern-Bereich → Sicherung). Wenn die Browserdaten gelöscht werden, ist der Fortschritt sonst weg. Die App erinnert euch alle zwei Wochen.</p>
+          <button class="btn btn-teal" type="button" onClick="{{ finish }}" style="height: 60px; border-radius: 16px; font-size: 20px; align-self: flex-end; padding: 0 36px">Los geht's</button>
+        </section>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+    <main style="flex: 1; display: flex; flex-direction: column; gap: 16px; min-height: 0">
+      <sc-if value="{{ backupDue }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #FFF4D6; border: 2px solid #FFC23D; border-radius: 18px; padding: 12px 20px">
+          <span style="font-size: 17px; font-weight: 800">Zeit für eine Sicherung – sie dauert eine Minute.</span>
+          <button class="btn btn-teal" type="button" onClick="{{ goBackup }}" style="height: 44px; padding: 0 20px; border-radius: 12px; font-size: 15px">Jetzt sichern</button>
+        </div>
+      </sc-if>
+      <nav aria-label="Bereiche" style="display: flex; gap: 10px">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+          <button class="btn {{ t.cls }}" type="button" onClick="{{ t.pick }}" aria-pressed="{{ t.on }}" style="height: 52px; padding: 0 22px; border-radius: 999px; font-size: 17px">{{ t.label }}</button>
+        </sc-for>
+      </nav>
+
+      <sc-if value="{{ tabLern }}" hint-placeholder-val="{{ true }}">
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Woher kommen die Lernwochen auf diesem Gerät?</h2>
+          <div style="display: flex; gap: 16px">
+            <button class="{{ modeOwnCls }}" type="button" onClick="{{ pickOwn }}" style="flex: 1; text-align: left; border-radius: 20px; padding: 14px 18px; font-family: inherit; color: #10304A; cursor: pointer; display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 18px; font-weight: 800">Selber verwalten <span style="font-size: 12px; background: #0C7C74; color: #fff; border-radius: 999px; padding: 2px 9px; margin-left: 6px">empfohlen</span></span>
+              <span style="font-size: 15px; line-height: 1.4; color: #3E5A6E">Ihr tragt die Lernwörter selbst ein.</span>
+            </button>
+            <button class="{{ modeAppCls }}" type="button" onClick="{{ pickApp }}" style="flex: 1; text-align: left; border-radius: 20px; padding: 14px 18px; font-family: inherit; color: #10304A; cursor: pointer; display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 18px; font-weight: 800">Lernwoche aus der App</span>
+              <span style="font-size: 15px; line-height: 1.4; color: #3E5A6E">Neue Wochen kommen mit App-Updates. Eigene Wochen bleiben im Lernregal.</span>
+            </button>
+          </div>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{ kidRows }}" as="r" hint-placeholder-count="2">
+              <li style="display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #F4F7F9; border-radius: 16px; padding: 12px 18px">
+                <span style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 19px; font-weight: 800">{{ r.name }}</span>
+                  <span style="font-size: 15px; color: #3E5A6E">Jetzt: {{ r.cur }} · Nächste: {{ r.nxt }}</span>
+                </span>
+                <sc-if value="{{ r.canEdit }}" hint-placeholder-val="{{ true }}">
+                  <button class="btn btn-teal" type="button" onClick="{{ r.edit }}" style="height: 48px; padding: 0 20px; border-radius: 14px; font-size: 16px">Lernwörter eintragen</button>
+                </sc-if>
+                <sc-if value="{{ r.isApp }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size: 15px; font-weight: 700; color: #3E5A6E">kommt aus der App</span>
+                </sc-if>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+      </sc-if>
+
+      <sc-if value="{{ tabKids }}" hint-placeholder-val="{{ false }}">
         <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
-          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Diese Woche</h2>
-          <ol aria-label="Übungstage" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px">
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Mo</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Di</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #C9DDE4; box-sizing: border-box"></span>Mi</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Do</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Fr</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed #C9DDE4; box-sizing: border-box"></span>Sa</li>
-            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed #C9DDE4; box-sizing: border-box"></span>So</li>
-          </ol>
-          <p style="margin: 0; font-size: 16px; color: #3E5A6E">4 Expeditionen, Wochenziel erreicht. Ein freier Tag ist eingeplant und völlig in Ordnung.</p>
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Kinder auf diesem Gerät</h2>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+            <sc-for list="{{ kidList }}" as="k" hint-placeholder-count="2">
+              <li style="display: flex; align-items: center; gap: 12px">
+                <input class="field" type="text" autocomplete="off" value="{{ k.name }}" onChange="{{ k.rename }}" aria-label="Name" style="flex: 1; min-width: 0; height: 52px; padding: 0 16px; font-size: 19px; font-weight: 800">
+                <button class="btn btn-soft" type="button" onClick="{{ k.del }}" style="height: 52px; padding: 0 18px; border-radius: 14px; font-size: 16px; color: {{ k.delColor }}">{{ k.delLabel }}</button>
+              </li>
+            </sc-for>
+          </ul>
+          <div style="display: flex; gap: 12px">
+            <input class="field" type="text" autocomplete="off" placeholder="Neues Kind: Vorname" value="{{ newName }}" onChange="{{ onNewName }}" onKeyDown="{{ onHomeNewKey }}" style="flex: 1; min-width: 0; height: 52px; padding: 0 16px; font-size: 19px">
+            <button class="btn btn-teal" type="button" onClick="{{ addKid }}" style="height: 52px; padding: 0 22px; border-radius: 14px; font-size: 16px">Hinzufügen</button>
+          </div>
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #0C7C74">{{ msg }}</span></sc-if>
         </section>
-      </div>
+      </sc-if>
 
-      <div style="display: flex; flex-direction: column; gap: 20px">
-        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 16px">
-          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Welcher Trick sitzt schon?</h2>
-          <p style="margin: 0; font-size: 15px; color: #3E5A6E">Anteil richtig geschriebener Wörter je Strategie, letzte 2 Wochen</p>
-          <sc-for list="{{ strategies }}" as="s" hint-placeholder-count="4">
-            <div style="display: flex; flex-direction: column; gap: 6px">
-              <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800">
-                <span>{{ s.name }} <span style="font-weight: 600; color: #3E5A6E">· {{ s.example }}</span></span>
-                <span>{{ s.label }}</span>
-              </div>
-              <div style="height: 14px; border-radius: 999px; background: #E4EDF1; overflow: hidden">
-                <div style="height: 14px; width: {{ s.width }}; border-radius: 999px; background: {{ s.color }}"></div>
-              </div>
-            </div>
-          </sc-for>
+      <sc-if value="{{ tabBackup }}" hint-placeholder-val="{{ false }}">
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Sicherung</h2>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">{{ backupInfo }}</p>
+          <div style="display: flex; gap: 12px; align-items: center">
+            <button class="btn btn-teal" type="button" onClick="{{ makeBackup }}" style="height: 48px; padding: 0 20px; border-radius: 14px; font-size: 16px">Sicherung erstellen</button>
+            <sc-if value="{{ hasExport }}" hint-placeholder-val="{{ false }}">
+              <button class="btn btn-soft" type="button" onClick="{{ selectAll }}" style="height: 48px; padding: 0 18px; border-radius: 14px; font-size: 16px">Alles markieren</button>
+              <a class="btn btn-soft" href="{{ mailHref }}" style="height: 48px; padding: 0 18px; border-radius: 14px; font-size: 16px; box-sizing: border-box">Per E-Mail senden</a>
+            </sc-if>
+          </div>
+          <sc-if value="{{ hasExport }}" hint-placeholder-val="{{ false }}">
+            <textarea id="bk" class="field" spellcheck="false" readonly value="{{ exportText }}" style="height: 110px; padding: 10px 12px; font-size: 12px; font-family: monospace"></textarea>
+            <span style="font-size: 14px; color: #3E5A6E">Markieren, kopieren und irgendwo sicher ablegen (Notizen, E-Mail an dich selbst).</span>
+          </sc-if>
+          <h3 style="margin: 8px 0 0; font-size: 18px; font-weight: 800">Sicherung einspielen</h3>
+          <textarea class="field" spellcheck="false" placeholder="Sicherungs-Text hier einfügen" value="{{ restoreText }}" onChange="{{ onRestore }}" style="height: 90px; padding: 10px 12px; font-size: 12px; font-family: monospace"></textarea>
+          <div style="display: flex; align-items: center; gap: 14px">
+            <button class="btn btn-soft" type="button" onClick="{{ doRestoreHome }}" style="height: 48px; padding: 0 20px; border-radius: 14px; font-size: 16px">Einspielen (ersetzt alles auf diesem Gerät)</button>
+            <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #0C7C74">{{ msg }}</span></sc-if>
+          </div>
         </section>
+      </sc-if>
 
-        <section style="background: #10304A; color: #fff; border-radius: 24px; padding: 24px 28px; display: flex; flex-direction: column; gap: 10px">
-          <span style="font-size: 14px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #FFC23D">Gesprächsimpuls für heute Abend</span>
-          <p style="margin: 0; font-size: 19px; line-height: 1.45">Frag Elli: „Wie findest du heraus, ob am Ende von <span style="font-family: 'Andika', system-ui, sans-serif">Wald</span> ein d oder ein t steht?“ Lob danach den Trick, nicht das Ergebnis.</p>
+      <sc-if value="{{ tabCode }}" hint-placeholder-val="{{ false }}">
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Eltern-Code</h2>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">{{ pinState }}</p>
+          <div style="display: flex; gap: 12px">
+            <input class="field" type="password" inputmode="numeric" autocomplete="off" placeholder="Neuer Code (4–6 Ziffern)" value="{{ pinA }}" onChange="{{ onPinA }}" style="width: 280px; height: 52px; padding: 0 16px; font-size: 19px">
+            <button class="btn btn-teal" type="button" onClick="{{ setPin }}" style="height: 52px; padding: 0 22px; border-radius: 14px; font-size: 16px">Code speichern</button>
+          </div>
+          <sc-if value="{{ hasMsg }}" hint-placeholder-val="{{ false }}"><span style="font-size: 16px; font-weight: 700; color: #0C7C74">{{ msg }}</span></sc-if>
         </section>
-      </div>
+      </sc-if>
     </main>
   </sc-if>
 </div>
@@ -113,42 +257,113 @@ a:focus-visible,button:focus-visible{outline:3px solid #10304A;outline-offset:3p
 class Component extends DCLogic {
   constructor(props) {
     super(props);
-    this.state = { unlocked: false, answer: '', gateWrong: false };
+    const W = window.WSI, dev = W.dev();
+    let view = 'gate';
+    if (!dev.setupDone) view = 'setup';
+    else if (W.isUnlocked()) view = 'home';
+    this.state = { view: view, step: 1, answer: '', gateWrong: false, pinA: '', msg: '', names: [], newName: '', mode: 'own', restoreText: '', tab: 'lern', exportText: '', delId: '' };
   }
+  setMsg(m) { this.setState({ msg: m }); }
   unlock() {
-    if (this.state.answer.trim() === '56') this.setState({ unlocked: true, gateWrong: false });
+    if (window.WSI.checkPin(this.state.answer)) { window.WSI.unlock(); this.setState({ view: 'home', answer: '', gateWrong: false, msg: '' }); }
     else this.setState({ gateWrong: true });
   }
+  lab(w) {
+    if (!w || !w.words || !w.words.length) return 'noch keine';
+    const f = (w.from || '').split('-'), t = (w.to || w.from || '').split('-');
+    return f[2] + '.' + (f[1] === t[1] ? '' : f[1] + '.') + '–' + t[2] + '.' + t[1] + '. (' + w.words.length + ' Wörter)';
+  }
+  validPin(p) { return /^[0-9]{4,6}$/.test(p); }
+  finish() {
+    const W = window.WSI, s = this.state, dev = W.dev();
+    s.names.forEach((n) => W.addProfile(n));
+    dev.pin = s.pinA; dev.mode = s.mode; dev.setupDone = true; dev.created = Date.now();
+    W.save(); W.unlock();
+    window.location.href = 'Start.dc.html';
+  }
+  addName(list) {
+    const n = this.state.newName.replace(/\s+/g, ' ').trim();
+    if (!n) return;
+    if (list.some((x) => x.toLowerCase() === n.toLowerCase())) { this.setState({ msg: 'Diesen Namen gibt es schon.', newName: '' }); return; }
+    list.push(n.slice(0, 20));
+  }
   renderVals() {
-    const s = this.state;
-    let st = null;
-    try { st = JSON.parse(window.localStorage.getItem('wsi.lernwoche.v1') || 'null'); } catch (e) { st = null; }
-    const lab = (w) => { const f = (w.from || '').split('-'); const t = (w.to || w.from || '').split('-'); return f[2] + '.' + (f[1] === t[1] ? '' : f[1] + '.') + '–' + t[2] + '.' + t[1] + '. · ' + w.words.length + ' Wörter'; };
-    const strategies = [
-      { name: 'Mitsprechen', example: 'Ba-na-ne', v: 92 },
-      { name: 'Merken', example: 'Vater, Vogel', v: 78 },
-      { name: 'Nachdenken', example: 'kommen, Biene', v: 70 },
-      { name: 'Verlängern', example: 'Hund, Wald', v: 55 }
-    ].map((x) => ({
-      name: x.name,
-      example: x.example,
-      width: x.v + '%',
-      label: x.v < 60 ? x.v + ' % · gerade dran' : x.v + ' %',
-      color: x.v < 60 ? '#F08A24' : '#0C7C74'
-    }));
-    return {
-      locked: !s.unlocked,
-      unlocked: s.unlocked,
-      answer: s.answer,
-      gateWrong: s.gateWrong,
-      onAnswer: (e) => this.setState({ answer: e.target.value, gateWrong: false }),
+    const s = this.state, W = window.WSI, dev = W.dev();
+    const view = s.view;
+    const titles = { gate: 'Eltern-Bereich', setup: 'Einrichtung', home: 'Eltern-Bereich' };
+    const hasMsg = !!s.msg;
+    // Enter löst zusätzlich ein change-Ereignis aus: nur bei geändertem Wert zurücksetzen
+    const chg = (key, extra) => (e) => { if (e.target.value !== this.state[key]) this.setState(Object.assign({ [key]: e.target.value }, extra)); };
+    const base = {
+      title: titles[view],
+      showBack: dev.setupDone,
+      isGate: view === 'gate', isSetup: view === 'setup', isHome: view === 'home',
+      hasMsg: hasMsg, msg: s.msg,
+      gateTitle: dev.pin ? 'Eltern-Code eingeben' : 'Kurz bestätigen, dass du erwachsen bist',
+      gateLabel: dev.pin ? 'Code' : 'Was ist 7 × 8?',
+      gateType: dev.pin ? 'password' : 'text',
+      answer: s.answer, gateWrong: s.gateWrong,
+      onAnswer: chg('answer', { gateWrong: false }),
       onGateKey: (e) => { if (e.key === 'Enter') this.unlock(); },
       unlock: () => this.unlock(),
-      curInfo: st && st.current ? lab(st.current) : '09.–13.11. · 10 Wörter',
-      nextInfo: st && st.next ? lab(st.next) : 'noch nicht eingetragen',
-      nextColor: st && st.next ? '#0C7C74' : '#B45309',
-      strategies: strategies
+      pinA: s.pinA, onPinA: chg('pinA', { msg: '' }),
+      newName: s.newName, onNewName: chg('newName', { msg: '' }),
+      restoreText: s.restoreText, onRestore: chg('restoreText', { msg: '' }),
+      modeOwnCls: (view === 'setup' ? s.mode : dev.mode) === 'own' ? 'opt-on' : 'opt-off',
+      modeAppCls: (view === 'setup' ? s.mode : dev.mode) === 'app' ? 'opt-on' : 'opt-off'
     };
+    if (view === 'setup') {
+      const step = s.step;
+      return Object.assign(base, {
+        stepDots: [1, 2, 3, 4].map((n) => ({ bg: n <= step ? '#0C7C74' : '#C9DDE4' })),
+        st1: step === 1, stRestore: step === 'restore', st2: step === 2, st3: step === 3, st4: step === 4,
+        next1: () => { if (this.validPin(s.pinA)) this.setState({ step: 2, msg: '' }); else this.setState({ msg: 'Bitte 4 bis 6 Ziffern wählen.' }); },
+        toRestore: () => this.setState({ step: 'restore', msg: '' }),
+        backToSetup: () => this.setState({ step: 1, msg: '' }),
+        doRestoreSetup: () => { if (W.importAll(s.restoreText)) { W.unlock(); window.location.href = 'Start.dc.html'; } else this.setState({ msg: 'Das ist keine gültige Sicherung.' }); },
+        setupNames: s.names.map((n, i) => ({ name: n, aria: n + ' entfernen', remove: () => { const l = s.names.slice(); l.splice(i, 1); this.setState({ names: l }); } })),
+        onNewKey: (e) => { if (e.key === 'Enter') { const l = s.names.slice(); this.addName(l); this.setState({ names: l, newName: '' }); } },
+        addSetupName: () => { const l = s.names.slice(); this.addName(l); this.setState({ names: l, newName: '' }); },
+        backTo1: () => this.setState({ step: 1, msg: '' }),
+        next2: () => { if (s.names.length) this.setState({ step: 3, msg: '' }); else this.setState({ msg: 'Bitte mindestens ein Kind eintragen.' }); },
+        pickOwn: () => this.setState({ mode: 'own' }), pickApp: () => this.setState({ mode: 'app' }),
+        backTo2: () => this.setState({ step: 2 }),
+        next3: () => this.setState({ step: 4 }),
+        sumNames: s.names.join(', '), sumMode: s.mode === 'own' ? 'selber verwalten' : 'aus der App', sumPin: 'gesetzt',
+        finish: () => this.finish()
+      });
+    }
+    if (view === 'gate') return base;
+    // Eltern-Bereich
+    const tabs = [['lern', 'Lernwochen'], ['kids', 'Kinder'], ['backup', 'Sicherung'], ['code', 'Eltern-Code']].map((t) => ({ label: t[1], on: s.tab === t[0], cls: s.tab === t[0] ? 'seg-on' : 'btn-soft', pick: () => this.setState({ tab: t[0], msg: '', delId: '' }) }));
+    const kidRows = W.profiles().map((p) => {
+      const d = W.profileData(p.id);
+      return { name: p.name, cur: this.lab(d && d.current), nxt: d && d.next ? this.lab(d.next) : 'noch nicht eingetragen', canEdit: dev.mode === 'own', isApp: dev.mode === 'app', edit: () => { W.setActive(p.id); W.unlock(); window.location.href = 'Lernwoche.dc.html#eintragen'; } };
+    });
+    const kidList = W.profiles().map((p) => ({
+      name: p.name,
+      rename: (e) => { W.renameProfile(p.id, e.target.value); this.setState({}); },
+      delLabel: s.delId === p.id ? 'Wirklich löschen?' : 'Löschen', delColor: s.delId === p.id ? '#B45309' : '#10304A',
+      del: () => { if (s.delId === p.id) { if (W.profiles().length > 1) { W.removeProfile(p.id); this.setState({ delId: '', msg: 'Gelöscht.' }); } else this.setState({ delId: '', msg: 'Das letzte Kind kann nicht gelöscht werden.' }); } else this.setState({ delId: p.id, msg: '' }); }
+    }));
+    const mail = s.exportText && s.exportText.length < 40000 ? 'mailto:?subject=' + encodeURIComponent('Sicherung Wortschatz-Inseln') + '&body=' + encodeURIComponent(s.exportText) : '#';
+    return Object.assign(base, {
+      backupDue: W.backupDue(),
+      goBackup: () => this.setState({ tab: 'backup' }),
+      tabs: tabs, tabLern: s.tab === 'lern', tabKids: s.tab === 'kids', tabBackup: s.tab === 'backup', tabCode: s.tab === 'code',
+      pickOwn: () => { dev.mode = 'own'; W.save(); this.setState({}); },
+      pickApp: () => { dev.mode = 'app'; W.save(); this.setState({}); },
+      kidRows: kidRows, kidList: kidList,
+      addKid: () => { const n = s.newName.trim(); if (!n) return; if (W.profiles().some((p) => p.name.toLowerCase() === n.toLowerCase())) { this.setState({ msg: 'Diesen Namen gibt es schon.', newName: '' }); return; } W.addProfile(n); this.setState({ newName: '', msg: n + ' ist dabei.' }); },
+      onHomeNewKey: (e) => { if (e.key === 'Enter') { const n = s.newName.trim(); if (n && !W.profiles().some((p) => p.name.toLowerCase() === n.toLowerCase())) { W.addProfile(n); this.setState({ newName: '', msg: n + ' ist dabei.' }); } } },
+      backupInfo: W.backupInfo(),
+      makeBackup: () => this.setState({ exportText: W.exportAll(), msg: '' }),
+      hasExport: !!s.exportText, exportText: s.exportText, mailHref: mail,
+      selectAll: () => { try { const t = document.getElementById('bk'); t.focus(); t.setSelectionRange(0, 9999999); t.select(); } catch (e) {} },
+      doRestoreHome: () => { if (W.importAll(s.restoreText)) { W.unlock(); this.setState({ restoreText: '', exportText: '', msg: 'Sicherung eingespielt.' }); } else this.setState({ msg: 'Das ist keine gültige Sicherung.' }); },
+      pinState: dev.pin ? 'Ein Eltern-Code ist gesetzt.' : 'Kein Code gesetzt – es gilt die Rechenaufgabe 7 × 8.',
+      setPin: () => { if (this.validPin(s.pinA)) { dev.pin = s.pinA; W.save(); this.setState({ pinA: '', msg: 'Neuer Code gespeichert.' }); } else this.setState({ msg: 'Bitte 4 bis 6 Ziffern wählen.' }); }
+    });
   }
 }
 </script>

@@ -33,6 +33,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #1030
 @media (prefers-reduced-motion: reduce){.bob,.today,.fog{animation:none}}
 </style>
 <script>window.__GAPS=[{"cls":"btn","gap":12,"display":"flex"}];</script>
+<script src="wsi.js"></script>
 </head>
 <body>
 <div id="wrap"><div id="stage"></div></div>
@@ -46,8 +47,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #1030
         <img src="assets/kiki.png" alt="" style="height: 76px; width: auto; display: block">
       </div>
       <div style="display: flex; flex-direction: column; gap: 2px">
-        <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 36px; line-height: 1.1">Ahoi, Elli!</h1>
-        <p style="margin: 0; font-size: 19px; color: #3E5A6E">Heute wartet der Verlängerungs-Vulkan auf dich.</p>
+        <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 36px; line-height: 1.1">Ahoi, {{ name }}!</h1>
+        <p style="margin: 0; font-size: 19px; color: #3E5A6E">Heute wartet der Verlängerungs-Vulkan auf dich.<sc-if value="{{ multi }}" hint-placeholder-val="{{ false }}"> · <a href="Start.html?w=1" style="font-weight: 800">Wechseln</a></sc-if></p>
       </div>
     </div>
     <nav aria-label="Bereiche" style="display: flex; align-items: center; gap: 16px">
@@ -66,6 +67,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:4px solid #1030
       <a class="btn btn-soft" href="Eltern.html" style="height: 64px; padding: 0 18px; border-radius: 20px; font-size: 16px; box-sizing: border-box">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
         Eltern
+        <sc-if value="{{ backupDue }}" hint-placeholder-val="{{ false }}"><span aria-label="Sicherung fällig" style="background: #FFC23D; border-radius: 999px; padding: 2px 9px; font-size: 14px">Sicherung fällig</span></sc-if>
       </a>
     </nav>
   </header>

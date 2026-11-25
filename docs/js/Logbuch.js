@@ -7,6 +7,7 @@ window.__Component = class Component extends DCLogic {
     const p = this.state.picked;
     const msg = ["", "Danke! Morgen gibt es ein paar neue W\xF6rter mehr.", "Super, dann bleibt es so.", "Danke! Morgen gibt es mehr Hilfen und weniger neue W\xF6rter."];
     return {
+      name: window.WSI.name() || "du",
       c1: p === 1 ? "btn-picked" : "btn-soft",
       c2: p === 2 ? "btn-picked" : "btn-soft",
       c3: p === 3 ? "btn-picked" : "btn-soft",
