@@ -230,10 +230,13 @@ window.__Component = class Component extends DCLogic {
     if (!st || !st.current || !st.current.words || !st.current.words.length) st = { current: this.defaultWeek, next: null, progress: null };
     const today = this.iso(/* @__PURE__ */ new Date());
     if (st.next && st.next.from <= today) {
+      st.shelf = st.shelf || [];
+      if (st.progress && st.current && st.progress.id === st.current.id) st.shelf.push({ week: st.current, progress: st.progress });
       st.current = st.next;
       st.next = null;
       st.progress = null;
     }
+    st.shelf = st.shelf || [];
     if (!st.current.id) st.current.id = st.current.from;
     if (!st.progress || st.progress.id !== st.current.id) st.progress = { id: st.current.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
     const pg = st.progress;
@@ -243,6 +246,37 @@ window.__Component = class Component extends DCLogic {
     pg.done = pg.done.map((k) => k.indexOf("#") === -1 ? k + "#1" : k);
     this.store = st;
     this.persist();
+  }
+  archiveCurrent() {
+    const st = this.store;
+    st.shelf = (st.shelf || []).filter((b) => b.week.id !== st.current.id);
+    st.shelf.push({ week: st.current, progress: st.progress });
+    if (st.shelf.length > 40) st.shelf = st.shelf.slice(-40);
+  }
+  openPack(id) {
+    const st = this.store;
+    const b = (st.shelf || []).filter((x) => x.week.id === id)[0];
+    if (!b) return;
+    this.archiveCurrent();
+    st.shelf = st.shelf.filter((x) => x.week.id !== id);
+    st.current = b.week;
+    st.progress = b.progress;
+    const pg = st.progress;
+    pg.flaw = pg.flaw || [];
+    pg.opened = pg.opened || 0;
+    pg.bonus = pg.bonus || 0;
+    pg.kept = pg.kept || [];
+    this.persist();
+    this.applyWeek();
+    this.setState(Object.assign({ screen: "hub", hubMsg: "Du \xFCbst jetzt: " + this.dateLabel(b.week.from, b.week.to) }, this.reset()));
+  }
+  packTotal() {
+    return 3 * (Object.keys(this.ex).length - 1) + 1;
+  }
+  packStat(wk, pg) {
+    const tot = this.packTotal(), d = Math.min(tot, (pg.done || []).length);
+    const status = d === 0 ? "Neu" : d >= tot ? "Geschafft" : "In Arbeit";
+    return { d, tot, pct: Math.round(100 * d / tot) + "%", status, label: d + " von " + tot };
   }
   persist() {
     try {
@@ -489,6 +523,7 @@ window.__Component = class Component extends DCLogic {
     const week = { id: s.edFrom + "#" + Date.now(), from: s.edFrom, to: s.edTo || s.edFrom, words: rows.map((r) => this.buildWord(r)), sentences };
     const today = this.iso(/* @__PURE__ */ new Date());
     if (now || week.from <= today) {
+      this.archiveCurrent();
       this.store.current = week;
       this.store.progress = { id: week.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
       if (this.store.next && (now || this.store.next.from <= today)) this.store.next = null;
@@ -901,7 +936,11 @@ window.__Component = class Component extends DCLogic {
     const doneSet = pr.done;
     const nDone = pr.done.length;
     const chests = Math.floor(nDone / 4);
-    const stars = nDone + pr.flaw.length + pr.bonus;
+    const shelfList = this.store.shelf || [];
+    const starsOf = (g) => (g.done || []).length + (g.flaw || []).length + (g.bonus || 0);
+    const allStars = shelfList.reduce((a, b) => a + starsOf(b.progress), starsOf(pr));
+    const stars = allStars;
+    const ps = this.packStat(this.store.current, pr);
     const rk = [[0, "Strandl\xE4ufer"], [6, "Muschelsucherin"], [13, "Schatzj\xE4gerin"], [23, "Inselforscherin"], [35, "Kapit\xE4nin"]].filter((x) => stars >= x[0]).pop()[1];
     const names = ["", "Entdecker", "Forscher", "Meister"];
     const cur = this.store.current;
@@ -912,9 +951,19 @@ window.__Component = class Component extends DCLogic {
     const shown = keys.filter((k) => cnt[k] > 0 || k === "gross");
     const base = {
       isHub: s.screen === "hub",
+      isRegal: s.screen === "regal",
+      allStars,
+      packCount: shelfList.length + 1,
+      packPct: ps.pct,
+      packLabel: ps.label + " \xDCbungen",
+      toRegal: () => this.setState({ screen: "regal", hubMsg: "" }),
+      packs: [{ week: this.store.current, progress: pr, now: true }].concat(shelfList.slice().sort((x, y) => x.week.from < y.week.from ? 1 : -1)).map((b) => {
+        const st2 = this.packStat(b.week, b.progress), cl = { "Neu": ["#EEF3E4", "#5C7A2E"], "In Arbeit": ["#FFF4D6", "#8A4B08"], "Geschafft": ["#D8F0EC", "#075A54"] }[st2.status];
+        return { title: this.dateLabel(b.week.from, b.week.to), words: b.week.words.slice(0, 5).map((x) => x.w).join(" \xB7 ") + (b.week.words.length > 5 ? " \u2026" : ""), status: b.now ? "Aktuell \xB7 " + st2.status : st2.status, chipBg: cl[0], chipFg: cl[1], pct: st2.pct, label: st2.label, bg: b.now ? "#FFF8E6" : "#fff", border: b.now ? "#FFC23D" : st2.status === "Geschafft" ? "#0C7C74" : "#D6E2C4", open: () => b.now ? this.setState({ screen: "hub", hubMsg: "" }) : this.openPack(b.week.id) };
+      }),
       isGate: s.screen === "gate",
       isEdit: s.screen === "edit",
-      isExercise: ["hub", "gate", "edit", "truhe"].indexOf(s.screen) === -1,
+      isExercise: ["hub", "gate", "edit", "truhe", "regal"].indexOf(s.screen) === -1,
       chestReady: chests > pr.opened,
       chestWait: !(chests > pr.opened),
       chestNo: chests + 1,
@@ -940,11 +989,11 @@ window.__Component = class Component extends DCLogic {
         const fl = lv.map((n2) => pr.flaw.indexOf(k + "#" + n2) !== -1);
         const nx2 = ds.indexOf(false) + 1;
         const all = nx2 === 0;
-        return { title: this.ex[k].title, desc: this.ex[k].desc, next: all ? "Alles geschafft \u2013 nochmal \xFCben" : mx === 1 ? "Los geht's" : "Weiter: Stufe " + nx2 + " \xB7 " + names[nx2], pips: ds.map((d, i) => ({ bg: fl[i] ? "#FFC23D" : d ? "#0C7C74" : "#fff", bd: fl[i] ? "#D99A12" : "#0C7C74" })), medal: mx > 1 && all, border: all ? "#0C7C74" : k === "satz" ? "#FFC23D" : "#D6E2C4", bg: k === "satz" ? "#FFF8E6" : "#fff", star: k === "satz", open: () => this.open(k, all ? mx > 1 ? 1 + Math.floor(Math.random() * 3) : 1 : nx2) };
-      }),
+        return { fin: all, title: this.ex[k].title, desc: this.ex[k].desc, next: all ? "Alles geschafft \u2013 nochmal \xFCben" : mx === 1 ? "Los geht's" : "Weiter: Stufe " + nx2 + " \xB7 " + names[nx2], pips: ds.map((d, i) => ({ bg: fl[i] ? "#FFC23D" : d ? "#0C7C74" : "#fff", bd: fl[i] ? "#D99A12" : "#0C7C74" })), medal: mx > 1 && all, border: all ? "#0C7C74" : k === "satz" ? "#FFC23D" : "#D6E2C4", bg: k === "satz" ? "#FFF8E6" : "#fff", star: k === "satz", open: () => this.open(k, all ? mx > 1 ? 1 + Math.floor(Math.random() * 3) : 1 : nx2) };
+      }).map((c, i) => ({ c, i })).sort((x, y) => x.c.fin - y.c.fin || x.i - y.i).map((x) => x.c),
       toHub: () => this.setState({ screen: "hub", hubMsg: "", rep: 1, errs: [], stufe: 1, pool: [], repRefs: [] })
     };
-    if (s.screen === "hub") return base;
+    if (s.screen === "hub" || s.screen === "regal") return base;
     if (s.screen === "truhe") {
       const rw = this.rewards[pr.opened % this.rewards.length];
       return Object.assign(base, { truheClosed: !s.truheOpen, truheOpen: s.truheOpen, rwEmoji: rw[0], rwName: rw[1], rwText: rw[2], openIt: () => this.setState({ truheOpen: true }), closeTruhe: () => {
