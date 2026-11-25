@@ -1295,15 +1295,16 @@ window.__Component = class Component extends DCLogic {
       note: s.hubMsg || (nx ? "Ab " + this.dateLabel(nx.from, nx.to) + " warten " + nx.words.length + " neue W\xF6rter" : ""),
       toGate: () => this.setState({ screen: "gate", gateAns: "", gateWrong: false }),
       chips: this.words.map((x) => ({ w: (x.art ? x.art + " " : "") + x.w, size: n > 12 ? "21px" : "26px" })),
-      cards: shown.map((k) => {
+      cards: this.hubCards = shown.map((k) => {
         const mx = this.isSingle(k) ? 1 : 3;
         const lv = [1, 2, 3].slice(0, mx);
         const ds = lv.map((n2) => pr.done.indexOf(k + "#" + n2) !== -1);
         const fl = lv.map((n2) => pr.flaw.indexOf(k + "#" + n2) !== -1);
         const nx2 = ds.indexOf(false) + 1;
         const all = nx2 === 0;
-        return { fin: all, title: this.ex[k].title, desc: this.ex[k].desc, next: all ? "Alles geschafft \u2013 nochmal \xFCben" : mx === 1 ? "Los geht's" : "Weiter: Stufe " + nx2 + " \xB7 " + names[nx2], pips: ds.map((d, i) => ({ bg: fl[i] ? "#FFC23D" : d ? "#0C7C74" : "#fff", bd: fl[i] ? "#D99A12" : "#0C7C74" })), medal: mx > 1 && all, border: all ? "#0C7C74" : k === "satz" ? "#FFC23D" : "#D6E2C4", bg: k === "satz" ? "#FFF8E6" : "#fff", star: k === "satz", open: () => this.open(k, all ? mx > 1 ? 1 + Math.floor(Math.random() * 3) : 1 : nx2) };
+        return { key: k, ic: { satz: "\u{1F4DD}", diktat: "\u{1F442}", silben: "\u2702\uFE0F", koenig: "\u{1F451}", plural: "\u{1F465}", wortart: "\u{1F50E}", gross: "\u{1F520}", abc: "\u{1F524}", zeichen: "\u2757", gefuehl: "\u{1F60A}", zerleg: "\u{1F9E9}", spur: "\u270D\uFE0F", heft: "\u{1F4D3}" }[k] || "\u2B50", fin: all, title: this.ex[k].title, desc: this.ex[k].desc, next: all ? "Alles geschafft \u2013 nochmal \xFCben" : mx === 1 ? "Los geht's" : "Weiter: Stufe " + nx2 + " \xB7 " + names[nx2], pips: ds.map((d, i) => ({ bg: fl[i] ? "#FFC23D" : d ? "#0C7C74" : "#fff", bd: fl[i] ? "#D99A12" : "#0C7C74" })), medal: mx > 1 && all, border: all ? "#0C7C74" : k === "satz" ? "#FFC23D" : "#D6E2C4", bg: k === "satz" ? "#FFF8E6" : "#fff", star: k === "satz", open: () => this.open(k, all ? mx > 1 ? 1 + Math.floor(Math.random() * 3) : 1 : nx2) };
       }).map((c, i) => ({ c, i })).sort((x, y) => x.c.fin - y.c.fin || x.i - y.i).map((x) => x.c),
+      groups: [["Sch\xF6n schreiben", "\u270F\uFE0F", "#EAF5F3", "#9AD3CA", ["satz", "diktat", "spur", "heft"]], ["Silben & W\xF6rter", "\u{1F451}", "#FFF6DC", "#F0C766", ["silben", "koenig", "zerleg", "abc"]], ["W\xF6rter erkennen", "\u{1F50E}", "#F0F5E6", "#B7CC93", ["wortart", "plural", "gross", "zeichen", "gefuehl"]], ["Englisch", "\u{1F1EC}\u{1F1E7}", "#E8F4FC", "#9CC6FF", []]].map((g) => ({ title: g[0], ic: g[1], bg: g[2], bd: g[3], english: g[0] === "Englisch", cards: this.hubCards.filter((c) => g[4].indexOf(c.key) !== -1) })).filter((g) => g.cards.length || g.english),
       toHub: () => this.setState({ screen: "hub", hubMsg: "", rep: 1, errs: [], stufe: 1, pool: [], repRefs: [] })
     };
     base.packsApp = base.packs.filter((p) => p.src === "app");

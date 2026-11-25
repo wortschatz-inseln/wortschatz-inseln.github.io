@@ -99,27 +99,34 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
         </ul>
       </section>
 
-      <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
-        <sc-for list="{{ cards }}" as="k" hint-placeholder-count="6">
-          <li style="display: flex">
-            <button class="card" type="button" onClick="{{ k.open }}" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 24px; background: {{ k.bg }}; border: 3px solid {{ k.border }}; box-shadow: 0 5px 0 #D6E2C4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; font-family: inherit; color: #10304A">
-              <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
-                <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px">{{ k.title }}</span>
-                <span style="display: flex; align-items: center; gap: 5px"><sc-if value="{{ k.medal }}" hint-placeholder-val="{{ false }}"><img src="assets/medaille.png" alt="Meister-Medaille" style="height: 34px; width: auto"></sc-if><sc-for list="{{ k.pips }}" as="p" hint-placeholder-count="3"><span style="width: 16px; height: 16px; border-radius: 50%; background: {{ p.bg }}; border: 2px solid {{ p.bd }}; box-sizing: border-box"></span></sc-for></span>
-              </span>
-              <span style="font-size: 16px; line-height: 1.35; color: #3E5A6E; font-weight: 600">{{ k.desc }}</span>
-              <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; font-weight: 800; color: #5C7A2E">{{ k.next }}<sc-if value="{{ k.star }}" hint-placeholder-val="{{ false }}"><span style="background: #10304A; color: #fff; border-radius: 999px; padding: 2px 10px; font-size: 13px">Wichtigste Aufgabe</span></sc-if></span>
-            </button>
-          </li>
-        </sc-for>
-        <li style="display: flex">
-          <a class="card" href="KoerperEnglisch.html" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 24px; background: #E3F2FB; border: 3px solid #9CC6FF; box-shadow: 0 5px 0 #C9DDE4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: #10304A">
-            <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px">My body</span>
-            <span style="font-size: 16px; line-height: 1.35; color: #3E5A6E; font-weight: 600">Englische Körperteile zeigen und zuordnen</span>
-            <span style="font-size: 14px; font-weight: 800; color: #2F6FD0">Englisch · 10 Wörter</span>
-          </a>
-        </li>
-      </ul>
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="3">
+        <section style="display: flex; align-items: stretch; gap: 14px; background: {{ g.bg }}; border: 3px solid {{ g.bd }}; border-radius: 28px; padding: 12px">
+          <div style="width: 118px; flex: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center">
+            <span style="font-size: 44px; line-height: 50px">{{ g.ic }}</span>
+            <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 19px; line-height: 1.1">{{ g.title }}</span>
+          </div>
+          <ul style="flex: 1; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 12px">
+            <sc-for list="{{ g.cards }}" as="k" hint-placeholder-count="4">
+              <li style="width: 182px; display: flex">
+                <button class="card" type="button" onClick="{{ k.open }}" style="flex: 1; height: 132px; box-sizing: border-box; border-radius: 22px; background: {{ k.bg }}; border: 3px solid {{ k.border }}; box-shadow: 0 4px 0 #D6E2C4; padding: 10px 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; font-family: inherit; color: #10304A">
+                  <span style="font-size: 34px; line-height: 38px">{{ k.ic }}</span>
+                  <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 18px; line-height: 1.1">{{ k.title }}</span>
+                  <span style="display: flex; align-items: center; gap: 5px"><sc-if value="{{ k.medal }}" hint-placeholder-val="{{ false }}"><img src="assets/medaille.png" alt="Meister-Medaille" style="height: 26px; width: auto"></sc-if><sc-for list="{{ k.pips }}" as="p" hint-placeholder-count="3"><span style="width: 14px; height: 14px; border-radius: 50%; background: {{ p.bg }}; border: 2px solid {{ p.bd }}"></span></sc-for></span>
+                </button>
+              </li>
+            </sc-for>
+            <sc-if value="{{ g.english }}" hint-placeholder-val="{{ false }}">
+              <li style="width: 182px; display: flex">
+                <a class="card" href="KoerperEnglisch.html" style="flex: 1; height: 132px; box-sizing: border-box; border-radius: 22px; background: #E3F2FB; border: 3px solid #9CC6FF; box-shadow: 0 4px 0 #C9DDE4; padding: 10px 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; text-decoration: none; color: #10304A">
+                  <span style="font-size: 34px; line-height: 38px">🧍</span>
+                  <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 18px">My body</span>
+                  <span style="font-size: 13px; font-weight: 800; color: #2F6FD0">10 Wörter</span>
+                </a>
+              </li>
+            </sc-if>
+          </ul>
+        </section>
+      </sc-for>
     </div>
   </sc-if>
 
