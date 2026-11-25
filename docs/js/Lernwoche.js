@@ -226,6 +226,45 @@ window.__Component = class Component extends DCLogic {
     if (screen === "zerleg") return this.zerleg;
     return [];
   }
+  norm(x) {
+    x = String(x || "").trim().replace(/\s+/g, " ");
+    try {
+      return x.normalize("NFC");
+    } catch (e) {
+      return x;
+    }
+  }
+  kbKey(k) {
+    const s = this.state;
+    if (s.phase !== "ask") return;
+    if (k === "SHIFT") {
+      this.setState({ shift: !s.shift });
+      return;
+    }
+    if (k === "READ") {
+      if (s.input.trim()) this.say(s.input, 0.8);
+      return;
+    }
+    if (k === "BACK") {
+      this.setState({ input: s.input.slice(0, -1), msg: "" });
+      return;
+    }
+    if (k === "ENTER") {
+      if (s.screen === "satz") this.checkSatz();
+      else this.check();
+      return;
+    }
+    const max = s.screen === "satz" ? 160 : 32;
+    if (s.input.length >= max) return;
+    const ch = k === "SPACE" ? " " : s.shift && k !== "\xDF" ? k.toUpperCase() : k;
+    this.setState({ input: s.input + ch, shift: false, msg: "" });
+  }
+  diffHint(v, a) {
+    const n = (x) => x.replace(/ß/g, "ss").toLowerCase();
+    if (v !== a && v.toLowerCase() === a.toLowerCase()) return "Achte auf gro\xDF und klein: " + (/^[A-ZÄÖÜ]/.test(a) ? "Das Wort beginnt mit einem gro\xDFen Buchstaben. " : "Das Wort beginnt klein. ");
+    if (v !== a && n(v) === n(a)) return "\xDF oder ss? ";
+    return "";
+  }
   kingTokens(it) {
     const re = /^(.*?)(aa|ee|oo|au|äu|eu|ei|ie|ai|[aeiouäöü])(.*)$/i;
     const out = [];
@@ -423,7 +462,7 @@ window.__Component = class Component extends DCLogic {
     this.setState(Object.assign({ screen: key, i: 0, rep: 1, errs: [], stufe: st, pool, repRefs: [], lastReward: null }, this.reset(), key === "satz" ? { written: [], round: 1, missed: [] } : {}));
   }
   reset() {
-    return { phase: "ask", input: "", attempt: "", cuts: [], caps: [], picked: [], wrongPick: "", msg: "", wasWrong: false, results: null, showIdea: false, self1: false, self2: false, tries: 0, marked: [] };
+    return { phase: "ask", input: "", attempt: "", cuts: [], caps: [], picked: [], wrongPick: "", msg: "", wasWrong: false, results: null, showIdea: false, self1: false, self2: false, tries: 0, marked: [], shift: false };
   }
   iso(d) {
     return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
@@ -961,7 +1000,7 @@ window.__Component = class Component extends DCLogic {
         return { mode: "choice", prompt: "Welche Schreibweise ist richtig?", sub: "H\xF6r das Wort und tippe die richtige Schreibweise.", show: "", speak: it.w, options: this.shuf([it.w].concat(wr.slice(0, 2))), answer: it.w, okMsg: "Richtig! " + it.tip, badMsg: "Nicht ganz. Tipp: " + it.tip };
       }
       const idx = it.crit.length ? it.crit : [Math.min(1, it.w.length - 1)];
-      return { mode: "type", prompt: "Schreib das ganze Wort.", sub: "Die L\xFCcken sind die kniffligen Stellen.", show: it.w.split("").map((ch, k) => idx.indexOf(k) !== -1 ? "_" : ch).join(""), speak: it.w, answer: it.w, okMsg: "Richtig! " + it.tip, badMsg: "Fast! Tipp: " + it.tip };
+      return { mode: "type", alt: idx.map((k) => it.w[k]).join(""), prompt: "Schreib das ganze Wort.", sub: "Die L\xFCcken sind die kniffligen Stellen. Du darfst auch nur die fehlenden Buchstaben tippen.", show: it.w.split("").map((ch, k) => idx.indexOf(k) !== -1 ? "_" : ch).join(""), speak: it.w, answer: it.w, okMsg: "Richtig! " + it.tip, badMsg: "Fast! Tipp: " + it.tip };
     }
     if (screen === "silben") {
       if (v === 0) {
@@ -1093,10 +1132,10 @@ window.__Component = class Component extends DCLogic {
   checkTask() {
     const s = this.state;
     const t = this.items(s.screen)[s.i];
-    const v = s.input.trim();
+    const v = this.norm(s.input);
     if (!t || s.phase !== "ask" || !v) return;
-    if (v === t.answer) this.setState({ phase: "right", msg: t.okMsg });
-    else this.setState({ errs: this.errList(), msg: t.badMsg });
+    if (v === t.answer || t.alt && v === t.alt) this.setState({ phase: "right", msg: t.okMsg });
+    else this.setState({ errs: this.errList(), msg: this.diffHint(v, t.answer) + t.badMsg });
   }
   right(msg) {
     this.setState({ phase: "right", msg });
@@ -1106,10 +1145,10 @@ window.__Component = class Component extends DCLogic {
     if (s.stufe > 1 && s.screen !== "satz") return this.checkTask();
     const it = this.items(s.screen)[s.i];
     if (s.screen === "diktat") {
-      const v = s.input.trim();
+      const v = this.norm(s.input);
       if (!v) return;
       if (v === it.w) this.setState({ phase: "right", attempt: v, wasWrong: false, msg: "Richtig! " + it.tip });
-      else this.setState({ errs: this.errList(), phase: "right", attempt: v, wasWrong: true, msg: "Fast! " + it.tip });
+      else this.setState({ errs: this.errList(), phase: "right", attempt: v, wasWrong: true, msg: "Fast! " + this.diffHint(v, it.w) + it.tip });
     }
     if (s.screen === "silben") {
       const expected = [];
@@ -1150,7 +1189,7 @@ window.__Component = class Component extends DCLogic {
       else this.setState({ errs: this.errList(), msg: "Noch nicht. Welche zwei Nomen stecken darin? Tipp: Manchmal steht ein n oder s dazwischen." });
     }
     if (s.screen === "plural") {
-      const v = s.input.trim();
+      const v = this.norm(s.input);
       if (!v) return;
       if (v === it.pl) this.right(it.pl === it.w ? "Richtig! Bei " + it.w + " bleibt es gleich \u2013 nur der Artikel wird zu \u201Edie\u201C." : "Richtig! " + it.art + " " + it.w + " \u2013 die " + it.pl + ".");
       else this.setState({ errs: this.errList(), msg: /[äöü]/.test(it.pl) ? "Tipp: Hier wird aus a ein \xE4. Sprich \u201Eviele \u2026\u201C laut." : "Tipp: Sprich \u201Eviele \u2026\u201C laut und h\xF6r aufs Ende." });
@@ -1165,7 +1204,7 @@ window.__Component = class Component extends DCLogic {
   checkSatz() {
     const s = this.state;
     const it = this.items("satz")[s.i];
-    const text = s.input.trim().replace(/\s+/g, " ");
+    const text = this.norm(s.input);
     if (!text) return;
     const tries = s.tries + 1;
     const toks = text.split(" ").map((t) => t.replace(/[.,!?;:„“"]/g, ""));
@@ -1439,6 +1478,11 @@ window.__Component = class Component extends DCLogic {
         this.setState(upd);
         if (s.screen === "satz" && s.round >= 2 && n2 < list.length) this.say((list[n2].art ? list[n2].art + " " : "") + list[n2].w);
       },
+      cardH: "660px",
+      cardPad: "32px 44px",
+      cardGap: "22px",
+      showKb: false,
+      kbRows: [],
       kTokens: [],
       hBtns: [],
       spurShow: "",
@@ -1505,6 +1549,20 @@ window.__Component = class Component extends DCLogic {
       markedTokens: [],
       hasMarks: false
     });
+    const kbOn = !finished && s.phase === "ask" && !listDone && ((s.screen === "diktat" || s.screen === "plural") && !taskRound || s.screen === "satz" || taskRound && it && it.mode === "type");
+    if (kbOn) {
+      v.showKb = true;
+      v.cardH = "420px";
+      v.cardPad = "16px 40px";
+      v.cardGap = "10px";
+      const rows = [["q", "w", "e", "r", "t", "z", "u", "i", "o", "p", "\xFC"], ["a", "s", "d", "f", "g", "h", "j", "k", "l", "\xF6", "\xE4"], ["SHIFT", "y", "x", "c", "v", "b", "n", "m", "\xDF", "BACK"], s.screen === "satz" ? ["READ", ",", ".", "?", "!", "SPACE", "ENTER"] : ["ENTER"]];
+      v.kbRows = rows.map((row) => ({ keys: row.map((k) => {
+        const sp = k === "SHIFT" || k === "BACK" || k === "ENTER" || k === "SPACE" || k === "READ";
+        const on = k === "SHIFT" && s.shift;
+        const l = k === "SHIFT" ? "\u21E7" : k === "BACK" ? "\u232B" : k === "ENTER" ? s.screen === "satz" ? "Pr\xFCfen" : "Pr\xFCfen \u2713" : k === "SPACE" ? "Leerzeichen" : k === "READ" ? "\u{1F50A}" : s.shift && k !== "\xDF" ? k.toUpperCase() : k;
+        return { l, press: () => this.kbKey(k), flex: k === "SPACE" ? "3.5" : k === "ENTER" ? s.screen === "satz" ? "2" : "3" : sp ? "1.5" : "1", bg: k === "ENTER" ? "#0C7C74" : on ? "#FFC23D" : sp ? "#D6E2C4" : "#fff", fg: k === "ENTER" ? "#fff" : "#10304A", edge: k === "ENTER" ? "#075A54" : on ? "#D99A12" : "#B8CBB0", size: sp && k !== "SHIFT" && k !== "BACK" && k !== "READ" ? "20px" : "28px" };
+      }) }));
+    }
     if (listDone) return v;
     if (taskRound) {
       const t = it;

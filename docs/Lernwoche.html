@@ -313,8 +313,8 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
         <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px; min-width: 180px; text-align: right">{{ exTitle }}</span>
       </header>
 
-      <main style="flex: 1; display: flex; justify-content: center">
-        <section aria-live="polite" style="width: 860px; height: 660px; box-sizing: border-box; background: #fff; border-radius: 36px; padding: 32px 44px; box-shadow: 0 8px 0 #D6E2C4; display: flex; flex-direction: column; align-items: center; gap: 22px">
+      <main style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px">
+        <section aria-live="polite" style="flex: none; width: 860px; height: {{ cardH }}; box-sizing: border-box; background: #fff; border-radius: 36px; padding: {{ cardPad }}; box-shadow: 0 8px 0 #D6E2C4; display: flex; flex-direction: column; align-items: center; gap: {{ cardGap }}; overflow: hidden">
 
           <sc-if value="{{ roundBreak }}" hint-placeholder-val="{{ false }}">
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center">
@@ -377,9 +377,8 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                   </sc-if>
                   <sc-if value="{{ tType }}" hint-placeholder-val="{{ false }}">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 16px">
-                      <input id="tin" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 88px; width: 520px; font-size: 46px">
+                      <input id="tin" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 88px; width: 520px; font-size: 46px">
                       <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
-                        <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
                       </sc-if>
                     </div>
                   </sc-if>
@@ -409,8 +408,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                   <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
                     <div style="display: flex; gap: 16px; width: 100%">
                       <label for="dik" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Wort</label>
-                      <input id="dik" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 100px; font-size: 54px; flex: 1; min-width: 0">
-                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 100px; padding: 0 30px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                      <input id="dik" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 100px; font-size: 54px; flex: 1; min-width: 0">
                     </div>
                   </sc-if>
                   <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
@@ -451,11 +449,9 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                     <span style="font-size: 19px; font-weight: 700; color: #5C7A2E">Kiki fragt: {{ idea }}</span>
                   </sc-if>
                   <label for="satz" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Satz</label>
-                  <textarea id="satz" class="word-input" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Schreib hier deinen Satz …" value="{{ input }}" onChange="{{ onSatz }}" disabled="{{ satzLocked }}" style="width: 100%; height: 120px; font-size: 34px; text-align: left; padding: 12px 18px; resize: none; line-height: 1.35"></textarea>
+                  <textarea id="satz" class="word-input" readonly="readonly" inputmode="none" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Schreib hier deinen Satz …" value="{{ input }}" onChange="{{ onSatz }}" disabled="{{ satzLocked }}" style="width: 100%; height: 120px; font-size: 34px; text-align: left; padding: 12px 18px; resize: none; line-height: 1.35"></textarea>
                   <sc-if value="{{ satzAsking }}" hint-placeholder-val="{{ true }}">
                     <div style="display: flex; gap: 14px">
-                      <button class="btn btn-soft" type="button" disabled="{{ empty }}" onClick="{{ readBack }}" style="height: 64px; padding: 0 22px; border-radius: 20px; font-size: 19px">Vorlesen lassen</button>
-                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ checkSatz }}" style="height: 64px; padding: 0 36px; border-radius: 20px; font-size: 22px">Prüfen</button>
                     </div>
                   </sc-if>
                   <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
@@ -566,13 +562,12 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                       <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
                         <span style="display: flex; align-items: center; gap: 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 50px">die
                           <label for="pl" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mehrzahl</label>
-                          <input id="pl" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 76px; width: 230px; font-size: 42px">
+                          <input id="pl" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 76px; width: 230px; font-size: 42px">
                         </span>
                       </sc-if>
                     </div>
                   </div>
                   <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
-                    <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
                   </sc-if>
                 </div>
               </sc-if>
@@ -626,6 +621,17 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
             </div>
           </sc-if>
         </section>
+        <sc-if value="{{ showKb }}" hint-placeholder-val="{{ false }}">
+          <div aria-label="Tastatur" style="flex: none; width: 1010px; display: flex; flex-direction: column; gap: 6px; background: #E6EFE0; border-radius: 22px; padding: 8px 10px; box-sizing: border-box">
+            <sc-for list="{{ kbRows }}" as="row" hint-placeholder-count="4">
+              <div style="display: flex; gap: 6px; justify-content: center">
+                <sc-for list="{{ row.keys }}" as="k" hint-placeholder-count="10">
+                  <button type="button" onClick="{{ k.press }}" style="flex: {{ k.flex }}; height: 54px; min-width: 0; padding: 0; border-radius: 12px; border: none; border-bottom: 4px solid {{ k.edge }}; background: {{ k.bg }}; color: {{ k.fg }}; font-family: 'Andika', system-ui, sans-serif; font-size: {{ k.size }}; font-weight: 700; cursor: pointer">{{ k.l }}</button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
       </main>
     </div>
   </sc-if>

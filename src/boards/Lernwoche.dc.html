@@ -306,8 +306,8 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
         <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px; min-width: 180px; text-align: right">{{ exTitle }}</span>
       </header>
 
-      <main style="flex: 1; display: flex; justify-content: center">
-        <section aria-live="polite" style="width: 860px; height: 660px; box-sizing: border-box; background: #fff; border-radius: 36px; padding: 32px 44px; box-shadow: 0 8px 0 #D6E2C4; display: flex; flex-direction: column; align-items: center; gap: 22px">
+      <main style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 12px">
+        <section aria-live="polite" style="flex: none; width: 860px; height: {{ cardH }}; box-sizing: border-box; background: #fff; border-radius: 36px; padding: {{ cardPad }}; box-shadow: 0 8px 0 #D6E2C4; display: flex; flex-direction: column; align-items: center; gap: {{ cardGap }}; overflow: hidden">
 
           <sc-if value="{{ roundBreak }}" hint-placeholder-val="{{ false }}">
             <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center">
@@ -370,9 +370,8 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                   </sc-if>
                   <sc-if value="{{ tType }}" hint-placeholder-val="{{ false }}">
                     <div style="display: flex; flex-direction: column; align-items: center; gap: 16px">
-                      <input id="tin" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 88px; width: 520px; font-size: 46px">
+                      <input id="tin" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 88px; width: 520px; font-size: 46px">
                       <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
-                        <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
                       </sc-if>
                     </div>
                   </sc-if>
@@ -402,8 +401,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                   <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
                     <div style="display: flex; gap: 16px; width: 100%">
                       <label for="dik" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Wort</label>
-                      <input id="dik" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 100px; font-size: 54px; flex: 1; min-width: 0">
-                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 100px; padding: 0 30px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                      <input id="dik" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 100px; font-size: 54px; flex: 1; min-width: 0">
                     </div>
                   </sc-if>
                   <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
@@ -444,11 +442,9 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                     <span style="font-size: 19px; font-weight: 700; color: #5C7A2E">Kiki fragt: {{ idea }}</span>
                   </sc-if>
                   <label for="satz" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Satz</label>
-                  <textarea id="satz" class="word-input" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Schreib hier deinen Satz …" value="{{ input }}" onChange="{{ onSatz }}" disabled="{{ satzLocked }}" style="width: 100%; height: 120px; font-size: 34px; text-align: left; padding: 12px 18px; resize: none; line-height: 1.35"></textarea>
+                  <textarea id="satz" class="word-input" readonly="readonly" inputmode="none" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Schreib hier deinen Satz …" value="{{ input }}" onChange="{{ onSatz }}" disabled="{{ satzLocked }}" style="width: 100%; height: 120px; font-size: 34px; text-align: left; padding: 12px 18px; resize: none; line-height: 1.35"></textarea>
                   <sc-if value="{{ satzAsking }}" hint-placeholder-val="{{ true }}">
                     <div style="display: flex; gap: 14px">
-                      <button class="btn btn-soft" type="button" disabled="{{ empty }}" onClick="{{ readBack }}" style="height: 64px; padding: 0 22px; border-radius: 20px; font-size: 19px">Vorlesen lassen</button>
-                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ checkSatz }}" style="height: 64px; padding: 0 36px; border-radius: 20px; font-size: 22px">Prüfen</button>
                     </div>
                   </sc-if>
                   <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
@@ -559,13 +555,12 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                       <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
                         <span style="display: flex; align-items: center; gap: 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 50px">die
                           <label for="pl" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mehrzahl</label>
-                          <input id="pl" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 76px; width: 230px; font-size: 42px">
+                          <input id="pl" class="word-input" type="text" readonly="readonly" inputmode="none" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 76px; width: 230px; font-size: 42px">
                         </span>
                       </sc-if>
                     </div>
                   </div>
                   <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
-                    <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
                   </sc-if>
                 </div>
               </sc-if>
@@ -619,6 +614,17 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
             </div>
           </sc-if>
         </section>
+        <sc-if value="{{ showKb }}" hint-placeholder-val="{{ false }}">
+          <div aria-label="Tastatur" style="flex: none; width: 1010px; display: flex; flex-direction: column; gap: 6px; background: #E6EFE0; border-radius: 22px; padding: 8px 10px; box-sizing: border-box">
+            <sc-for list="{{ kbRows }}" as="row" hint-placeholder-count="4">
+              <div style="display: flex; gap: 6px; justify-content: center">
+                <sc-for list="{{ row.keys }}" as="k" hint-placeholder-count="10">
+                  <button type="button" onClick="{{ k.press }}" style="flex: {{ k.flex }}; height: 54px; min-width: 0; padding: 0; border-radius: 12px; border: none; border-bottom: 4px solid {{ k.edge }}; background: {{ k.bg }}; color: {{ k.fg }}; font-family: 'Andika', system-ui, sans-serif; font-size: {{ k.size }}; font-weight: 700; cursor: pointer">{{ k.l }}</button>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
       </main>
     </div>
   </sc-if>
@@ -799,6 +805,25 @@ class Component extends DCLogic {
     if (screen === 'zerleg') return this.zerleg;
     return [];
   }
+  norm(x) { x = String(x || '').trim().replace(/\s+/g, ' '); try { return x.normalize('NFC'); } catch (e) { return x; } }
+  kbKey(k) {
+    const s = this.state;
+    if (s.phase !== 'ask') return;
+    if (k === 'SHIFT') { this.setState({ shift: !s.shift }); return; }
+    if (k === 'READ') { if (s.input.trim()) this.say(s.input, 0.8); return; }
+    if (k === 'BACK') { this.setState({ input: s.input.slice(0, -1), msg: '' }); return; }
+    if (k === 'ENTER') { if (s.screen === 'satz') this.checkSatz(); else this.check(); return; }
+    const max = s.screen === 'satz' ? 160 : 32;
+    if (s.input.length >= max) return;
+    const ch = k === 'SPACE' ? ' ' : (s.shift && k !== 'ß' ? k.toUpperCase() : k);
+    this.setState({ input: s.input + ch, shift: false, msg: '' });
+  }
+  diffHint(v, a) {
+    const n = (x) => x.replace(/ß/g, 'ss').toLowerCase();
+    if (v !== a && v.toLowerCase() === a.toLowerCase()) return 'Achte auf groß und klein: ' + (/^[A-ZÄÖÜ]/.test(a) ? 'Das Wort beginnt mit einem großen Buchstaben. ' : 'Das Wort beginnt klein. ');
+    if (v !== a && n(v) === n(a)) return 'ß oder ss? ';
+    return '';
+  }
   kingTokens(it) {
     const re = /^(.*?)(aa|ee|oo|au|äu|eu|ei|ie|ai|[aeiouäöü])(.*)$/i;
     const out = [];
@@ -924,7 +949,7 @@ class Component extends DCLogic {
     this.setState(Object.assign({ screen: key, i: 0, rep: 1, errs: [], stufe: st, pool: pool, repRefs: [], lastReward: null }, this.reset(), key === 'satz' ? { written: [], round: 1, missed: [] } : {}));
   }
   reset() {
-    return { phase: 'ask', input: '', attempt: '', cuts: [], caps: [], picked: [], wrongPick: '', msg: '', wasWrong: false, results: null, showIdea: false, self1: false, self2: false, tries: 0, marked: [] };
+    return { phase: 'ask', input: '', attempt: '', cuts: [], caps: [], picked: [], wrongPick: '', msg: '', wasWrong: false, results: null, showIdea: false, self1: false, self2: false, tries: 0, marked: [], shift: false };
   }
   iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   nextMonday() {
@@ -1345,7 +1370,7 @@ class Component extends DCLogic {
         return { mode: 'choice', prompt: 'Welche Schreibweise ist richtig?', sub: 'Hör das Wort und tippe die richtige Schreibweise.', show: '', speak: it.w, options: this.shuf([it.w].concat(wr.slice(0, 2))), answer: it.w, okMsg: 'Richtig! ' + it.tip, badMsg: 'Nicht ganz. Tipp: ' + it.tip };
       }
       const idx = it.crit.length ? it.crit : [Math.min(1, it.w.length - 1)];
-      return { mode: 'type', prompt: 'Schreib das ganze Wort.', sub: 'Die Lücken sind die kniffligen Stellen.', show: it.w.split('').map((ch, k) => (idx.indexOf(k) !== -1 ? '_' : ch)).join(''), speak: it.w, answer: it.w, okMsg: 'Richtig! ' + it.tip, badMsg: 'Fast! Tipp: ' + it.tip };
+      return { mode: 'type', alt: idx.map((k) => it.w[k]).join(''), prompt: 'Schreib das ganze Wort.', sub: 'Die Lücken sind die kniffligen Stellen. Du darfst auch nur die fehlenden Buchstaben tippen.', show: it.w.split('').map((ch, k) => (idx.indexOf(k) !== -1 ? '_' : ch)).join(''), speak: it.w, answer: it.w, okMsg: 'Richtig! ' + it.tip, badMsg: 'Fast! Tipp: ' + it.tip };
     }
     if (screen === 'silben') {
       if (v === 0) {
@@ -1463,10 +1488,10 @@ class Component extends DCLogic {
   checkTask() {
     const s = this.state;
     const t = this.items(s.screen)[s.i];
-    const v = s.input.trim();
+    const v = this.norm(s.input);
     if (!t || s.phase !== 'ask' || !v) return;
-    if (v === t.answer) this.setState({ phase: 'right', msg: t.okMsg });
-    else this.setState({ errs: this.errList(), msg: t.badMsg });
+    if (v === t.answer || (t.alt && v === t.alt)) this.setState({ phase: 'right', msg: t.okMsg });
+    else this.setState({ errs: this.errList(), msg: this.diffHint(v, t.answer) + t.badMsg });
   }
   right(msg) { this.setState({ phase: 'right', msg: msg }); }
   check() {
@@ -1474,10 +1499,10 @@ class Component extends DCLogic {
     if (s.stufe > 1 && s.screen !== 'satz') return this.checkTask();
     const it = this.items(s.screen)[s.i];
     if (s.screen === 'diktat') {
-      const v = s.input.trim();
+      const v = this.norm(s.input);
       if (!v) return;
       if (v === it.w) this.setState({ phase: 'right', attempt: v, wasWrong: false, msg: 'Richtig! ' + it.tip });
-      else this.setState({ errs: this.errList(), phase: 'right', attempt: v, wasWrong: true, msg: 'Fast! ' + it.tip });
+      else this.setState({ errs: this.errList(), phase: 'right', attempt: v, wasWrong: true, msg: 'Fast! ' + this.diffHint(v, it.w) + it.tip });
     }
     if (s.screen === 'silben') {
       const expected = [];
@@ -1509,7 +1534,7 @@ class Component extends DCLogic {
       else this.setState({ errs: this.errList(), msg: 'Noch nicht. Welche zwei Nomen stecken darin? Tipp: Manchmal steht ein n oder s dazwischen.' });
     }
     if (s.screen === 'plural') {
-      const v = s.input.trim();
+      const v = this.norm(s.input);
       if (!v) return;
       if (v === it.pl) this.right(it.pl === it.w ? 'Richtig! Bei ' + it.w + ' bleibt es gleich – nur der Artikel wird zu „die“.' : 'Richtig! ' + it.art + ' ' + it.w + ' – die ' + it.pl + '.');
       else this.setState({ errs: this.errList(), msg: /[äöü]/.test(it.pl) ? 'Tipp: Hier wird aus a ein ä. Sprich „viele …“ laut.' : 'Tipp: Sprich „viele …“ laut und hör aufs Ende.' });
@@ -1524,7 +1549,7 @@ class Component extends DCLogic {
   checkSatz() {
     const s = this.state;
     const it = this.items('satz')[s.i];
-    const text = s.input.trim().replace(/\s+/g, ' ');
+    const text = this.norm(s.input);
     if (!text) return;
     const tries = s.tries + 1;
     const toks = text.split(' ').map((t) => t.replace(/[.,!?;:„“"]/g, ''));
@@ -1770,10 +1795,21 @@ class Component extends DCLogic {
         this.setState(upd);
         if (s.screen === 'satz' && s.round >= 2 && n < list.length) this.say((list[n].art ? list[n].art + ' ' : '') + list[n].w);
       },
-      kTokens: [], hBtns: [], spurShow: '', heftWord: '', signed: !!pr.signed, notSigned: !pr.signed, signWrong: !!s.signWrong, signPin: s.signPin || '', onSignPin: (e) => this.setState({ signPin: e.target.value, signWrong: false }), doSign: () => { let ok = false; try { ok = window.WSI.checkPin(s.signPin); } catch (e) {} if (ok) { pr.signed = true; pr.bonus = (pr.bonus || 0) + 1; this.persist(); this.setState({ signPin: '', signWrong: false }); } else this.setState({ signWrong: true }); }, clearSpur: () => this.clearSpur(),
+      cardH: '660px', cardPad: '32px 44px', cardGap: '22px', showKb: false, kbRows: [], kTokens: [], hBtns: [], spurShow: '', heftWord: '', signed: !!pr.signed, notSigned: !pr.signed, signWrong: !!s.signWrong, signPin: s.signPin || '', onSignPin: (e) => this.setState({ signPin: e.target.value, signWrong: false }), doSign: () => { let ok = false; try { ok = window.WSI.checkPin(s.signPin); } catch (e) {} if (ok) { pr.signed = true; pr.bonus = (pr.bonus || 0) + 1; this.persist(); this.setState({ signPin: '', signWrong: false }); } else this.setState({ signWrong: true }); }, clearSpur: () => this.clearSpur(),
       letters: [], silLetters: [], silSolution: '', singular: '', plural: '', shownWord: '', typeButtons: [], tokens: [], abcPicked: [], abcLeft: [],
       speak: () => {}, speakSlow: () => {}, satzWord: '', idea: '', showIdea: false, results: [], hasResults: false, isSelf: false, satzAsking: false, satzLocked: false, wordShown: false, wordHidden: false, isTask: false, tHasShow: false, tShow: '', tSize: '54px', tHasSpeak: false, tSpeakFn: () => {}, tChoice: false, tType: false, tOrder: false, tOptions: [], tPicked: [], tLeft: [], roundLabel: '', speakSlowWord: () => {}, markedTokens: [], hasMarks: false
     });
+    const kbOn = !finished && s.phase === 'ask' && !listDone && (((s.screen === 'diktat' || s.screen === 'plural') && !taskRound) || s.screen === 'satz' || (taskRound && it && it.mode === 'type'));
+    if (kbOn) {
+      v.showKb = true; v.cardH = '420px'; v.cardPad = '16px 40px'; v.cardGap = '10px';
+      const rows = [['q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'ü'], ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ö', 'ä'], ['SHIFT', 'y', 'x', 'c', 'v', 'b', 'n', 'm', 'ß', 'BACK'], s.screen === 'satz' ? ['READ', ',', '.', '?', '!', 'SPACE', 'ENTER'] : ['ENTER']];
+      v.kbRows = rows.map((row) => ({ keys: row.map((k) => {
+        const sp = k === 'SHIFT' || k === 'BACK' || k === 'ENTER' || k === 'SPACE' || k === 'READ';
+        const on = k === 'SHIFT' && s.shift;
+        const l = k === 'SHIFT' ? '⇧' : k === 'BACK' ? '⌫' : k === 'ENTER' ? (s.screen === 'satz' ? 'Prüfen' : 'Prüfen ✓') : k === 'SPACE' ? 'Leerzeichen' : k === 'READ' ? '🔊' : (s.shift && k !== 'ß' ? k.toUpperCase() : k);
+        return { l: l, press: () => this.kbKey(k), flex: k === 'SPACE' ? '3.5' : (k === 'ENTER' ? (s.screen === 'satz' ? '2' : '3') : (sp ? '1.5' : '1')), bg: k === 'ENTER' ? '#0C7C74' : (on ? '#FFC23D' : (sp ? '#D6E2C4' : '#fff')), fg: k === 'ENTER' ? '#fff' : '#10304A', edge: k === 'ENTER' ? '#075A54' : (on ? '#D99A12' : '#B8CBB0'), size: sp && k !== 'SHIFT' && k !== 'BACK' && k !== 'READ' ? '20px' : '28px' };
+      }) }));
+    }
     if (listDone) return v;
     if (taskRound) {
       const t = it;
