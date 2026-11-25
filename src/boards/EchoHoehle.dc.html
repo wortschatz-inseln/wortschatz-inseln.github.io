@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Echo-Höhle</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(4px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 6px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-sun:hover{color:#10304A}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.seg{background:transparent;color:#3E5A6E;box-shadow:none}
+.seg-on{background:#fff;color:#10304A;box-shadow:0 3px 0 #C9DDE4}
+.word-input{width:100%;box-sizing:border-box;border:3px solid #C9DDE4;border-bottom:6px solid #9AD3DF;border-radius:24px;background:#F8FCFD;font-family:'Andika',system-ui,sans-serif;color:#10304A;text-align:center}
+.word-input::placeholder{color:#7D94A4}
+.word-input:focus{border-color:#0C7C74;outline:none}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4px}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .45s ease-out both}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.bob{animation:bob 3s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pop,.bob{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px; display: flex; flex-direction: column; gap: 20px; background: #E4F1F5; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 72px">
+    <a class="btn btn-soft" href="Main.dc.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      Karte
+    </a>
+    <ol aria-label="Fortschritt der Expedition" style="list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 14px">
+      <sc-for list="{{ stones }}" as="s" hint-placeholder-count="5">
+        <li style="display: flex; align-items: center">
+          <sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}">
+            <span aria-label="Wort {{ s.n }} geschafft" style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74; color: #fff; display: flex; align-items: center; justify-content: center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+            </span>
+          </sc-if>
+          <sc-if value="{{ s.current }}" hint-placeholder-val="{{ false }}">
+            <span aria-label="Aktuelles Wort {{ s.n }}" style="width: 48px; height: 48px; border-radius: 50%; background: #FFC23D; border: 4px solid #fff; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 20px; box-shadow: 0 3px 0 #D99A12">{{ s.n }}</span>
+          </sc-if>
+          <sc-if value="{{ s.todo }}" hint-placeholder-val="{{ true }}">
+            <span aria-label="Wort {{ s.n }}" style="width: 40px; height: 40px; border-radius: 50%; background: #fff; border: 3px solid #C9DDE4; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 17px; color: #3E5A6E">{{ s.n }}</span>
+          </sc-if>
+        </li>
+      </sc-for>
+    </ol>
+    <div style="display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; height: 60px; padding: 0 18px; box-sizing: border-box">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="10" width="18" height="10" rx="2"></rect><path d="M3 10a9 5 0 0 1 18 0"></path><path d="M10 13h4v3h-4z"></path></svg>
+      <span style="font-weight: 700; font-size: 17px">Heute gefunden: <span style="font-family: 'Fredoka', system-ui, sans-serif; font-size: 21px">{{ found }}</span></span>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; justify-content: center; align-items: flex-start">
+    <section aria-live="polite" style="width: 780px; height: 650px; box-sizing: border-box; background: #fff; border-radius: 36px; padding: 36px 48px; box-shadow: 0 8px 0 #C9DDE4; display: flex; flex-direction: column; align-items: center; gap: 22px">
+
+      <sc-if value="{{ isWrite }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+            <span style="display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #0C7C74"><img src="/_blob/38c5855d3564c7b07175662af8c52749" alt="" style="height: 44px; width: auto">Verlängerungs-Vulkan · Wort {{ num }} von 5</span>
+            <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 34px">Hör gut zu und schreib das Wort.</h2>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px">
+            <button class="btn btn-sun" type="button" onClick="{{ speakNormal }}" style="height: 96px; padding: 0 34px; border-radius: 30px; font-size: 26px">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19.5 5.5a9 9 0 0 1 0 13"></path></svg>
+              Anhören
+            </button>
+            <button class="btn btn-soft" type="button" onClick="{{ speakSlow }}" style="height: 72px; padding: 0 22px; border-radius: 24px; font-size: 19px">Ganz langsam</button>
+          </div>
+          <div role="group" aria-label="Schreibart" style="display: flex; gap: 6px; background: #E4F1F5; padding: 6px; border-radius: 18px">
+            <button class="btn {{ typeClass }}" type="button" aria-pressed="{{ isType }}" onClick="{{ setType }}" style="height: 48px; padding: 0 18px; border-radius: 14px; font-size: 17px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="2"></rect><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M7 14h10"></path></svg>
+              Tippen
+            </button>
+            <button class="btn {{ penClass }}" type="button" aria-pressed="{{ isPen }}" onClick="{{ setPen }}" style="height: 48px; padding: 0 18px; border-radius: 14px; font-size: 17px">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1L19 8l-3-3L5 16z"></path><path d="M14 6l3 3"></path></svg>
+              Mit Stift
+            </button>
+          </div>
+
+          <sc-if value="{{ isType }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%">
+              <label for="wort" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Wort</label>
+              <input id="wort" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 112px; font-size: 60px">
+              <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 80px; width: 320px; border-radius: 26px; font-size: 28px">Prüfen</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isPenWrite }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%">
+              <div style="position: relative; width: 100%; height: 132px; border: 3px solid #C9DDE4; border-radius: 24px; background: #F8FCFD; box-sizing: border-box; display: flex; align-items: center; justify-content: center">
+                <div aria-hidden="true" style="position: absolute; left: 24px; right: 24px; top: 34px; border-top: 2px dashed #C9DDE4"></div>
+                <div aria-hidden="true" style="position: absolute; left: 24px; right: 24px; top: 66px; border-top: 2px dashed #C9DDE4"></div>
+                <div aria-hidden="true" style="position: absolute; left: 24px; right: 24px; top: 96px; border-top: 3px solid #9AD3DF"></div>
+                <span style="position: relative; font-size: 18px; color: #3E5A6E; font-weight: 700; background: #F8FCFD; padding: 0 10px">Schreib hier mit dem Stift (oder auf Papier)</span>
+              </div>
+              <button class="btn btn-teal" type="button" onClick="{{ penCompare }}" style="height: 80px; width: 360px; border-radius: 26px; font-size: 26px">Fertig – vergleichen</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isPenCompare }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%">
+              <span style="font-size: 19px; font-weight: 700; color: #3E5A6E">So schreibt man es. Sieht dein Wort genauso aus?</span>
+              <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 72px; line-height: 1">{{ word }}</span>
+              <div style="display: flex; gap: 16px">
+                <button class="btn btn-teal" type="button" onClick="{{ penRight }}" style="height: 76px; padding: 0 30px; border-radius: 24px; font-size: 24px">Ja, genau so</button>
+                <button class="btn btn-soft" type="button" onClick="{{ penWrong }}" style="height: 76px; padding: 0 30px; border-radius: 24px; font-size: 24px">Nein, anders</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isRight }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center">
+          <img class="pop" src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 170px; width: auto; display: block">
+          <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 44px">Schatz gefunden!</h2>
+          <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 64px; line-height: 1; color: #0C7C74">{{ word }}</span>
+          <p style="margin: 0; font-size: 21px; max-width: 520px; line-height: 1.4; color: #3E5A6E">Du hast genau hingehört. In ein paar Tagen kommt das Wort wieder – schaffst du es dann noch einmal, wird es zur Sammelkarte.</p>
+          <sc-if value="{{ isLast }}" hint-placeholder-val="{{ false }}">
+            <a class="btn btn-teal" href="Logbuch.dc.html" style="height: 80px; padding: 0 44px; border-radius: 26px; font-size: 28px">Zum Logbuch</a>
+          </sc-if>
+          <sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}">
+            <button class="btn btn-teal" type="button" onClick="{{ next }}" style="height: 80px; padding: 0 56px; border-radius: 26px; font-size: 28px">Weiter</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isWrong }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%">
+          <div style="display: flex; align-items: center; gap: 16px">
+            <div style="width: 64px; height: 64px; border-radius: 50%; background: #FFC23D; display: flex; align-items: center; justify-content: center">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#10304A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3l8 8-3 3-8-8z"></path><path d="M11.5 9.5L3 18l3 3 8.5-8.5"></path></svg>
+            </div>
+            <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 34px">Fast! Ab in die Wort-Schmiede.</h2>
+          </div>
+          <div style="display: flex; align-items: flex-end; gap: 48px">
+            <sc-if value="{{ hasAttempt }}" hint-placeholder-val="{{ true }}">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+                <span style="font-size: 16px; font-weight: 700; color: #3E5A6E">Du hast geschrieben</span>
+                <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 44px; line-height: 1.1; color: #3E5A6E">{{ attempt }}</span>
+              </div>
+            </sc-if>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+              <span style="font-size: 16px; font-weight: 700; color: #3E5A6E">So schreibt man es</span>
+              <span style="display: flex; font-family: 'Andika', system-ui, sans-serif; font-size: 64px; line-height: 1.1">
+                <sc-for list="{{ letters }}" as="l" hint-placeholder-count="4">
+                  <sc-if value="{{ l.crit }}" hint-placeholder-val="{{ false }}">
+                    <span style="background: #FFC23D; border-radius: 12px; padding: 0 4px; box-shadow: inset 0 -5px 0 #D99A12">{{ l.ch }}</span>
+                  </sc-if>
+                  <sc-if value="{{ l.plain }}" hint-placeholder-val="{{ true }}">
+                    <span>{{ l.ch }}</span>
+                  </sc-if>
+                </sc-for>
+              </span>
+            </div>
+          </div>
+          <div style="width: 100%; box-sizing: border-box; background: #FFF4D6; border-radius: 22px; padding: 16px 22px; display: flex; align-items: center; gap: 16px">
+            <span style="flex-shrink: 0; background: #10304A; color: #fff; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 17px; padding: 8px 14px; border-radius: 999px">Trick: {{ strat }}</span>
+            <span style="font-size: 20px; line-height: 1.35">{{ hint }}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16px; width: 100%">
+            <label for="nochmal" style="font-weight: 800; font-size: 18px; flex-shrink: 0; width: 130px; line-height: 1.2">Schreib es jetzt richtig:</label>
+            <input id="nochmal" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ retry }}" onChange="{{ onRetry }}" onKeyDown="{{ onRetryKey }}" style="height: 84px; font-size: 44px; flex: 1">
+            <button class="btn btn-sun" type="button" disabled="{{ retryEmpty }}" onClick="{{ forge }}" style="height: 80px; padding: 0 26px; border-radius: 24px; font-size: 24px; flex-shrink: 0">Schmieden</button>
+          </div>
+          <sc-if value="{{ retryWrong }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size: 18px; font-weight: 700; color: #B45309">Noch nicht ganz – schau auf die gelbe Stelle.</span>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isForged }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 20px; text-align: center">
+          <div class="pop" style="width: 132px; height: 132px; border-radius: 50%; background: #FFC23D; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 12px #FFF4D6">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#10304A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3l8 8-3 3-8-8z"></path><path d="M11.5 9.5L3 18l3 3 8.5-8.5"></path></svg>
+          </div>
+          <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 44px">Geschmiedet!</h2>
+          <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 64px; line-height: 1">{{ word }}</span>
+          <p style="margin: 0; font-size: 21px; max-width: 520px; line-height: 1.4; color: #3E5A6E">Du hast den Trick <strong>{{ strat }}</strong> benutzt. Das Wort kommt bald noch einmal, damit es richtig sitzt.</p>
+          <sc-if value="{{ isLast }}" hint-placeholder-val="{{ false }}">
+            <a class="btn btn-teal" href="Logbuch.dc.html" style="height: 80px; padding: 0 44px; border-radius: 26px; font-size: 28px">Zum Logbuch</a>
+          </sc-if>
+          <sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}">
+            <button class="btn btn-teal" type="button" onClick="{{ next }}" style="height: 80px; padding: 0 56px; border-radius: 26px; font-size: 28px">Weiter</button>
+          </sc-if>
+        </div>
+      </sc-if>
+    </section>
+  </main>
+
+  <aside style="position: absolute; left: 32px; bottom: 40px; width: 150px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+    <div style="background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; padding: 12px 14px; font-size: 17px; font-weight: 700; line-height: 1.3; text-align: center">{{ kiki }}</div>
+    <div class="bob">
+      <img src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 130px; width: auto; display: block">
+    </div>
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { idx: 0, input: '', retry: '', phase: 'write', mode: 'type', penShown: false, attempt: '', found: 0, retryWrong: false };
+    this.words = [
+      { w: 'Hund', strat: 'Verlängern', hint: 'Verlängere das Wort: der Hund – die Hun-de. Jetzt hörst du das d.', crit: [3] },
+      { w: 'kommen', strat: 'Nachdenken', hint: 'Nach dem kurzen o kommen zwei gleiche Mitlaute: mm.', crit: [3, 4] },
+      { w: 'Vater', strat: 'Merken', hint: 'Merkwort: Vater schreibt man mit V – wie Vogel.', crit: [0] },
+      { w: 'Biene', strat: 'Nachdenken', hint: 'Das lange i schreibt man meistens ie.', crit: [1, 2] },
+      { w: 'Wald', strat: 'Verlängern', hint: 'Verlängere das Wort: der Wald – die Wäl-der. Jetzt hörst du das d.', crit: [3] }
+    ];
+  }
+  speak(slow) {
+    try {
+      const u = new window.SpeechSynthesisUtterance(this.words[this.state.idx].w);
+      u.lang = 'de-DE';
+      u.rate = slow ? 0.5 : 0.85;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  check() {
+    const val = this.state.input.trim();
+    if (!val) return;
+    const ok = val === this.words[this.state.idx].w;
+    this.setState({ phase: ok ? 'right' : 'wrong', attempt: val, found: this.state.found + (ok ? 1 : 0) });
+  }
+  forge() {
+    const val = this.state.retry.trim();
+    if (!val) return;
+    if (val === this.words[this.state.idx].w) this.setState({ phase: 'forged', retryWrong: false });
+    else this.setState({ retryWrong: true });
+  }
+  renderVals() {
+    const s = this.state;
+    const word = this.words[s.idx];
+    const solved = s.phase === 'right' || s.phase === 'forged';
+    const stones = this.words.map((_, i) => {
+      const done = i < s.idx || (i === s.idx && solved);
+      const current = i === s.idx && !solved;
+      return { n: i + 1, done: done, current: current, todo: !done && !current };
+    });
+    const letters = word.w.split('').map((ch, i) => {
+      const crit = word.crit.indexOf(i) !== -1;
+      return { ch: ch, crit: crit, plain: !crit };
+    });
+    const isLast = s.idx === this.words.length - 1;
+    const kikiText = { write: 'Hör genau hin!', right: 'Super gehört!', wrong: 'Fehler zeigen uns den Weg.', forged: 'Stark geschmiedet!' };
+    return {
+      stones: stones,
+      letters: letters,
+      word: word.w,
+      strat: word.strat,
+      hint: word.hint,
+      num: s.idx + 1,
+      found: s.found,
+      input: s.input,
+      retry: s.retry,
+      attempt: s.attempt,
+      hasAttempt: s.attempt !== '',
+      empty: s.input.trim() === '',
+      retryEmpty: s.retry.trim() === '',
+      retryWrong: s.retryWrong,
+      isWrite: s.phase === 'write',
+      isRight: s.phase === 'right',
+      isWrong: s.phase === 'wrong',
+      isForged: s.phase === 'forged',
+      isType: s.mode === 'type',
+      isPen: s.mode === 'pen',
+      isPenWrite: s.mode === 'pen' && !s.penShown,
+      isPenCompare: s.mode === 'pen' && s.penShown,
+      typeClass: s.mode === 'type' ? 'seg-on' : 'seg',
+      penClass: s.mode === 'pen' ? 'seg-on' : 'seg',
+      isLast: isLast,
+      notLast: !isLast,
+      kiki: kikiText[s.phase],
+      speakNormal: () => this.speak(false),
+      speakSlow: () => this.speak(true),
+      setType: () => this.setState({ mode: 'type', penShown: false }),
+      setPen: () => this.setState({ mode: 'pen', penShown: false }),
+      onInput: (e) => this.setState({ input: e.target.value }),
+      onRetry: (e) => this.setState({ retry: e.target.value, retryWrong: false }),
+      onKey: (e) => { if (e.key === 'Enter') this.check(); },
+      onRetryKey: (e) => { if (e.key === 'Enter') this.forge(); },
+      check: () => this.check(),
+      forge: () => this.forge(),
+      penCompare: () => this.setState({ penShown: true }),
+      penRight: () => this.setState({ phase: 'right', found: s.found + 1 }),
+      penWrong: () => this.setState({ phase: 'wrong', attempt: '' }),
+      next: () => this.setState({ idx: Math.min(s.idx + 1, this.words.length - 1), input: '', retry: '', phase: 'write', penShown: false, attempt: '', retryWrong: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

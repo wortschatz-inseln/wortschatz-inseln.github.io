@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>My body – Körperteile Englisch</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(4px)}
+.btn[disabled]{cursor:default;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 6px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-sun:hover{color:#10304A}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.btn-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:0 4px 0 #071B2B}
+.btn-good{background:#E6F5F2;color:#075A54;border:3px solid #0C7C74;box-shadow:none}
+.btn-sel{background:#FFF4D6;color:#10304A;border:3px solid #FFC23D;box-shadow:0 4px 0 #D99A12}
+.spot{position:absolute;background:transparent;border:3px dashed transparent;border-radius:18px;cursor:pointer;padding:0}
+.spot:hover{border-color:#9CC6FF}
+.spot-good{border:4px solid #0C7C74;background:rgba(12,124,116,.15)}
+.spot-bad{border:4px solid #F08A24;background:rgba(240,138,36,.15)}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; background: #E3F2FB; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; gap: 20px; height: 72px">
+    <a class="btn btn-soft" href="Lernwoche.dc.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      Lernwoche
+    </a>
+    <div style="display: flex; flex-direction: column; flex: 1">
+      <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 34px; line-height: 1.1">My body</h1>
+      <p style="margin: 0; font-size: 17px; color: #3E5A6E">Lies das englische Wort und finde, wohin es gehört.</p>
+    </div>
+    <div role="group" aria-label="Spiel wählen" style="display: flex; gap: 8px">
+      <button class="btn {{ cPoint }}" type="button" aria-pressed="{{ isPoint }}" onClick="{{ setPoint }}" style="height: 52px; padding: 0 20px; border-radius: 999px; font-size: 18px">Zeig es!</button>
+      <button class="btn {{ cPairs }}" type="button" aria-pressed="{{ isPairs }}" onClick="{{ setPairs }}" style="height: 52px; padding: 0 20px; border-radius: 999px; font-size: 18px">Paare finden</button>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; gap: 24px">
+    <section aria-label="Figur" style="width: 420px; flex-shrink: 0; background: #fff; border-radius: 36px; box-shadow: 0 8px 0 #C9DDE4; display: flex; align-items: center; justify-content: center">
+      <div style="position: relative; width: 360px; height: 580px">
+        <svg width="360" height="580" viewBox="0 0 360 580" aria-hidden="true" style="position: absolute; inset: 0">
+          <rect x="128" y="335" width="46" height="175" rx="20" fill="#10304A"></rect>
+          <rect x="186" y="335" width="46" height="175" rx="20" fill="#10304A"></rect>
+          <ellipse cx="146" cy="522" rx="36" ry="16" fill="#F08A24"></ellipse>
+          <ellipse cx="214" cy="522" rx="36" ry="16" fill="#F08A24"></ellipse>
+          <rect x="84" y="205" width="36" height="135" rx="18" fill="#3D8BEB"></rect>
+          <rect x="240" y="205" width="36" height="135" rx="18" fill="#3D8BEB"></rect>
+          <circle cx="102" cy="352" r="21" fill="#F6C9A0"></circle>
+          <circle cx="258" cy="352" r="21" fill="#F6C9A0"></circle>
+          <rect x="114" y="195" width="132" height="160" rx="30" fill="#3D8BEB"></rect>
+          <rect x="166" y="170" width="28" height="34" fill="#F6C9A0"></rect>
+          <circle cx="108" cy="115" r="15" fill="#F6C9A0"></circle>
+          <circle cx="252" cy="115" r="15" fill="#F6C9A0"></circle>
+          <circle cx="180" cy="110" r="70" fill="#F6C9A0"></circle>
+          <path d="M108 102 Q108 30 180 32 Q252 30 252 102 Q236 66 180 70 Q124 66 108 102 Z" fill="#8B5A2B"></path>
+          <circle cx="155" cy="108" r="8" fill="#10304A"></circle>
+          <circle cx="205" cy="108" r="8" fill="#10304A"></circle>
+          <ellipse cx="180" cy="128" rx="7" ry="9" fill="#E9A97E"></ellipse>
+          <path d="M160 150 Q180 168 200 150" stroke="#C0504D" stroke-width="5" fill="none" stroke-linecap="round"></path>
+          <circle cx="140" cy="135" r="9" fill="#F7A9A8"></circle>
+          <circle cx="220" cy="135" r="9" fill="#F7A9A8"></circle>
+        </svg>
+        <sc-for list="{{ spots }}" as="p" hint-placeholder-count="14">
+          <button class="spot {{ p.cls }}" type="button" aria-label="{{ p.aria }}" onClick="{{ p.tap }}" style="left: {{ p.x }}px; top: {{ p.y }}px; width: {{ p.w }}px; height: {{ p.h }}px"></button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section aria-live="polite" style="flex: 1; background: #fff; border-radius: 36px; box-shadow: 0 8px 0 #C9DDE4; padding: 32px 36px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 22px">
+
+      <sc-if value="{{ isPoint }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%; flex: 1">
+          <span style="font-weight: 800; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #2F6FD0">Zeig es! · Wort {{ num }} von 10</span>
+          <sc-if value="{{ pointRunning }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 20px">
+              <span style="font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 84px; line-height: 1">{{ target }}</span>
+              <button class="btn btn-sun" type="button" onClick="{{ speak }}" style="height: 64px; padding: 0 24px; border-radius: 22px; font-size: 20px">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path></svg>
+                Listen
+              </button>
+              <p style="margin: 0; font-size: 20px; color: #3E5A6E; font-weight: 700; text-align: center">Tippe auf der Figur auf das richtige Körperteil.</p>
+              <p style="margin: 0; min-height: 60px; font-size: 21px; font-weight: 800; text-align: center; color: {{ msgColor }}; max-width: 520px">{{ msg }}</p>
+              <sc-if value="{{ pointSolved }}" hint-placeholder-val="{{ false }}">
+                <button class="btn btn-teal" type="button" onClick="{{ nextPoint }}" style="height: 76px; padding: 0 56px; border-radius: 26px; font-size: 28px">Weiter</button>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ pointDone }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+              <img src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 150px; width: auto">
+              <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 40px">Well done!</h2>
+              <p style="margin: 0; font-size: 20px; color: #3E5A6E">Alle 10 Körperteile gefunden. Jetzt noch die Paare?</p>
+              <button class="btn btn-teal" type="button" onClick="{{ setPairs }}" style="height: 72px; padding: 0 40px; border-radius: 24px; font-size: 24px">Paare finden</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPairs }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; flex: 1">
+          <span style="font-weight: 800; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #2F6FD0">Paare finden · Runde {{ round }} von 2</span>
+          <sc-if value="{{ pairsRunning }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%">
+              <p style="margin: 0; font-size: 19px; color: #3E5A6E; font-weight: 700; text-align: center">Tippe ein englisches Wort an und dann das deutsche, das dazugehört.</p>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 28px; width: 100%">
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <sc-for list="{{ enList }}" as="e" hint-placeholder-count="5">
+                    <button class="btn {{ e.cls }}" type="button" disabled="{{ e.disabled }}" onClick="{{ e.pick }}" style="height: 64px; border-radius: 20px; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 32px">{{ e.text }}</button>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 12px">
+                  <sc-for list="{{ deList }}" as="d" hint-placeholder-count="5">
+                    <button class="btn {{ d.cls }}" type="button" disabled="{{ d.disabled }}" onClick="{{ d.pick }}" style="height: 64px; border-radius: 20px; font-family: 'Andika', system-ui, sans-serif; font-weight: 400; font-size: 30px">{{ d.text }}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <p style="margin: 0; min-height: 30px; font-size: 20px; font-weight: 800; text-align: center; color: {{ msgColor }}">{{ msg }}</p>
+              <sc-if value="{{ roundSolved }}" hint-placeholder-val="{{ false }}">
+                <button class="btn btn-teal" type="button" onClick="{{ nextRound }}" style="height: 72px; padding: 0 48px; border-radius: 24px; font-size: 26px">Weiter</button>
+              </sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ pairsDone }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+              <img src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 150px; width: auto">
+              <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 40px">Great job!</h2>
+              <p style="margin: 0; font-size: 20px; color: #3E5A6E">Alle 10 Paare gefunden.</p>
+              <a class="btn btn-teal" href="Lernwoche.dc.html" style="height: 72px; padding: 0 40px; border-radius: 24px; font-size: 24px">Zur Lernwoche</a>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.de = { head: 'Kopf', hair: 'Haare', eyes: 'Augen', ears: 'Ohren', nose: 'Nase', mouth: 'Mund', arm: 'Arm', hand: 'Hand', leg: 'Bein', foot: 'Fuß' };
+    this.spots = [
+      { part: 'head', x: 112, y: 44, w: 136, h: 130 },
+      { part: 'hair', x: 116, y: 26, w: 128, h: 40 },
+      { part: 'ears', x: 86, y: 93, w: 44, h: 44 },
+      { part: 'ears', x: 230, y: 93, w: 44, h: 44 },
+      { part: 'eyes', x: 134, y: 88, w: 92, h: 40 },
+      { part: 'nose', x: 158, y: 114, w: 44, h: 30 },
+      { part: 'mouth', x: 150, y: 144, w: 60, h: 30 },
+      { part: 'arm', x: 80, y: 206, w: 44, h: 120 },
+      { part: 'arm', x: 236, y: 206, w: 44, h: 120 },
+      { part: 'hand', x: 78, y: 328, w: 48, h: 48 },
+      { part: 'hand', x: 234, y: 328, w: 48, h: 48 },
+      { part: 'leg', x: 126, y: 360, w: 50, h: 140 },
+      { part: 'leg', x: 184, y: 360, w: 50, h: 140 },
+      { part: 'foot', x: 106, y: 504, w: 148, h: 40 }
+    ];
+    this.order = ['nose', 'hand', 'hair', 'foot', 'eyes', 'mouth', 'leg', 'ears', 'arm', 'head'];
+    this.rounds = [['head', 'hair', 'eyes', 'ears', 'nose'], ['mouth', 'arm', 'hand', 'leg', 'foot']];
+    this.deOrder = [['Augen', 'Nase', 'Kopf', 'Ohren', 'Haare'], ['Bein', 'Mund', 'Fuß', 'Hand', 'Arm']];
+    this.state = { mode: 'point', i: 0, solved: false, wrong: '', msg: '', round: 0, sel: '', matched: [] };
+  }
+  say(t) {
+    try {
+      const u = new window.SpeechSynthesisUtterance(t);
+      u.lang = 'en-GB';
+      u.rate = 0.8;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  tap(part) {
+    const s = this.state;
+    if (s.mode !== 'point' || s.solved || s.i >= this.order.length) return;
+    const target = this.order[s.i];
+    if (part === target) {
+      this.setState({ solved: true, wrong: '', msg: 'Yes! ' + target + ' heißt ' + this.de[target] + '.' });
+      this.say(target);
+    } else {
+      this.setState({ wrong: part, msg: 'Das ist: ' + part + ' (' + this.de[part] + '). Such noch einmal: ' + target });
+    }
+  }
+  pickDe(text) {
+    const s = this.state;
+    if (!s.sel) { this.setState({ msg: 'Tippe zuerst ein englisches Wort an.' }); return; }
+    if (this.de[s.sel] === text) {
+      const matched = s.matched.concat([s.sel]);
+      this.say(s.sel);
+      this.setState({ matched: matched, sel: '', msg: matched.length === 5 ? 'Super, Runde geschafft!' : s.sel + ' = ' + text });
+    } else {
+      this.setState({ msg: 'Das passt nicht. Lies das englische Wort noch einmal.' });
+    }
+  }
+  renderVals() {
+    const s = this.state;
+    const isPoint = s.mode === 'point';
+    const pointDone = s.i >= this.order.length;
+    const target = pointDone ? '' : this.order[s.i];
+    const spots = this.spots.map((p) => ({
+      x: p.x, y: p.y, w: p.w, h: p.h,
+      aria: this.de[p.part],
+      cls: isPoint && s.solved && p.part === target ? 'spot-good' : (isPoint && s.wrong === p.part ? 'spot-bad' : ''),
+      tap: () => this.tap(p.part)
+    }));
+    const r = this.rounds[Math.min(s.round, 1)];
+    const roundSolved = s.matched.length === 5;
+    const enList = r.map((w) => {
+      const done = s.matched.indexOf(w) !== -1;
+      return { text: w, disabled: done, cls: done ? 'btn-good' : (s.sel === w ? 'btn-sel' : 'btn-soft'), pick: () => { this.setState({ sel: w, msg: '' }); this.say(w); } };
+    });
+    const deList = this.deOrder[Math.min(s.round, 1)].map((d) => {
+      const done = s.matched.some((m) => this.de[m] === d);
+      return { text: d, disabled: done, cls: done ? 'btn-good' : 'btn-soft', pick: () => this.pickDe(d) };
+    });
+    return {
+      isPoint: isPoint,
+      isPairs: !isPoint,
+      cPoint: isPoint ? 'btn-on' : 'btn-soft',
+      cPairs: isPoint ? 'btn-soft' : 'btn-on',
+      setPoint: () => this.setState({ mode: 'point', i: 0, solved: false, wrong: '', msg: '' }),
+      setPairs: () => this.setState({ mode: 'pairs', round: 0, sel: '', matched: [], msg: '', wrong: '' }),
+      spots: spots,
+      num: Math.min(s.i + 1, 10),
+      target: target,
+      pointRunning: !pointDone,
+      pointDone: pointDone,
+      pointSolved: s.solved,
+      speak: () => this.say(target),
+      nextPoint: () => this.setState({ i: s.i + 1, solved: false, wrong: '', msg: '' }),
+      msg: s.msg,
+      msgColor: (isPoint && s.solved) || (!isPoint && s.msg && s.msg.indexOf('passt nicht') === -1 && s.msg.indexOf('zuerst') === -1) ? '#0C7C74' : '#B45309',
+      round: Math.min(s.round + 1, 2),
+      enList: enList,
+      deList: deList,
+      roundSolved: roundSolved,
+      pairsRunning: s.round < 2,
+      pairsDone: s.round >= 2,
+      nextRound: () => this.setState({ round: s.round + 1, matched: [], sel: '', msg: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

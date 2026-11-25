@@ -1,0 +1,1530 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Lernwoche</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(4px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 6px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-sun:hover{color:#10304A}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.btn-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:0 4px 0 #071B2B}
+.btn-red{background:#FDE7E5;color:#9B1C1C;border:3px solid #E5484D;box-shadow:0 4px 0 #C1272D}
+.btn-red:hover{color:#9B1C1C}
+.btn-blue{background:#E3EEFD;color:#1D4ED8;border:3px solid #3D8BEB;box-shadow:0 4px 0 #2F6FD0}
+.btn-blue:hover{color:#1D4ED8}
+.btn-green{background:#E5F4E4;color:#2E6B1F;border:3px solid #4CAF50;box-shadow:0 4px 0 #3A8A3E}
+.btn-green:hover{color:#2E6B1F}
+.btn-good{background:#E6F5F2;color:#075A54;border:3px solid #0C7C74;box-shadow:0 4px 0 #075A54}
+.btn-bad{background:#FFF4D6;color:#8A4B08;border:3px solid #F08A24;box-shadow:0 4px 0 #D99A12}
+.card{text-align:left;cursor:pointer;transition:transform .12s ease}
+.card:hover{transform:translateY(-3px)}
+.word-input{box-sizing:border-box;border:3px solid #C9DDE4;border-bottom:6px solid #9AD3DF;border-radius:22px;background:#F8FCFD;font-family:'Andika',system-ui,sans-serif;color:#10304A;text-align:center}
+.word-input:focus{border-color:#0C7C74;outline:none}
+.gap{width:22px;height:84px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.gap:hover span{background:#9AD3DF}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4px}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .45s ease-out both}
+@media (prefers-reduced-motion: reduce){.pop{animation:none}}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; background: #F2F6E9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <sc-if value="{{ isHub }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 18px; height: 100%">
+      <header style="display: flex; align-items: center; gap: 20px">
+        <a class="btn btn-soft" href="Main.dc.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Karte
+        </a>
+        <img src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 84px; width: auto">
+        <div style="display: flex; flex-direction: column; flex: 1">
+          <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.1">Meine Lernwoche</h1>
+          <p style="margin: 0; font-size: 18px; color: #3E5A6E">{{ weekSub }}</p>
+        </div>
+        <sc-if value="{{ chestReady }}" hint-placeholder-val="{{ false }}">
+          <button class="btn btn-sun pop" type="button" onClick="{{ toTruhe }}" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px">
+            <img src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 40px; width: auto">Truhe öffnen!
+          </button>
+        </sc-if>
+        <sc-if value="{{ chestWait }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; height: 60px; padding: 0 16px; box-sizing: border-box">
+            <img src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 40px; width: auto">
+            <span style="display: flex; flex-direction: column; gap: 4px">
+              <span style="font-weight: 800; font-size: 15px">Truhe {{ chestNo }}: {{ inChest }} von 4</span>
+              <span style="display: flex; gap: 6px">
+                <sc-for list="{{ chestPips }}" as="p" hint-placeholder-count="4"><span style="width: 18px; height: 12px; border-radius: 6px; background: {{ p.bg }}; border: 2px solid #D99A12; box-sizing: border-box"></span></sc-for>
+              </span>
+            </span>
+          </div>
+        </sc-if>
+        <button class="btn btn-soft" type="button" onClick="{{ toGate }}" aria-label="Für Eltern: Lernwörter eintragen" style="height: 60px; padding: 0 16px; border-radius: 20px; font-size: 16px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+          Eltern
+        </button>
+      </header>
+
+      <section aria-label="Lernwörter der Woche" style="background: #fff; border-radius: 26px; padding: 16px 22px; box-shadow: 0 5px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #5C7A2E">Lernwörter dieser Woche</h2>
+          <span style="display: flex; align-items: center; gap: 10px"><span style="font-size: 15px; font-weight: 800; color: #8A4B08; background: #FFF4D6; border-radius: 999px; padding: 4px 12px">⭐ {{ stars }} · {{ rank }}</span><sc-if value="{{ hasShelf }}" hint-placeholder-val="{{ false }}"><span aria-label="Gesammelte Schätze" style="font-size: 22px">{{ shelf }}</span></sc-if><sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}"><span style="font-size: 14px; font-weight: 800; color: #0C7C74; background: #E6F5F2; border-radius: 999px; padding: 4px 12px">{{ note }}</span></sc-if></span>
+        </div>
+        <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
+          <sc-for list="{{ chips }}" as="c" hint-placeholder-count="10">
+            <li style="font-family: 'Andika', system-ui, sans-serif; font-size: {{ c.size }}; background: #F2F6E9; border-radius: 14px; padding: 4px 14px">{{ c.w }}</li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px">
+        <sc-for list="{{ cards }}" as="k" hint-placeholder-count="6">
+          <li style="display: flex">
+            <button class="card" type="button" onClick="{{ k.open }}" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 24px; background: {{ k.bg }}; border: 3px solid {{ k.border }}; box-shadow: 0 5px 0 #D6E2C4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; font-family: inherit; color: #10304A">
+              <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+                <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px">{{ k.title }}</span>
+                <span style="display: flex; align-items: center; gap: 5px"><sc-if value="{{ k.medal }}" hint-placeholder-val="{{ false }}"><img src="/_blob/acfdf38d0373ca0a7947164fb80b4115" alt="Meister-Medaille" style="height: 34px; width: auto"></sc-if><sc-for list="{{ k.pips }}" as="p" hint-placeholder-count="3"><span style="width: 16px; height: 16px; border-radius: 50%; background: {{ p.bg }}; border: 2px solid {{ p.bd }}; box-sizing: border-box"></span></sc-for></span>
+              </span>
+              <span style="font-size: 16px; line-height: 1.35; color: #3E5A6E; font-weight: 600">{{ k.desc }}</span>
+              <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; font-weight: 800; color: #5C7A2E">{{ k.next }}<sc-if value="{{ k.star }}" hint-placeholder-val="{{ false }}"><span style="background: #10304A; color: #fff; border-radius: 999px; padding: 2px 10px; font-size: 13px">Wichtigste Aufgabe</span></sc-if></span>
+            </button>
+          </li>
+        </sc-for>
+        <li style="display: flex">
+          <a class="card" href="KoerperEnglisch.dc.html" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 24px; background: #E3F2FB; border: 3px solid #9CC6FF; box-shadow: 0 5px 0 #C9DDE4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: #10304A">
+            <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px">My body</span>
+            <span style="font-size: 16px; line-height: 1.35; color: #3E5A6E; font-weight: 600">Englische Körperteile zeigen und zuordnen</span>
+            <span style="font-size: 14px; font-weight: 800; color: #2F6FD0">Englisch · 10 Wörter</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isTruhe }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 14px; height: 100%">
+      <header style="display: flex; align-items: center; height: 64px">
+        <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Lernwoche
+        </button>
+      </header>
+      <main style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center">
+        <sc-if value="{{ truheClosed }}" hint-placeholder-val="{{ true }}">
+          <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 44px">Deine Schatztruhe wartet!</h1>
+          <p style="margin: 0; font-size: 21px; color: #3E5A6E">Vier Übungen geschafft – das hast du dir verdient.</p>
+          <img class="pop" src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 260px; width: auto">
+          <button class="btn btn-sun" type="button" onClick="{{ openIt }}" style="height: 84px; padding: 0 56px; border-radius: 28px; font-size: 30px">Truhe öffnen</button>
+        </sc-if>
+        <sc-if value="{{ truheOpen }}" hint-placeholder-val="{{ false }}">
+          <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 40px">Du hast gefunden:</h1>
+          <img class="pop" src="/_blob/dd5e18cef46ea9e431968be39083e2a6" alt="" style="height: 190px; width: auto">
+          <span class="pop" style="font-size: 84px; line-height: 1.1">{{ rwEmoji }}</span>
+          <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 38px">{{ rwName }}</h2>
+          <p style="margin: 0; font-size: 21px; color: #3E5A6E; max-width: 560px; line-height: 1.4">{{ rwText }}</p>
+          <span style="font-family: 'Fredoka', system-ui, sans-serif; font-size: 26px; font-weight: 600; color: #8A4B08; background: #FFF4D6; border-radius: 18px; padding: 8px 22px">+3 ⭐ Bonus-Sterne</span>
+          <button class="btn btn-teal" type="button" onClick="{{ closeTruhe }}" style="height: 76px; padding: 0 48px; border-radius: 26px; font-size: 26px">Weiter</button>
+        </sc-if>
+      </main>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isGate }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 18px; height: 100%">
+      <header style="display: flex; align-items: center; height: 64px">
+        <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Lernwoche
+        </button>
+      </header>
+      <main style="flex: 1; display: flex; align-items: center; justify-content: center">
+        <section style="width: 480px; background: #fff; border-radius: 28px; padding: 40px; box-shadow: 0 5px 0 #D6E2C4; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center">
+          <h2 style="margin: 0; font-size: 26px; font-weight: 800">Für Eltern: Neue Lernwörter</h2>
+          <label for="lwgate" style="font-size: 20px">Was ist 7 × 8?</label>
+          <input id="lwgate" class="word-input" type="text" inputmode="numeric" autocomplete="off" value="{{ gateAns }}" onChange="{{ onGate }}" onKeyDown="{{ onGateKey }}" style="width: 180px; height: 72px; font-size: 34px">
+          <sc-if value="{{ gateWrong }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size: 16px; font-weight: 700; color: #B45309">Das stimmt nicht ganz – noch einmal.</span>
+          </sc-if>
+          <button class="btn btn-teal" type="button" onClick="{{ unlock }}" style="height: 60px; width: 220px; border-radius: 18px; font-size: 20px">Öffnen</button>
+        </section>
+      </main>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isEdit }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 16px; height: 100%; font-family: 'Nunito', system-ui, sans-serif">
+      <header style="display: flex; align-items: center; gap: 18px; height: 60px">
+        <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 56px; padding: 0 18px; border-radius: 18px; font-size: 18px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Abbrechen
+        </button>
+        <h1 style="margin: 0; font-size: 28px; font-weight: 800; flex: 1">Lernwörter für die kommende Woche</h1>
+        <button class="btn btn-soft" type="button" onClick="{{ loadCurrent }}" style="height: 48px; padding: 0 16px; border-radius: 14px; font-size: 15px">{{ edCurrentInfo }} · bearbeiten</button>
+      </header>
+
+      <main style="flex: 1; min-height: 0; display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 18px">
+        <section style="background: #fff; border-radius: 24px; padding: 20px 22px; box-shadow: 0 4px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+          <div style="display: flex; gap: 10px">
+            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">Von<input type="date" value="{{ edFrom }}" onChange="{{ onFrom }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
+            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">Bis<input type="date" value="{{ edTo }}" onChange="{{ onTo }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
+          </div>
+          <label for="edtext" style="font-size: 15px; font-weight: 800">Lernwörter abtippen</label>
+          <span style="font-size: 13px; color: #3E5A6E; line-height: 1.35">Ein Wort pro Zeile, Nomen gern mit Artikel. Mehrzahl optional: „der Hund, die Hunde“</span>
+          <textarea id="edtext" spellcheck="false" autocapitalize="off" value="{{ edText }}" onChange="{{ onEdText }}" placeholder="die Angst&#10;streiten&#10;plötzlich&#10;der Urlaub, die Urlaube" style="height: 200px; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 14px; padding: 10px 12px; font-family: 'Andika', system-ui, sans-serif; font-size: 19px; line-height: 1.4; color: #10304A; resize: none"></textarea>
+          <button class="btn btn-sun" type="button" onClick="{{ analyze }}" disabled="{{ edTextEmpty }}" style="height: 52px; border-radius: 16px; font-size: 18px">Wörter übernehmen →</button>
+          <label for="edsent" style="font-size: 15px; font-weight: 800; margin-top: 4px">Sätze für „Groß oder klein?“ <span style="font-weight: 600; color: #3E5A6E">(optional)</span></label>
+          <textarea id="edsent" spellcheck="false" value="{{ edSent }}" onChange="{{ onEdSent }}" placeholder="Ein Satz pro Zeile. Leer lassen: Dann übt Elli mit ihren eigenen Sätzen aus der Satz-Werkstatt." style="flex: 1; min-height: 80px; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 14px; padding: 10px 12px; font-family: 'Andika', system-ui, sans-serif; font-size: 17px; line-height: 1.4; color: #10304A; resize: none"></textarea>
+        </section>
+
+        <section style="background: #fff; border-radius: 24px; padding: 18px 22px; box-shadow: 0 4px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <h2 style="margin: 0; font-size: 20px; font-weight: 800">{{ edCount }}</h2>
+            <span style="font-size: 13px; font-weight: 700; color: #8A4B08"><span style="display: inline-block; width: 12px; height: 12px; border-radius: 4px; background: #FFE08A; vertical-align: -1px"></span> geraten – bitte kurz prüfen</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 70px minmax(0, 1.3fr) 108px minmax(0, 1fr) minmax(0, 1fr) 40px; gap: 8px; font-size: 13px; font-weight: 800; color: #3E5A6E; padding: 0 6px">
+            <span>Artikel</span><span>Wort</span><span>Wortart</span><span>Mehrzahl</span><span>Silben (mit -)</span><span></span>
+          </div>
+          <ul style="list-style: none; margin: 0; padding: 0; flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 6px">
+            <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+              <li style="display: grid; grid-template-columns: 70px minmax(0, 1.3fr) 108px minmax(0, 1fr) minmax(0, 1fr) 40px; gap: 8px; align-items: center; background: {{ r.bg }}; border-radius: 12px; padding: 4px 6px">
+                <button class="btn btn-soft" type="button" onClick="{{ r.cycleArt }}" disabled="{{ r.noArt }}" style="height: 42px; border-radius: 10px; font-size: 16px; box-shadow: none">{{ r.artLabel }}</button>
+                <input type="text" spellcheck="false" autocapitalize="off" value="{{ r.w }}" onChange="{{ r.onW }}" style="height: 42px; min-width: 0; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 10px; padding: 0 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 19px; color: #10304A">
+                <button class="btn {{ r.typCls }}" type="button" onClick="{{ r.cycleTyp }}" style="height: 42px; border-radius: 10px; font-size: 14px; box-shadow: none; padding: 0 4px">{{ r.typLabel }}</button>
+                <input type="text" spellcheck="false" autocapitalize="off" value="{{ r.pl }}" onChange="{{ r.onPl }}" disabled="{{ r.noPl }}" placeholder="{{ r.plHint }}" style="height: 42px; min-width: 0; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 10px; padding: 0 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 18px; color: #10304A">
+                <input type="text" spellcheck="false" autocapitalize="off" value="{{ r.syl }}" onChange="{{ r.onSyl }}" style="height: 42px; min-width: 0; box-sizing: border-box; border: 2px solid #C9DDE4; border-radius: 10px; padding: 0 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 18px; color: #10304A">
+                <button class="btn btn-soft" type="button" aria-label="{{ r.delLabel }}" onClick="{{ r.del }}" style="height: 42px; width: 40px; border-radius: 10px; box-shadow: none; padding: 0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+                </button>
+              </li>
+            </sc-for>
+            <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+              <li style="padding: 30px 10px; text-align: center; font-size: 17px; color: #3E5A6E">Links die Wörter abtippen und „Wörter übernehmen“ antippen. Wortart, Mehrzahl und Silben werden vorgeschlagen – du kannst alles ändern.</li>
+            </sc-if>
+          </ul>
+          <div style="display: flex; align-items: center; gap: 12px; border-top: 2px solid #EEF3E4; padding-top: 12px">
+            <button class="btn btn-soft" type="button" onClick="{{ addRow }}" style="height: 48px; padding: 0 16px; border-radius: 14px; font-size: 16px">+ Wort</button>
+            <span aria-live="polite" style="flex: 1; font-size: 15px; font-weight: 800; color: {{ edMsgColor }}">{{ edMsg }}</span>
+            <button class="btn btn-soft" type="button" onClick="{{ saveNow }}" style="height: 52px; padding: 0 18px; border-radius: 16px; font-size: 16px">Sofort starten</button>
+            <button class="btn btn-teal" type="button" onClick="{{ savePlan }}" style="height: 52px; padding: 0 20px; border-radius: 16px; font-size: 17px">{{ planLabel }}</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isExercise }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 18px; height: 100%">
+      <header style="display: flex; align-items: center; justify-content: space-between; height: 64px">
+        <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+          Lernwoche
+        </button>
+        <ol aria-label="Fortschritt" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 10px">
+          <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6">
+            <li style="width: 22px; height: 22px; border-radius: 50%; box-sizing: border-box; background: {{ d.fill }}; border: 3px solid {{ d.border }}"></li>
+          </sc-for>
+        </ol>
+        <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px; min-width: 180px; text-align: right">{{ exTitle }}</span>
+      </header>
+
+      <main style="flex: 1; display: flex; justify-content: center">
+        <section aria-live="polite" style="width: 860px; height: 660px; box-sizing: border-box; background: #fff; border-radius: 36px; padding: 32px 44px; box-shadow: 0 8px 0 #D6E2C4; display: flex; flex-direction: column; align-items: center; gap: 22px">
+
+          <sc-if value="{{ roundBreak }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center">
+              <img class="pop" src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 170px; width: auto">
+              <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 42px">{{ breakTitle }}</h2>
+              <p style="margin: 0; font-size: 21px; color: #3E5A6E; max-width: 600px; line-height: 1.45">{{ breakText }}</p>
+              <button class="btn btn-sun" type="button" onClick="{{ startRound }}" style="height: 80px; padding: 0 44px; border-radius: 26px; font-size: 26px">{{ breakButton }}</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ finished }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; text-align: center">
+              <img class="pop" src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 170px; width: auto">
+              <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 44px">Geschafft!</h2>
+              <p style="margin: 0; font-size: 21px; color: #3E5A6E; max-width: 520px; line-height: 1.4">{{ finishText }}</p>
+              <sc-if value="{{ hasReward }}" hint-placeholder-val="{{ false }}"><p class="pop" style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 26px; color: #8A4B08; background: #FFF4D6; border-radius: 18px; padding: 10px 22px; max-width: 640px">{{ rewardText }}</p></sc-if>
+              <sc-if value="{{ isSatz }}" hint-placeholder-val="{{ false }}">
+                <ol style="margin: 0; padding: 0 0 0 28px; text-align: left; font-family: 'Andika', system-ui, sans-serif; font-size: 20px; line-height: 1.45; max-height: 200px; overflow: auto; width: 680px">
+                  <sc-for list="{{ written }}" as="x" hint-placeholder-count="3"><li>{{ x.t }} <span style="font-family: 'Nunito', system-ui, sans-serif; font-size: 13px; font-weight: 800; color: #5C7A2E">{{ x.r }}</span></li></sc-for>
+                </ol>
+              </sc-if>
+              <button class="btn btn-teal" type="button" onClick="{{ toHub }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">{{ finishBtn }}</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ running }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 22px; width: 100%">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+                <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 32px">{{ prompt }}</h2>
+                <span style="font-size: 17px; color: #3E5A6E; font-weight: 700">{{ subPrompt }}</span>
+              </div>
+
+              <sc-if value="{{ isTask }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%">
+                  <span style="font-size: 15px; font-weight: 800; color: #5C7A2E; background: #F2F6E9; border-radius: 999px; padding: 4px 14px">{{ roundLabel }}</span>
+                  <sc-if value="{{ tHasShow }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family: 'Andika', system-ui, sans-serif; font-size: {{ tSize }}; text-align: center; max-width: 760px; line-height: 1.3">{{ tShow }}</span>
+                  </sc-if>
+                  <sc-if value="{{ tHasSpeak }}" hint-placeholder-val="{{ false }}">
+                    <button class="btn btn-soft" type="button" onClick="{{ tSpeakFn }}" style="height: 56px; padding: 0 20px; border-radius: 18px; font-size: 18px">Vorsprechen</button>
+                  </sc-if>
+                  <sc-if value="{{ tChoice }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; width: 100%">
+                      <sc-for list="{{ tOptions }}" as="o" hint-placeholder-count="3">
+                        <button class="btn {{ o.cls }}" type="button" disabled="{{ o.disabled }}" onClick="{{ o.pick }}" style="width: {{ o.w }}; min-height: 76px; padding: 8px 22px; border-radius: 20px; font-family: 'Andika', system-ui, sans-serif; font-weight: 400; font-size: {{ o.size }}">{{ o.l }}</button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ tType }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 16px">
+                      <input id="tin" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 88px; width: 520px; font-size: 46px">
+                      <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                        <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ tOrder }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px">
+                      <ol aria-label="Deine Reihenfolge" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; min-height: 80px; align-items: center">
+                        <sc-for list="{{ tPicked }}" as="p" hint-placeholder-count="2">
+                          <li style="background: #E6F5F2; border: 3px solid #0C7C74; border-radius: 18px; padding: 8px 16px; font-family: 'Andika', system-ui, sans-serif; font-size: 44px">{{ p.w }}</li>
+                        </sc-for>
+                      </ol>
+                      <div style="display: flex; gap: 14px">
+                        <sc-for list="{{ tLeft }}" as="a" hint-placeholder-count="3">
+                          <button class="btn btn-soft" type="button" onClick="{{ a.pick }}" style="height: 84px; padding: 0 26px; border-radius: 22px; font-family: 'Andika', system-ui, sans-serif; font-weight: 400; font-size: 44px">{{ a.w }}</button>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isDiktat }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%">
+                  <button class="btn btn-sun" type="button" onClick="{{ speak }}" style="height: 84px; padding: 0 30px; border-radius: 28px; font-size: 24px">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19.5 5.5a9 9 0 0 1 0 13"></path></svg>
+                    Anhören
+                  </button>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; gap: 16px; width: 100%">
+                      <label for="dik" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Wort</label>
+                      <input id="dik" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Hier schreiben" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 100px; font-size: 54px; flex: 1; min-width: 0">
+                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 100px; padding: 0 30px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+                      <sc-if value="{{ wasWrong }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 38px; color: #3E5A6E">Du: {{ attempt }}</span>
+                      </sc-if>
+                      <span style="display: flex; font-family: 'Andika', system-ui, sans-serif; font-size: 64px">
+                        <sc-for list="{{ letters }}" as="l" hint-placeholder-count="5">
+                          <span style="border-radius: 10px; padding: 0 2px; background: {{ l.bg }}">{{ l.ch }}</span>
+                        </sc-for>
+                      </span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isSatz }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%">
+                  <span style="font-weight: 800; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #5C7A2E">{{ roundLabel }}</span>
+                  <div style="display: flex; align-items: center; gap: 14px">
+                    <sc-if value="{{ wordShown }}" hint-placeholder-val="{{ true }}">
+                      <span style="font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 54px; background: #FFF4D6; border: 3px solid #FFC23D; border-radius: 22px; padding: 2px 22px">{{ satzWord }}</span>
+                      <button class="btn btn-sun" type="button" aria-label="Lernwort anhören" onClick="{{ speak }}" style="width: 64px; height: 64px; border-radius: 20px">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path></svg>
+                      </button>
+                    </sc-if>
+                    <sc-if value="{{ wordHidden }}" hint-placeholder-val="{{ false }}">
+                      <button class="btn btn-sun" type="button" onClick="{{ speak }}" style="height: 76px; padding: 0 28px; border-radius: 24px; font-size: 24px">
+                        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19.5 5.5a9 9 0 0 1 0 13"></path></svg>
+                        Wort anhören
+                      </button>
+                      <button class="btn btn-soft" type="button" onClick="{{ speakSlowWord }}" style="height: 60px; padding: 0 18px; border-radius: 18px; font-size: 17px">Ganz langsam</button>
+                    </sc-if>
+                    <button class="btn btn-soft" type="button" onClick="{{ toggleIdea }}" style="height: 56px; padding: 0 18px; border-radius: 18px; font-size: 17px">Ideen-Hilfe</button>
+                  </div>
+                  <sc-if value="{{ showIdea }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-size: 19px; font-weight: 700; color: #5C7A2E">Kiki fragt: {{ idea }}</span>
+                  </sc-if>
+                  <label for="satz" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Dein Satz</label>
+                  <textarea id="satz" class="word-input" spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="Schreib hier deinen Satz …" value="{{ input }}" onChange="{{ onSatz }}" disabled="{{ satzLocked }}" style="width: 100%; height: 120px; font-size: 34px; text-align: left; padding: 12px 18px; resize: none; line-height: 1.35"></textarea>
+                  <sc-if value="{{ satzAsking }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; gap: 14px">
+                      <button class="btn btn-soft" type="button" disabled="{{ empty }}" onClick="{{ readBack }}" style="height: 64px; padding: 0 22px; border-radius: 20px; font-size: 19px">Vorlesen lassen</button>
+                      <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ checkSatz }}" style="height: 64px; padding: 0 36px; border-radius: 20px; font-size: 22px">Prüfen</button>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ false }}">
+                    <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 18px; width: 100%">
+                      <sc-for list="{{ results }}" as="r" hint-placeholder-count="4">
+                        <li style="display: flex; flex-direction: column; gap: 2px; background: {{ r.bg }}; border-radius: 14px; padding: 8px 12px">
+                          <span style="font-size: 17px; font-weight: 800; color: {{ r.color }}">{{ r.mark }} {{ r.label }}</span>
+                          <sc-if value="{{ r.showTip }}" hint-placeholder-val="{{ false }}"><span style="font-size: 15px; font-weight: 700; color: #3E5A6E">{{ r.tip }}</span></sc-if>
+                        </li>
+                      </sc-for>
+                    </ul>
+                  </sc-if>
+                  <sc-if value="{{ hasMarks }}" hint-placeholder-val="{{ false }}">
+                    <p aria-label="Dein Satz mit markierten Stolperstellen" style="margin: 0; display: flex; flex-wrap: wrap; gap: 6px; font-family: 'Andika', system-ui, sans-serif; font-size: 26px">
+                      <sc-for list="{{ markedTokens }}" as="m" hint-placeholder-count="5"><span style="background: {{ m.bg }}; border-radius: 8px; padding: 0 4px">{{ m.t }}</span></sc-for>
+                    </p>
+                  </sc-if>
+                  <sc-if value="{{ isSelf }}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; align-items: center; gap: 22px; flex-wrap: wrap; justify-content: center">
+                      <label style="display: flex; align-items: center; gap: 10px; font-size: 19px; font-weight: 800; cursor: pointer"><input type="checkbox" checked="{{ self2 }}" onChange="{{ toggleSelf2 }}" style="width: 30px; height: 30px; accent-color: #0C7C74">Satz vorgelesen – klingt richtig?</label>
+                      <button class="btn btn-teal" type="button" disabled="{{ selfNotDone }}" onClick="{{ saveSatz }}" style="height: 64px; padding: 0 28px; border-radius: 20px; font-size: 21px">In die Schatzkiste</button>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isSilben }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 18px">
+                  <button class="btn btn-soft" type="button" onClick="{{ speakSlow }}" style="height: 56px; padding: 0 20px; border-radius: 18px; font-size: 18px">Langsam vorsprechen</button>
+                  <div style="display: flex; align-items: center">
+                    <sc-for list="{{ silLetters }}" as="l" hint-placeholder-count="6">
+                      <span style="display: flex; align-items: center">
+                        <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 72px; line-height: 84px; width: 50px; text-align: center">{{ l.ch }}</span>
+                        <sc-if value="{{ l.hasGap }}" hint-placeholder-val="{{ false }}">
+                          <button class="gap" type="button" aria-label="Hier trennen" aria-pressed="{{ l.cut }}" onClick="{{ l.toggle }}"><span style="width: 6px; height: 70px; border-radius: 3px; background: {{ l.gapColor }}"></span></button>
+                        </sc-if>
+                      </span>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 40px; color: #0C7C74">{{ silSolution }}</span>
+                  </sc-if>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <button class="btn btn-teal" type="button" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isPlural }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%">
+                  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; width: 100%">
+                    <div style="background: #F2F6E9; border-radius: 24px; padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+                      <span style="font-size: 16px; font-weight: 800; color: #5C7A2E">EINZAHL</span>
+                      <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 50px">{{ singular }}</span>
+                    </div>
+                    <div style="background: #F2F6E9; border-radius: 24px; padding: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+                      <span style="font-size: 16px; font-weight: 800; color: #5C7A2E">MEHRZAHL</span>
+                      <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+                        <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 50px; color: #0C7C74">die {{ plural }}</span>
+                      </sc-if>
+                      <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                        <span style="display: flex; align-items: center; gap: 10px; font-family: 'Andika', system-ui, sans-serif; font-size: 50px">die
+                          <label for="pl" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mehrzahl</label>
+                          <input id="pl" class="word-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="{{ input }}" onChange="{{ onInput }}" onKeyDown="{{ onKey }}" style="height: 76px; width: 230px; font-size: 42px">
+                        </span>
+                      </sc-if>
+                    </div>
+                  </div>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <button class="btn btn-teal" type="button" disabled="{{ empty }}" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isWortart }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 22px">
+                  <span style="font-family: 'Andika', system-ui, sans-serif; font-size: {{ shownSize }}; letter-spacing: .02em; text-align: center; max-width: 760px; line-height: 1.3">{{ shownWord }}</span>
+                  <div role="group" aria-label="Wortart" style="display: flex; gap: 16px">
+                    <sc-for list="{{ typeButtons }}" as="b" hint-placeholder-count="3">
+                      <button class="btn {{ b.cls }}" type="button" disabled="{{ b.disabled }}" onClick="{{ b.pick }}" style="width: 180px; height: 96px; border-radius: 24px; flex-direction: column; gap: 2px">
+                        <span style="font-size: 26px">{{ b.label }}</span>
+                        <span style="font-family: 'Nunito', system-ui, sans-serif; font-size: 14px; font-weight: 700">{{ b.hint }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isGross }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 22px">
+                  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 760px">
+                    <sc-for list="{{ tokens }}" as="t" hint-placeholder-count="6">
+                      <button class="btn {{ t.cls }}" type="button" aria-pressed="{{ t.on }}" onClick="{{ t.toggle }}" style="height: 76px; padding: 0 16px; border-radius: 18px; font-family: 'Andika', system-ui, sans-serif; font-weight: 400; font-size: 40px">{{ t.text }}</button>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <button class="btn btn-teal" type="button" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isAbc }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 22px">
+                  <ol aria-label="Deine Reihenfolge" style="list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; min-height: 76px">
+                    <sc-for list="{{ abcPicked }}" as="p" hint-placeholder-count="2">
+                      <li style="display: flex; align-items: center; gap: 8px; background: #E6F5F2; border: 3px solid #0C7C74; border-radius: 18px; padding: 8px 16px; font-family: 'Andika', system-ui, sans-serif; font-size: 36px"><span style="font-family: 'Fredoka', system-ui, sans-serif; font-size: 20px; color: #0C7C74">{{ p.n }}.</span>{{ p.w }}</li>
+                    </sc-for>
+                  </ol>
+                  <div style="display: flex; gap: 14px">
+                    <sc-for list="{{ abcLeft }}" as="a" hint-placeholder-count="4">
+                      <button class="btn btn-soft" type="button" onClick="{{ a.pick }}" style="height: 80px; padding: 0 24px; border-radius: 22px; font-family: 'Andika', system-ui, sans-serif; font-weight: 400; font-size: 38px">{{ a.w }}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <p style="margin: 0; min-height: 30px; font-size: 20px; font-weight: 800; text-align: center; color: {{ msgColor }}">{{ msg }}</p>
+              <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+                <button class="btn btn-teal" type="button" onClick="{{ next }}" style="height: 76px; padding: 0 56px; border-radius: 26px; font-size: 28px">Weiter</button>
+              </sc-if>
+            </div>
+          </sc-if>
+        </section>
+      </main>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.words = [
+      { w: 'plötzlich', idea2: 'Denk an etwas Überraschendes.', forms: 'plötzlich', idea: 'Was passiert plötzlich?', typ: 'Adjektiv', syl: ['plötz', 'lich'], crit: [4, 5], tip: 'Nach kurzem ö kommt tz.' },
+      { w: 'streiten', idea2: 'Denk an Geschwister oder Freunde, die sich nicht einig sind.', forms: 'streit|stritt', idea: 'Wer streitet – und worüber?', typ: 'Verb', syl: ['strei', 'ten'], crit: [3, 4], tip: 'Achte auf ei und auf st am Anfang.' },
+      { w: 'Angst', idea2: 'Denk an etwas Gruseliges.', forms: 'Angst|Ängst', idea: 'Wovor hat jemand Angst?', art: 'die', pl: 'Ängste', typ: 'Nomen', syl: ['Angst'], crit: [0], tip: 'Nomen schreibt man groß: die Angst.' },
+      { w: 'Urlaub', idea2: 'Denk an Ferien und Reisen.', forms: 'Urlaub', idea: 'Wohin fahrt ihr in den Urlaub?', art: 'der', pl: 'Urlaube', typ: 'Nomen', syl: ['Ur', 'laub'], crit: [0, 5], tip: 'Verlängere: die Urlau-be – deshalb b am Ende.' },
+      { w: 'immer', idea2: 'Was machst du jeden Tag?', forms: 'immer', idea: 'Was machst du immer?', typ: 'anderes', syl: ['im', 'mer'], crit: [1, 2], tip: 'Kurzes i, dann zwei m.' },
+      { w: 'Ecke', idea2: 'Denk an dein Zimmer.', forms: 'Ecke', idea: 'Was steht in der Ecke?', art: 'die', pl: 'Ecken', typ: 'Nomen', syl: ['E', 'cke'], crit: [0, 1, 2], tip: 'Nach kurzem E kommt ck. Und groß, weil Nomen.' },
+      { w: 'Spaß', idea2: 'Was machst du richtig gern?', forms: 'Spaß|Späß', idea: 'Was macht dir Spaß?', art: 'der', pl: 'Späße', typ: 'Nomen', syl: ['Spaß'], crit: [0, 3], tip: 'Nach langem a kommt ß. Und groß: der Spaß.' },
+      { w: 'ärgern', idea2: 'Was findest du doof?', forms: 'ärger|ärgr', idea: 'Worüber ärgert sich jemand?', typ: 'Verb', syl: ['är', 'gern'], crit: [0], tip: 'ä, weil es von Ärger kommt.' },
+      { w: 'spät', idea2: 'Denk an die Uhr und ans Zubettgehen.', forms: 'spät', idea: 'Wer kommt zu spät?', typ: 'Adjektiv', syl: ['spät'], crit: [2, 3], tip: 'spät mit ä – verlängere: später, deshalb t.' },
+      { w: 'Unterricht', idea2: 'Denk an die Schule.', forms: 'Unterricht', idea: 'Was macht ihr im Unterricht?', art: 'der', typ: 'Nomen', syl: ['Un', 'ter', 'richt'], crit: [0, 7, 8], tip: 'Groß, weil Nomen. Am Ende: richt mit ch.' }
+    ];
+    this.sentences = [
+      'Plötzlich hatte der Hund große Angst.',
+      'Im Urlaub haben wir immer viel Spaß.',
+      'Die Kinder streiten in der Ecke.',
+      'Nach dem Unterricht kommt Paul spät nach Hause.'
+    ];
+    this.defaultWeek = { id: '2026-11-09', from: '2026-11-09', to: '2026-11-13', words: this.words, sentences: this.sentences };
+    this.loadStore();
+    this.applyWeek();
+    this.ex = {
+      satz: { title: 'Satz-Werkstatt', desc: 'Erst ansehen, dann nur hören – eigene Sätze schreiben', meta: '3 Runden · 10 Wörter' },
+      diktat: { title: 'Wort-Diktat', desc: 'Hören und richtig schreiben', meta: 'Rechtschreibung · 10 Wörter' },
+      silben: { title: 'Silben-Schnitt', desc: 'Wörter in Silben trennen', meta: 'Silbenbögen · 7 Wörter' },
+      plural: { title: 'Einer – viele', desc: 'Aus Einzahl wird Mehrzahl', meta: 'Einzahl / Mehrzahl · 4 Wörter' },
+      wortart: { title: 'Wort-Detektiv', desc: 'Nomen rot, Verb blau, Adjektiv grün', meta: 'Wortarten · 10 Wörter' },
+      gross: { title: 'Groß oder klein?', desc: 'Im Satz die großen Wörter finden', meta: 'Großschreibung · 4 Sätze' },
+      abc: { title: 'ABC-Reihe', desc: 'Wörter wie im Wörterbuch ordnen', meta: 'Nachschlagen · 3 Runden' },
+      zeichen: { title: 'Satz-Ende', desc: 'Punkt, Fragezeichen oder Ausrufezeichen?', meta: 'Satzarten' },
+      gefuehl: { title: 'Gefühle-Wörter', desc: 'Welches Gefühl passt in den Satz?', meta: 'Nomen für Gefühle' },
+      zerleg: { title: 'Wort-Zerleger', desc: 'Lange Nomen teilen und nachschlagen', meta: 'Wörterbuch' }
+    };
+    this.zeichen = [
+      ['Welche Aufgaben hat ein Klassensprecher', '?'], ['Er soll gut vermitteln können', '.'], ['Er soll sich mit den meisten Kindern gut verstehen', '.'], ['Natürlich darf er auch lustig sein', '.!'], ['Wählt Hugo', '!'],
+      ['Lasst uns mal nach unserem Hochbeet schauen', '!.'], ['Sind die Kartoffeln schon reif', '?'], ['Die Möhren und den Brokkoli können wir auch ernten', '.'], ['Kennt jemand ein leckeres Rezept', '?'], ['Wir könnten einen Auflauf zubereiten', '.'], ['Der wird lecker', '!.']
+    ];
+    this.gefuehle = [
+      ['An meinem Geburtstag strahle ich vor ___.', 'Glück'], ['Ich weine vor ___, wenn ich mich verletzt habe.', 'Schmerz'], ['Bei der Nachtwanderung habe ich vor ___ gezittert.', 'Angst'], ['Wenn ich mich ungerecht behandelt fühle, koche ich vor ___.', 'Wut']
+    ];
+    this.rewards = [
+      ['🐚', 'Goldmuschel', 'Kiki hat sie am Strand gefunden. Sie rauscht, wenn du ein Wort richtig schreibst.'],
+      ['🧭', 'Kompass', 'Er zeigt dir immer den Weg zur nächsten Insel.'],
+      ['🔭', 'Fernrohr', 'Damit entdeckst du jeden Fehler schon von Weitem.'],
+      ['🗝️', 'Goldschlüssel', 'Er öffnet die geheimen Türen der Wort-Höhle.'],
+      ['🪙', 'Piratenmünze', 'Ein alter Schatz – nur für echte Wort-Piraten.'],
+      ['⚓', 'Anker', 'Jetzt sitzt dein Wissen fest wie ein Schiff im Hafen.'],
+      ['🏝️', 'Geheiminsel', 'Nur wer fleißig übt, findet diese Insel.'],
+      ['👑', 'Kiki-Krone', 'Die Krone der Kapitänin – du bist ein Wortschatz-Profi!']
+    ];
+    this.gefExtra = {
+      Angst: ['Nachts im Dunkeln habe ich ___ vor Gespenstern.', 'Der kleine Hund zittert vor ___ beim Gewitter.'],
+      Schmerz: ['Nach dem Sturz hatte ich großen ___ im Knie.', 'Das Pflaster lindert den ___ an der Wunde.'],
+      Glück: ['Ich hatte viel ___ und habe im Spiel gewonnen.', 'Wir wünschen dir viel ___ zum Geburtstag.'],
+      Wut: ['Ich habe eine ___ im Bauch, weil du mein Spielzeug kaputt gemacht hast.', 'Er stampft vor ___ mit dem Fuß auf den Boden.']
+    };
+    this.zerleg = [
+      { w: 'Pausenkiste', cut: 6, a: 'die Pause', b: 'die Kiste' }, { w: 'Hofdienst', cut: 3, a: 'der Hof', b: 'der Dienst' },
+      { w: 'Freundebuch', cut: 7, a: 'der Freund', b: 'das Buch' }, { w: 'Fußballtor', cut: 7, a: 'der Fußball', b: 'das Tor' }
+    ];
+    this.bookAbc = [['befehlen', 'erlauben', 'kräftig', 'ähnlich'], ['dreckig', 'überqueren', 'fühlen', 'helfen'], ['Pause', 'richtig', 'Dienst', 'verlieren']];
+    this.state = { screen: 'hub', i: 0, phase: 'ask', input: '', attempt: '', cuts: [], caps: [], picked: [], wrongPick: '', done: [], msg: '', wasWrong: false, results: null, showIdea: false, self1: false, self2: false, written: [], round: 1, missed: [], tries: 0, dictReady: false, rep: 1, errs: [], stufe: 1, pool: [], repRefs: [], lastReward: null, truheOpen: false, done: this.store.progress.done.slice(), gateAns: '', gateWrong: false, edFrom: '', edTo: '', edText: '', edSent: '', rows: [], edMsg: '', edOk: true, hubMsg: '' };
+    try { if (window.location.hash === '#eintragen') { this.state.screen = 'edit'; this.state.wantEditor = true; } } catch (e) {}
+  }
+  componentDidMount() {
+    try {
+      fetch('/_blob/53361ba37e80facc5e986900fbdc2f70').then((r) => r.json()).then((arr) => {
+        this.dict = new Set(arr);
+        this.dictArr = arr;
+        this.rank = new Map();
+        arr.forEach((w, k) => { if (!this.rank.has(w)) this.rank.set(w, k); });
+        this.setState({ dictReady: true });
+      }).catch(() => {});
+    } catch (e) {}
+    if (this.state.wantEditor) this.openEditor();
+  }
+  known(t) { return !!this.dict && this.dict.has(t); }
+  compound(t) {
+    for (let i = 3; i < t.length - 2; i++) {
+      const a = t.slice(0, i);
+      const b = t.slice(i);
+      const bb = b[0].toUpperCase() + b.slice(1);
+      const cands = a.endsWith('s') ? [a, a.slice(0, -1)] : [a];
+      if (cands.some((x) => this.known(x) || this.known(x.toLowerCase()) || this.known(x[0].toUpperCase() + x.slice(1))) && this.known(bb)) return true;
+    }
+    return false;
+  }
+  spell(text) {
+    if (!this.dict) return [];
+    const toks = text.split(' ').map((t) => t.replace(/[.,!?;:„“"()]/g, ''));
+    const out = [];
+    toks.forEach((t, k) => {
+      if (!t || !/^[A-Za-zÄÖÜäöüß-]+$/.test(t)) return;
+      const alt = (t[0] === t[0].toUpperCase() ? t[0].toLowerCase() : t[0].toUpperCase()) + t.slice(1);
+      if (this.known(t) || (k === 0 && this.known(alt)) || this.compound(t)) return;
+      if (this.known(alt)) { out.push({ k: k, t: t, kind: alt[0] === alt[0].toUpperCase() ? 'gross' : 'klein', fix: alt }); return; }
+      if (k > 0 && t[0] === t[0].toUpperCase()) return;
+      out.push({ k: k, t: t, kind: 'unbekannt', fix: this.suggest(k === 0 ? t[0].toLowerCase() + t.slice(1) : t) });
+    });
+    return out;
+  }
+  dist(a, b) {
+    if (Math.abs(a.length - b.length) > 2) return 9;
+    const d = [];
+    for (let i = 0; i <= a.length; i++) { d.push([i]); }
+    for (let j = 1; j <= b.length; j++) d[0][j] = j;
+    for (let i = 1; i <= a.length; i++) for (let j = 1; j <= b.length; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    return d[a.length][b.length];
+  }
+  suggest(t) {
+    if (!this.dictArr) return '';
+    const low = t.toLowerCase();
+    let best = '';
+    let bestScore = 3;
+    for (const w of this.dictArr) {
+      if (Math.abs(w.length - t.length) > 2) continue;
+      const wl = w.toLowerCase();
+      const d = Math.min(this.dist(low, wl), this.dist(low.replace(/ß/g, 'ss'), wl.replace(/ß/g, 'ss')) + 0.4);
+      const score = d + (wl[0] === low[0] ? 0 : 1) + (w[0] === t[0] ? 0 : 0.5);
+      if (score < bestScore && score > 0) { bestScore = score; best = w; if (score <= 0.4) break; }
+    }
+    return best;
+  }
+  items(screen) {
+    const s = this.state;
+    if (screen === 'satz' || !s) return this.baseItems(screen);
+    const L0 = s.stufe > 1 ? s.pool : this.baseItems(screen);
+    return s.rep > 1 ? s.repRefs.map((r) => L0[r]) : L0;
+  }
+  baseItems(screen) {
+    const w = this.words;
+    if (screen === 'satz') return this.state.round === 3 ? this.state.missed.map((n) => w[n]) : w;
+    if (screen === 'diktat' || screen === 'wortart') return w;
+    if (screen === 'silben') return w.filter((x) => x.syl.length > 1);
+    if (screen === 'plural') return w.filter((x) => !!x.pl);
+    if (screen === 'gross') return this.grossList();
+    if (screen === 'abc') return this.abcRounds.concat(this.bookAbc);
+    if (screen === 'zeichen') return this.zeichen;
+    if (screen === 'gefuehl') return this.gefuehle;
+    if (screen === 'zerleg') return this.zerleg;
+    return [];
+  }
+  say(text, rate) {
+    try {
+      const u = new window.SpeechSynthesisUtterance(text);
+      u.lang = 'de-DE';
+      u.rate = rate || 0.85;
+      if (window.speechSynthesis.speaking) window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  open(key, stufe) {
+    if (!this.baseItems(key).length) return;
+    const st = key === 'satz' ? 1 : (stufe || 1);
+    const pool = st > 1 ? this.mkTasks(key, this.baseItems(key).map((_, k) => k), st - 2) : [];
+    this.setState(Object.assign({ screen: key, i: 0, rep: 1, errs: [], stufe: st, pool: pool, repRefs: [], lastReward: null }, this.reset(), key === 'satz' ? { written: [], round: 1, missed: [] } : {}));
+  }
+  reset() {
+    return { phase: 'ask', input: '', attempt: '', cuts: [], caps: [], picked: [], wrongPick: '', msg: '', wasWrong: false, results: null, showIdea: false, self1: false, self2: false, tries: 0, marked: [] };
+  }
+  iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  nextMonday() {
+    const d = new Date();
+    const add = ((8 - d.getDay()) % 7) || 7;
+    d.setDate(d.getDate() + add);
+    const f = new Date(d.getTime());
+    f.setDate(f.getDate() + 4);
+    return [this.iso(d), this.iso(f)];
+  }
+  dateLabel(from, to) {
+    const p = (x) => { const a = (x || '').split('-'); return a.length === 3 ? [a[2], a[1]] : ['', '']; };
+    const a = p(from);
+    const b = p(to || from);
+    if (!a[0]) return '';
+    if (a[1] === b[1]) return a[0] + '.–' + b[0] + '.' + b[1] + '.';
+    return a[0] + '.' + a[1] + '.–' + b[0] + '.' + b[1] + '.';
+  }
+  loadStore() {
+    let st = null;
+    try { const raw = window.localStorage.getItem('wsi.lernwoche.v1'); if (raw) st = JSON.parse(raw); } catch (e) { st = null; }
+    if (!st || !st.current || !st.current.words || !st.current.words.length) st = { current: this.defaultWeek, next: null, progress: null };
+    const today = this.iso(new Date());
+    if (st.next && st.next.from <= today) { st.current = st.next; st.next = null; st.progress = null; }
+    if (!st.current.id) st.current.id = st.current.from;
+    if (!st.progress || st.progress.id !== st.current.id) st.progress = { id: st.current.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
+    const pg = st.progress;
+    pg.flaw = pg.flaw || []; pg.opened = pg.opened || 0; pg.bonus = pg.bonus || 0;
+    pg.done = pg.done.map((k) => (k.indexOf('#') === -1 ? k + '#1' : k));
+    this.store = st;
+    this.persist();
+  }
+  persist() { try { window.localStorage.setItem('wsi.lernwoche.v1', JSON.stringify(this.store)); } catch (e) {} }
+  applyWeek() {
+    const wk = this.store.current;
+    this.words = wk.words;
+    this.abcRounds = this.abcFrom(this.words);
+  }
+  grossList() {
+    const wk = this.store.current;
+    if (wk.sentences && wk.sentences.length) return wk.sentences;
+    return (this.store.progress.kept || []).slice(-6);
+  }
+  abcFrom(ws) {
+    const names = [];
+    ws.forEach((x) => { if (names.indexOf(x.w) === -1 && x.w.indexOf(' ') === -1) names.push(x.w); });
+    if (names.length < 3) return [];
+    const r = [];
+    for (let i = 0; i < names.length && r.length < 4; i += 4) {
+      let g = names.slice(i, i + 4);
+      if (g.length < 3) g = g.concat(names.filter((n) => g.indexOf(n) === -1).slice(0, 4 - g.length));
+      r.push(g);
+    }
+    return r;
+  }
+  umlaut(w) {
+    for (let i = w.length - 1; i >= 0; i--) {
+      const c = w[i].toLowerCase();
+      if (c === 'u' && i > 0 && w[i - 1].toLowerCase() === 'e') { i--; continue; }
+      if (c === 'u' && i > 0 && w[i - 1].toLowerCase() === 'a') { const up = w[i - 1] === 'A'; return w.slice(0, i - 1) + (up ? 'Ä' : 'ä') + w.slice(i); }
+      const map = { a: 'ä', o: 'ö', u: 'ü' };
+      if (map[c] && !(c === 'a' && w[i + 1] && w[i + 1].toLowerCase() === 'a')) { const r = w[i] === c ? map[c] : map[c].toUpperCase(); return w.slice(0, i) + r + w.slice(i + 1); }
+      if ('eiäöü'.indexOf(c) !== -1 && i < w.length - 2) { /* weiter suchen */ }
+    }
+    return w;
+  }
+  guessTyp(w, art) {
+    if (art) return 'Nomen';
+    if (/^[A-ZÄÖÜ]/.test(w)) return 'Nomen';
+    const low = w.toLowerCase();
+    const other = ['immer', 'nie', 'oft', 'manchmal', 'heute', 'gestern', 'morgen', 'jetzt', 'gleich', 'bald', 'schon', 'noch', 'sehr', 'auch', 'nur', 'und', 'oder', 'aber', 'weil', 'dass', 'denn', 'wenn', 'als', 'dann', 'hier', 'dort', 'da', 'oben', 'unten', 'neben', 'hinter', 'vor', 'über', 'unter', 'zwischen', 'gegen', 'ohne', 'mit', 'nach', 'bei', 'seit', 'von', 'zu', 'vielleicht', 'wieder', 'zusammen', 'draußen', 'drinnen', 'links', 'rechts', 'vorbei', 'zurück', 'nichts', 'etwas', 'alle', 'viele', 'wer', 'wie', 'was', 'wo', 'warum', 'wann', 'ihr', 'wir', 'sie', 'er', 'ich', 'du', 'mein', 'dein', 'kein', 'ein', 'eine', 'nachher', 'vorher', 'sofort', 'endlich', 'plötzlich', 'trotzdem', 'deshalb', 'darum', 'genug', 'fast', 'ganz', 'überall', 'nirgends', 'irgendwo'];
+    if (other.indexOf(low) !== -1) return 'anderes';
+    if (/(ig|lich|isch|bar|sam|los|haft|voll)$/.test(low)) return 'Adjektiv';
+    if (/(en|ern|eln)$/.test(low) && low.length > 3) return 'Verb';
+    return 'Adjektiv';
+  }
+  guessArt(w) {
+    const l = w.toLowerCase();
+    if (/(ung|heit|keit|schaft|ion|tät|ei|ik|in|e)$/.test(l)) return 'die';
+    if (/(chen|lein|ment|[^aeiou]um)$/.test(l)) return 'das';
+    return 'der';
+  }
+  guessPl(w) {
+    if (!this.rank) return '';
+    const l = w.toLowerCase();
+    const uml = this.umlaut(w);
+    const has = (x) => this.rank.has(x);
+    if (/e$/.test(l)) return has(w + 'n') ? w + 'n' : '';
+    if (/(ung|heit|keit|schaft|ion|tät)$/.test(l)) return w + 'en';
+    if (/in$/.test(l)) return w + 'nen';
+    if (/(chen|lein)$/.test(l)) return w;
+    if (/(er|el|en)$/.test(l)) return uml !== w && has(uml) ? uml : w;
+    const c = [w + 'e', uml + 'e', w + 'er', uml + 'er', w + 's', w + 'en'].filter((x, k, a) => a.indexOf(x) === k && has(x));
+    if (!c.length) return '';
+    if (c.indexOf(w + 'en') !== -1 && c.length > 1) c.splice(c.indexOf(w + 'en'), 1);
+    c.sort((a, b) => this.rank.get(a) - this.rank.get(b));
+    return c[0];
+  }
+  sylls(w) {
+    if (w.indexOf(' ') !== -1) return [w];
+    const l = w.toLowerCase();
+    const units = [];
+    let i = 0;
+    while (i < w.length) {
+      let n = 1;
+      if (l.slice(i, i + 3) === 'sch') n = 3;
+      else if (['ch', 'ck', 'ph', 'th', 'qu', 'ei', 'ie', 'au', 'eu', 'äu', 'ai', 'aa', 'ee', 'oo'].indexOf(l.slice(i, i + 2)) !== -1) n = 2;
+      units.push(w.slice(i, i + n));
+      i += n;
+    }
+    const isV = (u) => 'aeiouäöüy'.indexOf(u[0].toLowerCase()) !== -1;
+    const vi = [];
+    units.forEach((u, k) => { if (isV(u)) vi.push(k); });
+    if (vi.length < 2) return [w];
+    const cuts = [];
+    for (let k = 0; k < vi.length - 1; k++) {
+      const c = vi[k + 1] - vi[k] - 1;
+      cuts.push(c <= 1 ? vi[k] + 1 : vi[k + 1] - 1);
+    }
+    const out = [];
+    let start = 0;
+    cuts.forEach((c) => { out.push(units.slice(start, c).join('')); start = c; });
+    out.push(units.slice(start).join(''));
+    return out.filter((x) => x);
+  }
+  autoTip(x) {
+    const w = x.w;
+    const l = w.toLowerCase();
+    const found = [];
+    const add = (tip, i, n) => { const c = []; for (let k = i; k < i + n; k++) c.push(k); found.push({ tip: tip, crit: c }); };
+    let m;
+    if ((m = l.indexOf('ck')) !== -1) add('Nach kurzem Vokal kommt ck.', m, 2);
+    else if ((m = l.indexOf('tz')) !== -1) add('Nach kurzem Vokal kommt tz.', m, 2);
+    else if ((m = l.search(/([bdfgklmnprst])\1/)) !== -1) add('Kurzer Vokal – dann zwei ' + l[m] + '.', m, 2);
+    if ((m = l.indexOf('ß')) !== -1) add('Nach langem Vokal oder ei, au, eu kommt ß.', m, 1);
+    if ((m = l.indexOf('ie')) !== -1) add('Langes i schreibt man meist ie.', m, 2);
+    if ((m = l.search(/[aeiouäöü]h(?![aeiouäöü])/)) !== -1) add('Merkwort: Hier steckt ein h drin.', m + 1, 1);
+    if ((m = l.indexOf('ä')) !== -1) add('ä oder e? Gibt es ein verwandtes Wort mit a oder au?', m, l[m + 1] === 'u' ? 2 : 1);
+    if (/^(sp|st)/.test(l)) add('Am Anfang sp/st schreiben – auch wenn man schp/scht spricht.', 0, 2);
+    if (/[bdg]$/.test(l)) add('Verlängere das Wort – dann hörst du, was ans Ende gehört.', l.length - 1, 1);
+    const use = found.slice(0, x.typ === 'Nomen' ? 1 : 2);
+    if (x.typ === 'Nomen') use.push({ tip: 'Groß, weil Nomen: ' + x.art + ' ' + w + '.', crit: [0] });
+    if (!use.length) use.push({ tip: 'Sprich das Wort langsam und deutlich mit.', crit: [] });
+    const crit = [];
+    use.forEach((u) => u.crit.forEach((k) => { if (crit.indexOf(k) === -1) crit.push(k); }));
+    return { tip: use.map((u) => u.tip).join(' '), crit: crit.sort((a2, b2) => a2 - b2) };
+  }
+  buildWord(r) {
+    const w = r.w.trim();
+    const typ = r.typ;
+    const x = { w: w, typ: typ };
+    if (typ === 'Nomen') { x.art = r.art || this.guessArt(w); if (r.pl.trim()) x.pl = r.pl.trim(); }
+    const parts = r.syl.split(/[-–·|\s]+/).map((p) => p.trim()).filter((p) => p);
+    x.syl = parts.join('') === w ? parts : this.sylls(w);
+    const t = this.autoTip(x);
+    x.tip = t.tip;
+    x.crit = t.crit;
+    const esc = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    let forms = [w];
+    if (typ === 'Nomen' && x.pl && x.pl !== w) forms.push(x.pl);
+    if (typ === 'Verb') {
+      const st = w.replace(/e?n$/, '');
+      if (st.length >= 3) {
+        const lastE = st.lastIndexOf('e');
+        forms = [st, this.umlaut(st)];
+        if (lastE > 0) forms.push(st.slice(0, lastE) + 'ie' + st.slice(lastE + 1), st.slice(0, lastE) + 'i' + st.slice(lastE + 1));
+      }
+    }
+    if (typ === 'Adjektiv' && /e$/.test(w) && w.length > 3) forms = [w.slice(0, -1)];
+    x.forms = forms.filter((f, k, a) => a.indexOf(f) === k).map(esc).join('|');
+    const acc = { der: 'den', die: 'die', das: 'das' };
+    if (typ === 'Nomen') x.idea = 'Erzähl etwas über ' + acc[x.art] + ' ' + w + '.';
+    else if (typ === 'Verb') x.idea = 'Wer kann ' + w + '? Und wo?';
+    else if (typ === 'Adjektiv') x.idea = 'Was oder wer ist ' + w + '?';
+    else x.idea = 'Erzähl etwas von deinem Tag mit diesem Wort.';
+    x.idea2 = 'Wer? Wo? Wann? Denk an zu Hause, die Schule oder deine Freunde.';
+    return x;
+  }
+  rowFrom(w, art, pl) {
+    const typ = this.guessTyp(w, art);
+    const row = { w: w, art: '', typ: typ, pl: '', syl: this.sylls(w).join('-'), flag: false };
+    if (typ === 'Nomen') {
+      if (w[0] !== w[0].toUpperCase()) row.w = w[0].toUpperCase() + w.slice(1);
+      row.art = art || this.guessArt(row.w);
+      row.pl = pl || this.guessPl(row.w);
+      if (!art || (!pl && !row.pl)) row.flag = true;
+      if (!pl && row.pl) row.flag = true;
+    } else if (typ === 'Adjektiv' && !/(ig|lich|isch|bar|sam|los|haft|voll)$/.test(w.toLowerCase())) row.flag = true;
+    else if (typ === 'Verb') row.flag = false;
+    return row;
+  }
+  parseText(text) {
+    const out = [];
+    text.split(/\n|;/).forEach((line) => {
+      const parts = line.split(/\s*(?:,|\s[–—-]\s)\s*/).map((p) => p.replace(/[^A-Za-zÄÖÜäöüß \-]/g, '').replace(/\s+/g, ' ').trim()).filter((p) => p);
+      let k = 0;
+      while (k < parts.length) {
+        let p = parts[k];
+        let art = '';
+        const m = p.match(/^(der|die|das)\s+(.+)$/i);
+        if (m) { art = m[1].toLowerCase(); p = m[2]; }
+        let pl = '';
+        if (art && parts[k + 1] && /^die\s+/i.test(parts[k + 1])) { pl = parts[k + 1].replace(/^die\s+/i, ''); k++; }
+        if (p) out.push({ w: p, art: art, pl: pl });
+        k++;
+      }
+    });
+    return out;
+  }
+  openEditor() {
+    const nm = this.nextMonday();
+    const wk = this.store.next;
+    const rows = wk ? wk.words.map((x) => ({ w: x.w, art: x.art || '', typ: x.typ, pl: x.pl || '', syl: x.syl.join('-'), flag: false })) : [];
+    this.setState({ screen: 'edit', edFrom: wk ? wk.from : nm[0], edTo: wk ? wk.to : nm[1], edText: '', edSent: wk ? (wk.sentences || []).join('\n') : '', rows: rows, edMsg: wk ? 'Die geplante Woche ist geladen – du kannst sie ändern.' : '', edOk: true });
+  }
+  saveWeek(now) {
+    const s = this.state;
+    const seen = [];
+    const rows = s.rows.filter((r) => { const w = r.w.trim(); if (!w || seen.indexOf(w) !== -1) return false; seen.push(w); return true; });
+    if (rows.length < 3) { this.setState({ edMsg: 'Bitte mindestens 3 Lernwörter eintragen.', edOk: false }); return; }
+    if (rows.length > 16) { this.setState({ edMsg: 'Höchstens 16 Wörter pro Woche, bitte.', edOk: false }); return; }
+    if (!s.edFrom) { this.setState({ edMsg: 'Bitte ein Startdatum wählen.', edOk: false }); return; }
+    const sentences = s.edSent.split('\n').map((t) => t.replace(/\s+/g, ' ').trim()).filter((t) => t.split(' ').length >= 3).map((t) => (/[.!?]$/.test(t) ? t : t + '.'));
+    const week = { id: s.edFrom + '#' + Date.now(), from: s.edFrom, to: s.edTo || s.edFrom, words: rows.map((r) => this.buildWord(r)), sentences: sentences };
+    const today = this.iso(new Date());
+    if (now || week.from <= today) {
+      this.store.current = week;
+      this.store.progress = { id: week.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
+      if (this.store.next && (now || this.store.next.from <= today)) this.store.next = null;
+      this.persist();
+      this.applyWeek();
+      this.setState(Object.assign({ screen: 'hub', i: 0, done: [], hubMsg: 'Neue Lernwoche ist gestartet: ' + rows.length + ' Wörter.' }, this.reset()));
+    } else {
+      this.store.next = week;
+      this.persist();
+      this.setState({ screen: 'hub', hubMsg: '' });
+    }
+  }
+  editVals() {
+    const s = this.state;
+    const typs = ['Nomen', 'Verb', 'Adjektiv', 'anderes'];
+    const cls = { Nomen: 'btn-red', Verb: 'btn-blue', Adjektiv: 'btn-green', anderes: 'btn-soft' };
+    const arts = ['der', 'die', 'das'];
+    const upd = (k, patch) => { const rows = s.rows.slice(); rows[k] = Object.assign({}, rows[k], patch, { flag: false }); this.setState({ rows: rows, edMsg: '' }); };
+    const cur = this.store.current;
+    return {
+      edCurrentInfo: 'Aktuell: ' + this.dateLabel(cur.from, cur.to) + ' · ' + cur.words.length + ' Wörter',
+      loadCurrent: () => {
+        const wk = this.store.current;
+        this.setState({ edFrom: wk.from, edTo: wk.to, edSent: (wk.sentences || []).join('\n'), rows: wk.words.map((x) => ({ w: x.w, art: x.art || '', typ: x.typ, pl: x.pl || '', syl: x.syl.join('-'), flag: false })), edMsg: 'Die aktuelle Woche ist geladen. „Sofort starten“ übernimmt die Änderungen (Fortschritt beginnt neu).', edOk: true });
+      },
+      edFrom: s.edFrom,
+      edTo: s.edTo,
+      onFrom: (e) => this.setState({ edFrom: e.target.value }),
+      onTo: (e) => this.setState({ edTo: e.target.value }),
+      edText: s.edText,
+      onEdText: (e) => this.setState({ edText: e.target.value }),
+      edTextEmpty: s.edText.trim() === '',
+      edSent: s.edSent,
+      onEdSent: (e) => this.setState({ edSent: e.target.value }),
+      analyze: () => {
+        const have = s.rows.map((r) => r.w.toLowerCase());
+        const add = this.parseText(s.edText).filter((p) => have.indexOf(p.w.toLowerCase()) === -1).map((p) => this.rowFrom(p.w, p.art, p.pl));
+        this.setState({ rows: s.rows.concat(add), edText: '', edMsg: add.length ? add.length + ' Wörter übernommen.' : 'Keine neuen Wörter gefunden.', edOk: true });
+      },
+      edCount: s.rows.length ? s.rows.length + ' Lernwörter' : 'Noch keine Lernwörter',
+      noRows: s.rows.length === 0,
+      rows: s.rows.map((r, k) => ({
+        w: r.w,
+        pl: r.pl,
+        syl: r.syl,
+        bg: r.flag ? '#FFF4C7' : '#F6F9F1',
+        artLabel: r.typ === 'Nomen' ? (r.art || 'der') : '–',
+        noArt: r.typ !== 'Nomen',
+        noPl: r.typ !== 'Nomen',
+        plHint: r.typ === 'Nomen' ? 'keine' : '',
+        typLabel: r.typ === 'anderes' ? 'Anderes' : r.typ,
+        typCls: cls[r.typ],
+        delLabel: r.w + ' löschen',
+        cycleArt: () => upd(k, { art: arts[(arts.indexOf(r.art) + 1) % 3] }),
+        cycleTyp: () => {
+          const t = typs[(typs.indexOf(r.typ) + 1) % 4];
+          const patch = { typ: t };
+          if (t === 'Nomen') { patch.w = r.w ? r.w[0].toUpperCase() + r.w.slice(1) : r.w; patch.art = r.art || this.guessArt(r.w); patch.pl = r.pl || this.guessPl(patch.w); }
+          else if (r.typ === 'Nomen' && r.w) patch.w = r.w[0].toLowerCase() + r.w.slice(1);
+          upd(k, patch);
+        },
+        onW: (e) => { const w = e.target.value; const old = r.sylAuto !== false && r.syl === this.sylls(r.w).join('-'); upd(k, Object.assign({ w: w }, old ? { syl: this.sylls(w.trim()).join('-') } : {})); },
+        onPl: (e) => upd(k, { pl: e.target.value }),
+        onSyl: (e) => upd(k, { syl: e.target.value }),
+        del: () => this.setState({ rows: s.rows.filter((_, j) => j !== k) })
+      })),
+      addRow: () => this.setState({ rows: s.rows.concat([{ w: '', art: 'der', typ: 'Nomen', pl: '', syl: '', flag: false }]) }),
+      edMsg: s.edMsg,
+      edMsgColor: s.edOk ? '#0C7C74' : '#B45309',
+      saveNow: () => this.saveWeek(true),
+      savePlan: () => this.saveWeek(false),
+      planLabel: s.edFrom ? 'Ab ' + s.edFrom.split('-')[2] + '.' + s.edFrom.split('-')[1] + '. planen' : 'Planen'
+    };
+  }
+  shuf(a) { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = r[i]; r[i] = r[j]; r[j] = t; } return r; }
+  errList() {
+    const s = this.state;
+    const ref = s.rep > 1 && s.screen !== 'satz' ? s.repRefs[s.i] : s.i;
+    return s.errs.indexOf(ref) === -1 ? s.errs.concat([ref]) : s.errs;
+  }
+  refName(screen, ref) {
+    const b = this.baseItems(screen)[ref];
+    if (!b) return '';
+    if (typeof b === 'string') return b.split(' ').slice(0, 3).join(' ') + ' …';
+    if (Array.isArray(b)) return screen === 'abc' ? 'ABC-Runde ' + (ref + 1) : (screen === 'gefuehl' ? b[1] : b[0].split(' ').slice(0, 3).join(' ') + ' …');
+    return b.w;
+  }
+  flipCase(t) { return (t[0] === t[0].toUpperCase() ? t[0].toLowerCase() : t[0].toUpperCase()) + t.slice(1); }
+  misspell(w) {
+    const out = [];
+    const cap = /^[A-ZÄÖÜ]/.test(w);
+    const l = w.toLowerCase();
+    const add = (x) => { if (!x || x === l) return; const r = cap ? x[0].toUpperCase() + x.slice(1) : x; if (r !== w && out.indexOf(r) === -1) out.push(r); };
+    let m;
+    if (/ck/.test(l)) add(l.replace('ck', 'k'));
+    if (/tz/.test(l)) add(l.replace('tz', 'z'));
+    if ((m = l.match(/([bdfgklmnprst])\1/))) add(l.replace(m[0], m[1]));
+    if (/ß/.test(l)) add(l.replace('ß', 'ss'));
+    if (/ss/.test(l)) add(l.replace('ss', 'ß'));
+    if (/ie/.test(l)) add(l.replace('ie', 'i'));
+    if (/äu/.test(l)) add(l.replace('äu', 'eu')); else if (/eu/.test(l)) add(l.replace('eu', 'äu'));
+    if (/ä/.test(l)) add(l.replace('ä', 'e'));
+    if (/ö/.test(l)) add(l.replace('ö', 'e'));
+    if (/ü/.test(l)) add(l.replace('ü', 'u'));
+    if (/[bdg]$/.test(l)) add(l.replace(/b$/, 'p').replace(/d$/, 't').replace(/g$/, 'k'));
+    if ((m = l.match(/([aeiouäöü])h(?=[^aeiouäöü])/))) add(l.replace(m[0], m[1]));
+    if (/^f/.test(l)) add('v' + l.slice(1));
+    if (/^v/.test(l)) add('f' + l.slice(1));
+    if (/^st/.test(l)) add('scht' + l.slice(2));
+    if (/^sp/.test(l)) add('schp' + l.slice(2));
+    return out;
+  }
+  wrongSpells(w) {
+    const wrong = [];
+    if (/^[A-ZÄÖÜ]/.test(w)) wrong.push(w[0].toLowerCase() + w.slice(1));
+    const c = this.shuf(this.misspell(w));
+    while (wrong.length < 2 && c.length) wrong.push(c.pop());
+    for (let i = 1; wrong.length < 2 && i < w.length - 1; i++) {
+      if (w[i] !== w[i + 1]) { const x = w.slice(0, i) + w[i + 1] + w[i] + w.slice(i + 2); if (wrong.indexOf(x) === -1 && x !== w) wrong.push(x); }
+    }
+    return wrong;
+  }
+  plDistr(w, pl) {
+    const u = this.umlaut(w);
+    const c = [w + 'e', w + 'en', w + 'n', w + 'er', w + 's', u + 'e', u + 'er', u, w].filter((x, k, a) => x !== pl && a.indexOf(x) === k);
+    return this.shuf(c).slice(0, 2);
+  }
+  mkTasks(screen, refs, v) {
+    const base = this.baseItems(screen);
+    return refs.map((ref) => {
+      const it = base[ref];
+      let t = this.mkTask(screen, it, v) || this.mkTask(screen, it, 1 - v);
+      if (!t) t = { mode: 'type', prompt: 'Noch einmal üben.', sub: 'Hör zu und schreib das Wort.', show: '', speak: it.w || '', answer: it.w || '', okMsg: 'Richtig!', badMsg: 'Fast – hör noch einmal hin.' };
+      t.ref = ref;
+      return t;
+    });
+  }
+  mkTask(screen, it, v) {
+    const lab = { Nomen: 'ein Nomen', Verb: 'ein Verb', Adjektiv: 'ein Adjektiv', anderes: 'kein Nomen, Verb oder Adjektiv' };
+    if (screen === 'diktat') {
+      if (v === 0) {
+        const wr = this.wrongSpells(it.w);
+        if (wr.length < 2) return null;
+        return { mode: 'choice', prompt: 'Welche Schreibweise ist richtig?', sub: 'Hör das Wort und tippe die richtige Schreibweise.', show: '', speak: it.w, options: this.shuf([it.w].concat(wr.slice(0, 2))), answer: it.w, okMsg: 'Richtig! ' + it.tip, badMsg: 'Nicht ganz. Tipp: ' + it.tip };
+      }
+      const idx = it.crit.length ? it.crit : [Math.min(1, it.w.length - 1)];
+      return { mode: 'type', prompt: 'Schreib das ganze Wort.', sub: 'Die Lücken sind die kniffligen Stellen.', show: it.w.split('').map((ch, k) => (idx.indexOf(k) !== -1 ? '_' : ch)).join(''), speak: it.w, answer: it.w, okMsg: 'Richtig! ' + it.tip, badMsg: 'Fast! Tipp: ' + it.tip };
+    }
+    if (screen === 'silben') {
+      if (v === 0) {
+        let o = this.shuf(it.syl);
+        for (let k = 0; k < 6 && o.join('|') === it.syl.join('|'); k++) o = this.shuf(it.syl);
+        return { mode: 'order', prompt: 'Baue das Wort aus den Silben.', sub: 'Tippe die Silben in der richtigen Reihenfolge.', show: '', speak: it.w, options: o, answer: it.syl, okMsg: 'Genau! ' + it.syl.join(' – '), badMsg: 'Nicht ganz. Sprich das Wort langsam und klatsche mit.' };
+      }
+      const n = it.syl.length;
+      return { mode: 'choice', prompt: 'Wie viele Silben hat das Wort?', sub: 'Klatsche beim Sprechen mit.', show: it.w, speak: it.syl.join(' - '), slow: true, options: ['1', '2', '3', '4'].slice(0, Math.max(3, Math.min(4, n + 1))), answer: String(n), okMsg: 'Richtig! ' + it.syl.join(' – '), badMsg: 'Nicht ganz. Sprich langsam und klatsche bei jeder Silbe.' };
+    }
+    if (screen === 'plural') {
+      if (v === 0) {
+        const d = this.plDistr(it.w, it.pl);
+        if (d.length < 2) return null;
+        return { mode: 'choice', prompt: 'Wie heißt die Mehrzahl?', sub: 'Sprich „viele …“ laut.', show: it.art + ' ' + it.w, options: this.shuf([it.pl].concat(d)), answer: it.pl, okMsg: 'Richtig! ' + it.art + ' ' + it.w + ' – die ' + it.pl + '.', badMsg: 'Nicht ganz. Sprich „viele …“ laut und hör aufs Ende.' };
+      }
+      return { mode: 'choice', prompt: 'Wie heißt das Wort in der Einzahl?', sub: 'Welcher Artikel passt?', show: 'die ' + it.pl, options: this.shuf(['der', 'die', 'das'].map((a) => a + ' ' + it.w)), answer: it.art + ' ' + it.w, okMsg: 'Richtig! ' + it.art + ' ' + it.w + ' – die ' + it.pl + '.', badMsg: 'Probier: der, die oder das – was klingt richtig?' };
+    }
+    if (screen === 'wortart') {
+      const others = this.words.filter((x) => x.typ !== it.typ);
+      if (v === 0) {
+        if (others.length < 2) return null;
+        const p = this.shuf(others);
+        return { mode: 'choice', upper: true, prompt: 'Welches Wort ist ' + lab[it.typ] + '?', sub: 'Tippe das passende Wort.', show: '', options: this.shuf([it.w, p[0].w, p[1].w]), answer: it.w, okMsg: 'Richtig! ' + (it.typ === 'Nomen' ? it.art + ' ' + it.w + ' – Nomen schreibt man groß.' : it.w + ' ist ' + lab[it.typ] + '.'), badMsg: 'Nicht ganz. Nomen: der, die, das · Verb: ich … · Adjektiv: Wie ist etwas?' };
+      }
+      const truth = Math.random() < 0.5;
+      const keys = Object.keys(lab).filter((k) => k !== it.typ);
+      const shown = truth ? it.typ : keys[Math.floor(Math.random() * keys.length)];
+      return { mode: 'choice', prompt: 'Stimmt das?', sub: 'Denk an die Tipps: der/die/das, ich …, Wie ist etwas?', show: it.w.replace(/ß/g, 'ẞ').toUpperCase() + ' ist ' + lab[shown] + '.', options: ['Stimmt', 'Stimmt nicht'], answer: truth ? 'Stimmt' : 'Stimmt nicht', okMsg: 'Richtig! ' + it.w + ' ist ' + lab[it.typ] + '.', badMsg: 'Nicht ganz. Prüfe: Passt der, die oder das davor? Passt „ich …“?' };
+    }
+    if (screen === 'gross') {
+      const end = (it.match(/[.!?]$/) || ['.'])[0];
+      const toks = it.replace(/[.!?]$/, '').split(' ');
+      const fl = this.shuf(toks.map((_, k) => k));
+      if (v === 0) {
+        const mk = (k) => toks.map((t, j) => (j === k ? this.flipCase(t) : t)).join(' ') + end;
+        return { mode: 'choice', wide: true, prompt: 'Welcher Satz ist richtig geschrieben?', sub: 'Achte auf groß und klein.', show: '', options: this.shuf([it, mk(fl[0]), mk(fl[1])]), answer: it, okMsg: 'Richtig! Satzanfang und Nomen schreibt man groß.', badMsg: 'Nicht ganz. Trick: Kann ich der, die oder das davorsetzen?' };
+      }
+      const wr = toks.map((t, j) => (j === fl[0] ? this.flipCase(t) : t));
+      return { mode: 'choice', prompt: 'Ein Wort ist falsch geschrieben.', sub: 'Tippe das Wort, bei dem groß oder klein nicht stimmt.', show: wr.join(' ') + end, options: wr, answer: wr[fl[0]], okMsg: 'Genau! Richtig heißt es: ' + toks[fl[0]], badMsg: 'Nicht ganz. Trick: Kann ich der, die oder das davorsetzen?' };
+    }
+    if (screen === 'abc') {
+      const g = this.shuf(it).slice(0, 3);
+      const sorted = g.slice().sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase(), 'de'));
+      const first = v === 0;
+      return { mode: 'choice', prompt: first ? 'Welches Wort kommt im Wörterbuch zuerst?' : 'Welches Wort kommt im Wörterbuch zuletzt?', sub: 'Schau auf den ersten Buchstaben. ä wird wie a einsortiert.', show: '', options: g, answer: first ? sorted[0] : sorted[sorted.length - 1], okMsg: 'Richtig! ' + sorted.join(' – '), badMsg: 'Schau auf den ersten Buchstaben. Welcher kommt im ABC früher?' };
+    }
+    if (screen === 'zeichen') {
+      const mk = it[1][0];
+      if (v === 0) {
+        const names = ['Aussagesatz', 'Fragesatz', 'Aufforderung oder Ausruf'];
+        return { mode: 'choice', wide: true, prompt: 'Welche Satzart ist das?', sub: 'Aussage (.) · Frage (?) · Aufforderung oder Ausruf (!)', show: it[0] + mk, options: names, answer: names[mk === '.' ? 0 : (mk === '?' ? 1 : 2)], okMsg: 'Richtig! Am Ende steht: ' + mk, badMsg: 'Lies den Satz laut: Fragt er etwas? Fordert er auf?' };
+      }
+      const oth = this.zeichen.filter((z) => z[1].indexOf(mk) === -1);
+      if (oth.length < 2) return null;
+      return { mode: 'choice', wide: true, prompt: 'Welcher Satz braucht ' + { '.': 'einen Punkt', '?': 'ein Fragezeichen', '!': 'ein Ausrufezeichen' }[mk] + '?', sub: 'Lies die Sätze laut.', show: '', options: this.shuf([it[0]].concat(this.shuf(oth).slice(0, 2).map((z) => z[0]))), answer: it[0], okMsg: 'Richtig! ' + it[0] + mk, badMsg: 'Lies die Sätze laut: Welcher passt?' };
+    }
+    if (screen === 'gefuehl') {
+      const ex = this.gefExtra[it[1]][v === 0 ? 0 : 1];
+      const full = ex.replace('___', it[1]);
+      if (v === 0) return { mode: 'choice', prompt: 'Welches Gefühl passt?', sub: 'Angst, Schmerz, Glück oder Wut', show: ex.replace('___', '▢▢▢'), options: this.shuf(['Angst', 'Schmerz', 'Glück', 'Wut']), answer: it[1], okMsg: 'Richtig! ' + full, badMsg: 'Lies den Satz mit dem Wort laut: Passt es?' };
+      return { mode: 'type', prompt: 'Schreib das passende Gefühl-Wort.', sub: 'Gefühle sind Nomen – denk an den Anfangsbuchstaben.', show: ex.replace('___', '▢▢▢'), answer: it[1], okMsg: 'Richtig! ' + full, badMsg: 'Nicht ganz. Gefühle sind Nomen und werden großgeschrieben.' };
+    }
+    if (screen === 'zerleg') {
+      const A = it.a.replace(/^(der|die|das) /, '');
+      const B = it.b.replace(/^(der|die|das) /, '');
+      const b = B[0].toLowerCase() + B.slice(1);
+      const show = it.a + ' + ' + it.b;
+      if (v === 0) {
+        const wr = this.shuf([A + b, A + 'n' + b, A + 's' + b, A + 'e' + b, A + B].filter((x, k, a) => x !== it.w && a.indexOf(x) === k)).slice(0, 2);
+        return { mode: 'choice', prompt: 'Wie schreibt man das zusammengesetzte Nomen?', sub: 'Achte auf kleine Buchstaben in der Mitte und auf Fugen-n.', show: show, options: this.shuf([it.w].concat(wr)), answer: it.w, okMsg: 'Richtig! ' + show + ' = ' + it.w, badMsg: 'Nicht ganz. Das zweite Nomen wird mitten im Wort klein geschrieben.' };
+      }
+      return { mode: 'type', prompt: 'Schreib das zusammengesetzte Nomen.', sub: 'Setz die beiden Nomen zu einem Wort zusammen.', show: show, answer: it.w, okMsg: 'Richtig! ' + show + ' = ' + it.w, badMsg: 'Fast! Mitten im Wort schreibt man klein – manchmal steht ein n oder s dazwischen.' };
+    }
+    return null;
+  }
+  pickTask(o) {
+    const s = this.state;
+    const t = this.items(s.screen)[s.i];
+    if (!t || s.phase !== 'ask') return;
+    if (t.mode === 'order') {
+      if (o === t.answer[s.picked.length]) {
+        const p = s.picked.concat([o]);
+        if (p.length === t.answer.length) this.setState({ picked: p, phase: 'right', msg: t.okMsg });
+        else this.setState({ picked: p, msg: '' });
+      } else this.setState({ errs: this.errList(), msg: t.badMsg });
+      return;
+    }
+    if (o === t.answer) this.setState({ phase: 'right', wrongPick: '', msg: t.okMsg });
+    else this.setState({ errs: this.errList(), wrongPick: o, msg: t.badMsg });
+  }
+  checkTask() {
+    const s = this.state;
+    const t = this.items(s.screen)[s.i];
+    const v = s.input.trim();
+    if (!t || s.phase !== 'ask' || !v) return;
+    if (v === t.answer) this.setState({ phase: 'right', msg: t.okMsg });
+    else this.setState({ errs: this.errList(), msg: t.badMsg });
+  }
+  right(msg) { this.setState({ phase: 'right', msg: msg }); }
+  check() {
+    const s = this.state;
+    if (s.stufe > 1 && s.screen !== 'satz') return this.checkTask();
+    const it = this.items(s.screen)[s.i];
+    if (s.screen === 'diktat') {
+      const v = s.input.trim();
+      if (!v) return;
+      if (v === it.w) this.setState({ phase: 'right', attempt: v, wasWrong: false, msg: 'Richtig! ' + it.tip });
+      else this.setState({ errs: this.errList(), phase: 'right', attempt: v, wasWrong: true, msg: 'Fast! ' + it.tip });
+    }
+    if (s.screen === 'silben') {
+      const expected = [];
+      let pos = 0;
+      it.syl.slice(0, -1).forEach((p) => { pos += p.length; expected.push(pos); });
+      const got = s.cuts.slice().sort((a, b) => a - b);
+      if (got.join(',') === expected.join(',')) this.right('Genau! ' + it.syl.join(' – ') + (it.w === 'Ecke' ? '. ck bleibt zusammen!' : '.'));
+      else this.setState({ errs: this.errList(), msg: 'Noch nicht. Sprich langsam und klatsche bei jeder Silbe.' });
+    }
+    if (s.screen === 'zerleg') {
+      if (s.cuts.length === 1 && s.cuts[0] === it.cut) this.right('Genau! Im Wörterbuch suchst du: ' + it.a + ' und ' + it.b + '.');
+      else if (s.cuts.length > 1) this.setState({ errs: this.errList(), msg: 'Nur ein Strich: Teile das Wort in zwei Nomen.' });
+      else this.setState({ errs: this.errList(), msg: 'Noch nicht. Welche zwei Nomen stecken darin? Tipp: Manchmal steht ein n oder s dazwischen.' });
+    }
+    if (s.screen === 'plural') {
+      const v = s.input.trim();
+      if (!v) return;
+      if (v === it.pl) this.right(it.pl === it.w ? 'Richtig! Bei ' + it.w + ' bleibt es gleich – nur der Artikel wird zu „die“.' : 'Richtig! ' + it.art + ' ' + it.w + ' – die ' + it.pl + '.');
+      else this.setState({ errs: this.errList(), msg: /[äöü]/.test(it.pl) ? 'Tipp: Hier wird aus a ein ä. Sprich „viele …“ laut.' : 'Tipp: Sprich „viele …“ laut und hör aufs Ende.' });
+    }
+    if (s.screen === 'gross') {
+      const toks = it.replace(/[.!?]$/, '').split(' ');
+      const wrong = toks.filter((t, k) => (t[0] === t[0].toUpperCase()) !== (s.caps.indexOf(k) !== -1));
+      if (!wrong.length) this.right('Super! Satzanfang und Nomen schreibt man groß.');
+      else this.setState({ errs: this.errList(), msg: 'Noch ' + wrong.length + ' Wort' + (wrong.length > 1 ? 'e' : '') + ' falsch. Trick: Kann ich der, die oder das davorsetzen?' });
+    }
+  }
+  checkSatz() {
+    const s = this.state;
+    const it = this.items('satz')[s.i];
+    const text = s.input.trim().replace(/\s+/g, ' ');
+    if (!text) return;
+    const tries = s.tries + 1;
+    const toks = text.split(' ').map((t) => t.replace(/[.,!?;:„“"]/g, ''));
+    const re = new RegExp(it.forms, 'i');
+    const k = toks.findIndex((t) => re.test(t));
+    const isNoun = it.typ === 'Nomen';
+    let wordOk = false;
+    let wordMsg = 'Ich finde das Lernwort nicht richtig geschrieben. So schreibt man es: ' + (it.art ? it.art + ' ' : '') + it.w;
+    if (k !== -1) {
+      const t = toks[k];
+      const strict = new RegExp(it.forms);
+      const first = t[0];
+      if (isNoun && first !== first.toUpperCase()) wordMsg = it.w + ' ist ein Nomen – schreib es groß.';
+      else if (!isNoun && k > 0 && first !== first.toLowerCase()) wordMsg = it.w + ' ist kein Nomen – mitten im Satz schreibt man es klein.';
+      else if (!strict.test(k === 0 && !isNoun ? t[0].toLowerCase() + t.slice(1) : t)) wordMsg = 'Schau noch einmal genau: ' + it.w;
+      else wordOk = true;
+    }
+    const results = [
+      { label: 'Lernwort richtig geschrieben', ok: wordOk, tip: wordOk ? '' : wordMsg },
+      { label: 'Großer Anfangsbuchstabe', ok: text[0] === text[0].toUpperCase() && text[0] !== text[0].toLowerCase(), tip: 'Ein Satz beginnt immer groß.' },
+      { label: 'Punkt, ! oder ? am Ende', ok: /[.!?]$/.test(text), tip: 'Am Satzende steht ein Punkt.' },
+      { label: 'Mindestens 4 Wörter', ok: toks.filter((t) => t).length >= 4, tip: 'Erzähl noch etwas mehr: Wer? Wo? Wann?' }
+    ];
+    const flagged = this.spell(text).filter((f) => f.k !== k || !wordOk);
+    const spellTips = flagged.map((f) => f.kind === 'gross' ? '„' + f.t + '“ – groß?' : (f.kind === 'klein' ? '„' + f.t + '“ – klein?' : (tries >= 2 && f.fix ? '„' + f.t + '“ → ' + f.fix : '„' + f.t + '“ – Stolperstelle?')));
+    results.push({ label: this.dict ? 'Alle Wörter richtig geschrieben' : 'Rechtschreibprüfung lädt …', ok: flagged.length === 0, tip: spellTips.join('  ·  ') });
+    const idx = this.words.indexOf(it);
+    let missed = s.missed;
+    if (tries === 1 && !wordOk && s.round < 3 && missed.indexOf(idx) === -1) missed = missed.concat([idx]);
+    const hardOk = results.slice(0, 4).every((r) => r.ok);
+    const allOk = hardOk && flagged.length === 0;
+    const letPass = hardOk && !allOk && tries >= 2;
+    const msg = allOk ? 'Stark! Jetzt noch einmal vorlesen und selbst prüfen.' : (letPass ? 'Die Wortliste kennt nicht jedes Wort. Wenn du sicher bist, darfst du weiter – Mama oder Papa schauen später drüber.' : 'Fast! Schau auf die Hinweise und verbessere deinen Satz.');
+    this.setState({ results: results, tries: tries, missed: missed, marked: flagged.map((f) => f.k), phase: allOk || letPass ? 'self' : 'ask', msg: msg });
+  }
+  saveSatz() {
+    const s = this.state;
+    const text = s.input.trim().replace(/\s+/g, ' ');
+    const pr = this.store.progress;
+    if (/^[A-ZÄÖÜ][A-Za-zÄÖÜäöüß ,]+[.!?]$/.test(text) && text.split(' ').length >= 3 && (pr.kept || []).indexOf(text) === -1) { pr.kept = (pr.kept || []).concat([text]).slice(-12); this.persist(); }
+    this.setState({ phase: 'right', written: s.written.concat([{ t: text, round: s.round }]), msg: 'Dein Satz liegt in der Schatzkiste!' });
+  }
+  pickType(t) {
+    const s = this.state;
+    const it = this.items('wortart')[s.i];
+    if (s.phase !== 'ask') return;
+    if (t === it.typ) {
+      const extra = it.typ === 'Nomen' ? ' – ' + it.art + ' ' + it.w + '. Nomen schreibt man groß!' : ' – ' + it.w + ' schreibt man klein.';
+      const label = it.typ === 'anderes' ? 'Richtig, ' + it.w + ' ist kein Nomen, Verb oder Adjektiv – das unterstreichst du nicht' : 'Richtig, ein ' + t;
+      this.setState({ phase: 'right', wrongPick: '', msg: label + extra });
+    } else {
+      this.setState({ errs: this.errList(), wrongPick: t, msg: 'Nicht ganz. Probier die Tipps unter den Knöpfen.' });
+    }
+  }
+  pickChoice(c) {
+    const s = this.state;
+    const it = this.items(s.screen)[s.i];
+    if (s.phase !== 'ask') return;
+    if (s.screen === 'zeichen') {
+      const ok = it[1].indexOf(c) !== -1;
+      const kind = { '.': 'Aussagesatz – Punkt.', '?': 'Fragesatz – Fragezeichen.', '!': 'Aufforderung oder Ausruf – Ausrufezeichen.' };
+      if (ok) this.setState({ phase: 'right', wrongPick: '', msg: 'Richtig: ' + kind[c] + (it[1].length > 1 ? ' (Hier passt auch ' + (c === '.' ? '!' : '.') + ')' : '') });
+      else this.setState({ errs: this.errList(), wrongPick: c, msg: c === '?' ? 'Fragt der Satz etwas? Lies ihn laut.' : 'Lies den Satz laut: Fragt er etwas? Fordert er auf?' });
+    } else {
+      if (c === it[1]) this.setState({ phase: 'right', wrongPick: '', msg: 'Richtig! ' + it[0].replace('___', it[1]) + ' Gefühle sind Nomen – groß!' });
+      else this.setState({ errs: this.errList(), wrongPick: c, msg: 'Passt das Gefühl? Lies den Satz mit dem Wort laut.' });
+    }
+  }
+  pickAbc(w) {
+    const s = this.state;
+    const round = this.items('abc')[s.i];
+    const sorted = round.slice().sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase(), 'de'));
+    if (w === sorted[s.picked.length]) {
+      const picked = s.picked.concat([w]);
+      if (picked.length === round.length) this.setState({ picked: picked, phase: 'right', msg: 'Richtig sortiert – so findest du Wörter im Wörterbuch!' });
+      else this.setState({ picked: picked, msg: '' });
+    } else {
+      this.setState({ errs: this.errList(), msg: 'Schau auf den ersten Buchstaben. Welcher kommt im ABC früher?' });
+    }
+  }
+  renderVals() {
+    const s = this.state;
+    const keys = Object.keys(this.ex);
+    const pr = this.store.progress;
+    const doneSet = pr.done;
+    const nDone = pr.done.length;
+    const chests = Math.floor(nDone / 4);
+    const stars = nDone + pr.flaw.length + pr.bonus;
+    const rk = [[0, 'Strandläufer'], [6, 'Muschelsucherin'], [13, 'Schatzjägerin'], [23, 'Inselforscherin'], [35, 'Kapitänin']].filter((x) => stars >= x[0]).pop()[1];
+    const names = ['', 'Entdecker', 'Forscher', 'Meister'];
+    const cur = this.store.current;
+    const nx = this.store.next;
+    const n = this.words.length;
+    const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems('silben').length, plural: this.baseItems('plural').length, gross: this.grossList().length, abc: this.baseItems('abc').length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length };
+    const metaOf = { satz: '3 Runden · ' + n + ' Wörter', diktat: 'Rechtschreibung · ' + n + ' Wörter', silben: 'Silbenbögen · ' + cnt.silben + ' Wörter', plural: 'Einzahl / Mehrzahl · ' + cnt.plural + ' Wörter', wortart: 'Wortarten · ' + n + ' Wörter', gross: cnt.gross ? 'Großschreibung · ' + cnt.gross + ' Sätze' : 'Erst Sätze in der Satz-Werkstatt schreiben', abc: 'Nachschlagen · ' + cnt.abc + ' Runden', zeichen: 'Satzarten · ' + cnt.zeichen + ' Sätze', gefuehl: 'Nomen für Gefühle · ' + cnt.gefuehl + ' Sätze', zerleg: 'Wörterbuch · ' + cnt.zerleg + ' Wörter' };
+    const shown = keys.filter((k) => cnt[k] > 0 || k === 'gross');
+    const base = {
+      isHub: s.screen === 'hub',
+      isGate: s.screen === 'gate',
+      isEdit: s.screen === 'edit',
+      isExercise: ['hub', 'gate', 'edit', 'truhe'].indexOf(s.screen) === -1,
+      chestReady: chests > pr.opened,
+      chestWait: !(chests > pr.opened),
+      chestNo: chests + 1,
+      inChest: nDone % 4,
+      chestPips: [0, 1, 2, 3].map((k) => ({ bg: k < nDone % 4 ? '#FFC23D' : '#fff' })),
+      stars: stars,
+      rank: rk,
+      hasShelf: pr.opened > 0,
+      shelf: Array.from({ length: Math.min(pr.opened, 8) }, (_, k) => this.rewards[k % this.rewards.length][0]).join(' '),
+      isTruhe: s.screen === 'truhe',
+      toTruhe: () => this.setState({ screen: 'truhe', truheOpen: false }),
+      doneCount: 0,
+      totalCount: shown.length + 1,
+      weekSub: 'Lernwörter vom ' + this.dateLabel(cur.from, cur.to) + ' – starte mit der Satz-Werkstatt!',
+      hasNote: !!(s.hubMsg || nx),
+      note: s.hubMsg || (nx ? 'Ab ' + this.dateLabel(nx.from, nx.to) + ' warten ' + nx.words.length + ' neue Wörter' : ''),
+      toGate: () => this.setState({ screen: 'gate', gateAns: '', gateWrong: false }),
+      chips: this.words.map((x) => ({ w: (x.art ? x.art + ' ' : '') + x.w, size: n > 12 ? '21px' : '26px' })),
+      cards: shown.map((k) => {
+        const mx = k === 'satz' ? 1 : 3;
+        const lv = [1, 2, 3].slice(0, mx);
+        const ds = lv.map((n) => pr.done.indexOf(k + '#' + n) !== -1);
+        const fl = lv.map((n) => pr.flaw.indexOf(k + '#' + n) !== -1);
+        const nx = ds.indexOf(false) + 1;
+        const all = nx === 0;
+        return { title: this.ex[k].title, desc: this.ex[k].desc, next: all ? 'Alles geschafft – nochmal üben' : (mx === 1 ? 'Los geht\'s' : 'Weiter: Stufe ' + nx + ' · ' + names[nx]), pips: ds.map((d, i) => ({ bg: fl[i] ? '#FFC23D' : (d ? '#0C7C74' : '#fff'), bd: fl[i] ? '#D99A12' : '#0C7C74' })), medal: mx > 1 && all, border: all ? '#0C7C74' : (k === 'satz' ? '#FFC23D' : '#D6E2C4'), bg: k === 'satz' ? '#FFF8E6' : '#fff', star: k === 'satz', open: () => this.open(k, all ? (mx > 1 ? 1 + Math.floor(Math.random() * 3) : 1) : nx) };
+      }),
+      toHub: () => this.setState({ screen: 'hub', hubMsg: '', rep: 1, errs: [], stufe: 1, pool: [], repRefs: [] })
+    };
+    if (s.screen === 'hub') return base;
+    if (s.screen === 'truhe') {
+      const rw = this.rewards[pr.opened % this.rewards.length];
+      return Object.assign(base, { truheClosed: !s.truheOpen, truheOpen: s.truheOpen, rwEmoji: rw[0], rwName: rw[1], rwText: rw[2], openIt: () => this.setState({ truheOpen: true }), closeTruhe: () => { pr.opened += 1; pr.bonus += 3; this.persist(); this.setState({ screen: 'hub', truheOpen: false }); } });
+    }
+    if (s.screen === 'gate') {
+      const unlock = () => { if (s.gateAns.trim() === '56') this.openEditor(); else this.setState({ gateWrong: true }); };
+      return Object.assign(base, { gateAns: s.gateAns, gateWrong: s.gateWrong, onGate: (e) => this.setState({ gateAns: e.target.value, gateWrong: false }), onGateKey: (e) => { if (e.key === 'Enter') unlock(); }, unlock: unlock });
+    }
+    if (s.screen === 'edit') return Object.assign(base, this.editVals());
+    const list = this.items(s.screen);
+    const listDone = s.i >= list.length;
+    const missedAfter = s.missed;
+    const moreRep = s.screen !== 'satz' && listDone && s.errs.length > 0 && s.rep < 3;
+    const moreRounds = moreRep || (s.screen === 'satz' && listDone && (s.round === 1 || (s.round === 2 && missedAfter.length > 0)));
+    const taskRound = s.screen !== 'satz' && s.stufe > 1;
+    const finished = listDone && !moreRounds;
+    const it = listDone ? null : list[s.i];
+    const dots = list.map((_, k) => ({ fill: k < s.i || (k === s.i && s.phase === 'right') ? '#0C7C74' : (k === s.i ? '#FFC23D' : '#fff'), border: k < s.i || (k === s.i && s.phase === 'right') ? '#075A54' : (k === s.i ? '#D99A12' : '#C9DDE4') }));
+    const answered = !finished && s.phase === 'right';
+    const prompts = {
+      satz: ['Bilde einen Satz mit dem Lernwort.', 'Schreib ihn auf. Tipp: Wer? Was? Wo? Wann?'],
+      diktat: ['Hör zu und schreib das Wort.', 'Achte auf doppelte Buchstaben und auf groß oder klein.'],
+      silben: ['Wo trennst du das Wort?', 'Tippe zwischen die Buchstaben, um einen Silbenstrich zu setzen.'],
+      plural: ['Wie heißt es, wenn es viele sind?', 'Schreib die Mehrzahl.'],
+      wortart: ['Was für ein Wort ist das?', 'Das Wort steht in Großbuchstaben – du findest heraus, wie man es schreibt.'],
+      gross: ['Welche Wörter schreibt man groß?', 'Tippe die Wörter an, die einen großen Anfangsbuchstaben brauchen.'],
+      zeichen: ['Welches Zeichen gehört ans Ende?', 'Aussage: Punkt · Frage: ? · Aufforderung oder Ausruf: !'],
+      gefuehl: ['Welches Gefühl passt?', 'Angst, Schmerz, Glück oder Wut'],
+      zerleg: ['Welche zwei Nomen stecken im Wort?', 'Setz einen Strich, wo das erste Nomen endet.'],
+      abc: ['Bring die Wörter in ABC-Reihenfolge.', 'Tippe das Wort an, das zuerst kommt. ä wird wie a einsortiert.']
+    };
+    const v = Object.assign(base, {
+      exTitle: this.ex[s.screen].title,
+      dots: dots,
+      finished: finished,
+      running: !listDone,
+      roundBreak: moreRounds,
+      breakTitle: moreRep ? 'Fast geschafft!' : s.round === 1 ? 'Runde 1 geschafft!' : 'Runde 2 geschafft!',
+      breakText: moreRep ? 'Bei ' + s.errs.length + (s.errs.length === 1 ? ' Aufgabe' : ' Aufgaben') + ' ist noch etwas durcheinandergeraten: ' + s.errs.map((r) => this.refName(s.screen, r)).join(', ') + '. Gleich kommen genau diese Aufgaben noch einmal – bis sie sitzen.' : s.round === 1 ? 'Jetzt wird es kniffliger: In Runde 2 siehst du das Wort nicht mehr. Du hörst es nur – und schreibst es selbst richtig in deinen Satz.' : 'Bei ' + missedAfter.length + (missedAfter.length === 1 ? ' Wort' : ' Wörtern') + ' war das Lernwort noch nicht ganz richtig: ' + missedAfter.map((n) => this.words[n].w).join(', ') + '. Die üben wir in Runde 3 noch einmal – nur hören.',
+      breakButton: moreRep ? 'Noch einmal üben' : s.round === 1 ? 'Runde 2 starten' : 'Runde 3 starten',
+      startRound: () => {
+        if (s.screen !== 'satz') { const refs = s.errs.slice(); const L0 = s.stufe > 1 ? s.pool : this.baseItems(s.screen); const f = L0[refs[0]]; this.setState(Object.assign({ rep: s.rep + 1, repRefs: refs, errs: [], i: 0 }, this.reset())); const sp = s.stufe > 1 ? f.speak : (s.screen === 'diktat' ? f.w : ''); if (sp) this.say(sp, f.slow ? 0.5 : 0.85); return; }
+        const r = s.round + 1;
+        const first = r === 3 ? this.words[s.missed[0]] : this.words[0];
+        this.setState(Object.assign({ round: r, i: 0 }, this.reset()));
+        this.say((first.art ? first.art + ' ' : '') + first.w);
+      },
+      hasReward: !!s.lastReward,
+      rewardText: !s.lastReward ? '' : (s.lastReward.replay ? 'Schön geübt! Diese Stufe zählte schon.' : '⭐ +' + (s.lastReward.flaw ? '2 Sterne – ohne Fehler!' : '1 Stern') + (s.lastReward.medal ? ' · 🏅 Meister-Medaille!' : '') + (s.lastReward.chest ? ' · Schatztruhe voll!' : ' · Truhe: ' + s.lastReward.inChest + ' von 4')),
+      finishBtn: chests > pr.opened ? 'Zur Lernwoche – deine Truhe wartet!' : 'Zur Lernwoche',
+      finishText: s.screen === 'satz' ? (s.written.length + ' eigene Sätze! Zeig sie Mama oder Papa und lies sie zusammen vor.') : 'Du hast alle Aufgaben bei „' + this.ex[s.screen].title + '“ gelöst.' + (s.errs.length ? ' Noch wackelig – das üben wir bald noch einmal: ' + s.errs.map((r) => this.refName(s.screen, r)).join(', ') + '.' : ' Such dir das nächste Spiel aus!'),
+      written: s.written.map((x) => ({ t: x.t, r: 'R' + x.round })),
+      prompt: prompts[s.screen][0],
+      subPrompt: prompts[s.screen][1],
+      isSatz: s.screen === 'satz',
+      isDiktat: s.screen === 'diktat',
+      isSilben: s.screen === 'silben' || s.screen === 'zerleg',
+      isPlural: s.screen === 'plural',
+      isWortart: ['wortart', 'zeichen', 'gefuehl'].indexOf(s.screen) !== -1,
+      isGross: s.screen === 'gross',
+      isAbc: s.screen === 'abc',
+      asking: !finished && s.phase === 'ask',
+      answered: answered,
+      input: s.input,
+      empty: s.input.trim() === '',
+      attempt: s.attempt,
+      wasWrong: s.wasWrong,
+      msg: s.msg,
+      msgColor: s.phase === 'right' || s.phase === 'self' ? '#0C7C74' : '#B45309',
+      onInput: (e) => this.setState({ input: e.target.value, msg: '' }),
+      onKey: (e) => { if (e.key === 'Enter') this.check(); },
+      check: () => this.check(),
+      next: () => {
+        const n = s.i + 1;
+        const upd = Object.assign({ i: n }, this.reset());
+        const lastRound = s.screen !== 'satz' ? (s.errs.length === 0 || s.rep >= 3) : (s.round === 3 || (s.round === 2 && s.missed.length === 0));
+        if (n >= list.length && lastRound) {
+          const key = s.screen + '#' + s.stufe;
+          if (pr.done.indexOf(key) === -1) {
+            const flaw = s.screen === 'satz' ? (s.missed.length === 0 && s.round < 3) : (s.rep === 1 && s.errs.length === 0);
+            pr.done = pr.done.concat([key]);
+            if (flaw) pr.flaw = pr.flaw.concat([key]);
+            this.persist();
+            upd.lastReward = { replay: false, flaw: flaw, chest: pr.done.length % 4 === 0, inChest: pr.done.length % 4, medal: s.screen !== 'satz' && [1, 2, 3].every((m) => pr.done.indexOf(s.screen + '#' + m) !== -1) };
+          } else upd.lastReward = { replay: true };
+        }
+        this.setState(upd);
+        if (s.screen === 'satz' && s.round >= 2 && n < list.length) this.say((list[n].art ? list[n].art + ' ' : '') + list[n].w);
+      },
+      letters: [], silLetters: [], silSolution: '', singular: '', plural: '', shownWord: '', typeButtons: [], tokens: [], abcPicked: [], abcLeft: [],
+      speak: () => {}, speakSlow: () => {}, satzWord: '', idea: '', showIdea: false, results: [], hasResults: false, isSelf: false, satzAsking: false, satzLocked: false, wordShown: false, wordHidden: false, isTask: false, tHasShow: false, tShow: '', tSize: '54px', tHasSpeak: false, tSpeakFn: () => {}, tChoice: false, tType: false, tOrder: false, tOptions: [], tPicked: [], tLeft: [], roundLabel: '', speakSlowWord: () => {}, markedTokens: [], hasMarks: false
+    });
+    if (listDone) return v;
+    if (taskRound) {
+      const t = it;
+      v.isTask = true;
+      v.isDiktat = v.isSilben = v.isPlural = v.isWortart = v.isGross = v.isAbc = false;
+      v.prompt = t.prompt;
+      v.subPrompt = t.sub;
+      v.roundLabel = 'Stufe ' + s.stufe + ' · ' + names[s.stufe] + (s.rep > 1 ? ' · Wiederholung' : '');
+      v.tHasShow = !!t.show;
+      v.tShow = t.show;
+      v.tSize = t.show && t.show.length > 28 ? '30px' : '56px';
+      v.tHasSpeak = !!t.speak;
+      v.tSpeakFn = () => this.say(t.speak, t.slow ? 0.5 : 0.85);
+      v.tChoice = t.mode === 'choice';
+      v.tType = t.mode === 'type';
+      v.tOrder = t.mode === 'order';
+      if (t.mode === 'choice') v.tOptions = t.options.map((o) => ({ l: t.upper ? o.replace(/ß/g, 'ẞ').toUpperCase() : o, w: t.wide ? '100%' : 'auto', size: t.wide ? '28px' : '40px', cls: s.phase === 'right' && o === t.answer ? 'btn-good' : (s.wrongPick === o ? 'btn-bad' : 'btn-soft'), disabled: s.phase === 'right', pick: () => this.pickTask(o) }));
+      if (t.mode === 'order') {
+        const left = t.options.slice();
+        s.picked.forEach((x) => { const k = left.indexOf(x); if (k !== -1) left.splice(k, 1); });
+        v.tPicked = s.picked.map((x) => ({ w: x }));
+        v.tLeft = left.map((x) => ({ w: x, pick: () => this.pickTask(x) }));
+      }
+      return v;
+    }
+    if (s.screen === 'satz') {
+      const hidden = s.round >= 2;
+      v.satzWord = (it.art ? it.art + ' ' : '') + it.w;
+      v.wordShown = !hidden;
+      v.wordHidden = hidden;
+      v.roundLabel = ['', 'Runde 1 · Wort ansehen', 'Runde 2 · Nur hören', 'Runde 3 · Noch einmal hören'][s.round];
+      v.idea = hidden ? it.idea2 : it.idea;
+      v.speakSlowWord = () => this.say((it.art ? it.art + ' ' : '') + it.w, 0.55);
+      v.showIdea = s.showIdea;
+      v.toggleIdea = () => this.setState({ showIdea: !s.showIdea });
+      v.speak = () => this.say((it.art ? it.art + ' ' : '') + it.w);
+      v.readBack = () => this.say(s.input, 0.8);
+      v.onSatz = (e) => this.setState({ input: e.target.value });
+      v.checkSatz = () => this.checkSatz();
+      v.satzAsking = s.phase === 'ask';
+      v.satzLocked = s.phase !== 'ask';
+      v.hasResults = !!s.results;
+      v.results = (s.results || []).map((r) => ({ label: r.label, tip: r.tip, showTip: !r.ok, mark: r.ok ? '✓' : '!', color: r.ok ? '#075A54' : '#8A4B08', bg: r.ok ? '#E6F5F2' : '#FFF4D6' }));
+      v.isSelf = s.phase === 'self';
+      v.self1 = s.self1;
+      v.self2 = s.self2;
+      v.toggleSelf1 = () => this.setState({ self1: !s.self1 });
+      v.toggleSelf2 = () => this.setState({ self2: !s.self2 });
+      v.selfNotDone = !s.self2;
+      v.markedTokens = s.input.trim().split(/\s+/).map((t, k) => ({ t: t, bg: (s.marked || []).indexOf(k) !== -1 ? '#FFE08A' : 'transparent' }));
+      v.hasMarks = (s.marked || []).length > 0;
+      v.saveSatz = () => this.saveSatz();
+    }
+    if (s.screen === 'diktat') {
+      v.letters = it.w.split('').map((ch, k) => ({ ch: ch, bg: it.crit.indexOf(k) !== -1 ? '#FFE08A' : 'transparent' }));
+      v.speak = () => this.say(it.w);
+    }
+    if (s.screen === 'zeichen' || s.screen === 'gefuehl') {
+      const z = s.screen === 'zeichen';
+      v.shownWord = z ? it[0] + (s.phase === 'right' ? s.picked[0] || '' : ' ▢') : (s.phase === 'right' ? it[0].replace('___', it[1]) : it[0].replace('___', '▢▢▢'));
+      v.shownSize = '40px';
+      const opts = z ? [['.', 'Punkt'], ['?', 'Frage'], ['!', 'Ausruf']] : [['Angst', ''], ['Schmerz', ''], ['Glück', ''], ['Wut', '']];
+      const good = z ? it[1] : it[1];
+      v.typeButtons = opts.map((o) => ({ label: o[0], hint: o[1], cls: s.phase === 'right' && good.indexOf(o[0]) !== -1 && (z ? s.picked[0] === o[0] : true) ? 'btn-good' : (s.wrongPick === o[0] ? 'btn-bad' : 'btn-soft'), disabled: s.phase === 'right', pick: () => { if (z) this.setState({ picked: [o[0]] }); this.pickChoice(o[0]); } }));
+    }
+    if (s.screen === 'zerleg') {
+      const letters = it.w.split('');
+      v.silLetters = letters.map((ch, k) => {
+        const pos = k + 1;
+        const cut = s.cuts.indexOf(pos) !== -1;
+        return { ch: ch, hasGap: k < letters.length - 1, cut: cut, gapColor: cut ? '#F08A24' : '#E4EDF1', toggle: () => { if (s.phase !== 'ask') return; this.setState({ cuts: cut ? s.cuts.filter((c) => c !== pos) : s.cuts.concat([pos]), msg: '' }); } };
+      });
+      v.silSolution = it.a + ' + ' + it.b;
+      v.speakSlow = () => this.say(it.w, 0.6);
+    }
+    if (s.screen === 'silben') {
+      const letters = it.w.split('');
+      v.silLetters = letters.map((ch, k) => {
+        const pos = k + 1;
+        const cut = s.cuts.indexOf(pos) !== -1;
+        return {
+          ch: ch,
+          hasGap: k < letters.length - 1,
+          cut: cut,
+          gapColor: cut ? '#F08A24' : '#E4EDF1',
+          toggle: () => { if (s.phase !== 'ask') return; this.setState({ cuts: cut ? s.cuts.filter((c) => c !== pos) : s.cuts.concat([pos]), msg: '' }); }
+        };
+      });
+      v.silSolution = it.syl.join(' – ');
+      v.speakSlow = () => this.say(it.syl.join(' - '), 0.5);
+    }
+    if (s.screen === 'plural') {
+      v.singular = it.art + ' ' + it.w;
+      v.plural = it.pl;
+    }
+    if (s.screen === 'wortart') {
+      v.shownWord = it.w.replace(/ß/g, 'ẞ').toUpperCase();
+      v.shownSize = '70px';
+      const defs = [['Nomen', 'der, die, das …', 'btn-red'], ['Verb', 'ich …, du …', 'btn-blue'], ['Adjektiv', 'Wie ist etwas?', 'btn-green'], ['anderes', 'nicht unterstreichen', 'btn-soft']];
+      v.typeButtons = defs.map((d) => ({
+        label: d[0] === 'anderes' ? 'Anderes Wort' : d[0],
+        hint: d[1],
+        cls: s.phase === 'right' && d[0] === it.typ ? 'btn-good' : (s.wrongPick === d[0] ? 'btn-bad' : d[2]),
+        disabled: s.phase === 'right',
+        pick: () => this.pickType(d[0])
+      }));
+    }
+    if (s.screen === 'gross') {
+      const toks = it.replace(/[.!?]$/, '').split(' ');
+      v.tokens = toks.map((t, k) => {
+        const on = s.caps.indexOf(k) !== -1;
+        const shown = on ? t[0].toUpperCase() + t.slice(1) : t[0].toLowerCase() + t.slice(1);
+        const correct = (t[0] === t[0].toUpperCase()) === on;
+        return {
+          text: shown + (k === toks.length - 1 ? (it.match(/[.!?]$/) || ['.'])[0] : ''),
+          on: on,
+          cls: s.phase === 'right' ? (on ? 'btn-good' : 'btn-soft') : (on ? 'btn-on' : 'btn-soft'),
+          toggle: () => { if (s.phase !== 'ask') return; this.setState({ caps: on ? s.caps.filter((c) => c !== k) : s.caps.concat([k]), msg: '' }); }
+        };
+      });
+    }
+    if (s.screen === 'abc') {
+      v.abcPicked = s.picked.map((w, k) => ({ n: k + 1, w: w }));
+      v.abcLeft = it.filter((w) => s.picked.indexOf(w) === -1).map((w) => ({ w: w, pick: () => this.pickAbc(w) }));
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Vokabeltrainer Englisch</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:12px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(4px)}
+.btn[disabled]{cursor:not-allowed;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 6px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-sun:hover{color:#10304A}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.pick{background:#fff;border:3px solid #C9DDE4;box-shadow:0 5px 0 #C9DDE4;border-radius:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .08s ease}
+.pick:hover{border-color:#3D8BEB}
+.pick:active{transform:translateY(3px)}
+.pick-tried{opacity:.35;cursor:not-allowed}
+.pick-right{border-color:#0C7C74;box-shadow:0 5px 0 #075A54;background:#E6F5F2}
+.tile{width:76px;height:84px;border-radius:20px;background:#fff;border:3px solid #C9DDE4;box-shadow:0 5px 0 #C9DDE4;font-family:'Andika',system-ui,sans-serif;font-size:44px;color:#10304A;cursor:pointer}
+.tile:active{transform:translateY(3px)}
+.tile-used{visibility:hidden}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4px}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .45s ease-out both}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.bob{animation:bob 3s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.pop,.bob{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px; display: flex; flex-direction: column; gap: 18px; background: #E3F2FB; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 72px">
+    <a class="btn btn-soft" href="Hafen.dc.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      Hafen
+    </a>
+    <ol aria-label="Ladung" style="list-style: none; margin: 0; padding: 0; display: flex; align-items: center; gap: 10px">
+      <sc-for list="{{ crates }}" as="c" hint-placeholder-count="8">
+        <li style="width: 34px; height: 30px; border-radius: 8px; box-sizing: border-box; border: 3px solid {{ c.border }}; background: {{ c.fill }}"></li>
+      </sc-for>
+    </ol>
+    <div style="display: flex; align-items: center; gap: 10px; background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; height: 60px; padding: 0 16px 0 8px; box-sizing: border-box">
+      <img src="/_blob/4cbf5fb668e206f2b49be84c54d71fdf" alt="" style="height: 48px; width: auto">
+      <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 19px">Animals</span>
+    </div>
+  </header>
+
+  <main style="flex: 1; display: flex; justify-content: center">
+    <section aria-live="polite" style="width: 800px; height: 664px; box-sizing: border-box; background: #fff; border-radius: 36px; padding: 32px 44px; box-shadow: 0 8px 0 #C9DDE4; display: flex; flex-direction: column; align-items: center; gap: 20px">
+
+      <sc-if value="{{ notDone }}" hint-placeholder-val="{{ true }}">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+            <span style="font-weight: 800; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; color: #2F6FD0">{{ stepLabel }} · Kiste {{ num }} von 8</span>
+            <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 34px">{{ prompt }}</h2>
+            <span style="font-size: 17px; color: #3E5A6E; font-weight: 700">{{ promptDe }}</span>
+          </div>
+
+          <sc-if value="{{ isListen }}" hint-placeholder-val="{{ true }}">
+            <button class="btn btn-sun" type="button" onClick="{{ speakWord }}" style="height: 84px; padding: 0 30px; border-radius: 28px; font-size: 24px">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z"></path><path d="M16.5 8.5a5 5 0 0 1 0 7"></path><path d="M19.5 5.5a9 9 0 0 1 0 13"></path></svg>
+              Listen
+            </button>
+          </sc-if>
+          <sc-if value="{{ isRead }}" hint-placeholder-val="{{ false }}">
+            <button class="btn btn-soft" type="button" onClick="{{ speakWord }}" style="height: 96px; padding: 0 40px; border-radius: 28px; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 60px">{{ word }}</button>
+          </sc-if>
+
+          <sc-if value="{{ showOptions }}" hint-placeholder-val="{{ true }}">
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; width: 100%">
+              <sc-for list="{{ options }}" as="o" hint-placeholder-count="4">
+                <button class="pick {{ o.cls }}" type="button" aria-label="{{ o.label }}" disabled="{{ o.disabled }}" onClick="{{ o.pick }}" style="height: 168px">
+<sc-if value="{{ o.isDog }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="25" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(18 25 48)"></ellipse><ellipse cx="75" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(-18 75 48)"></ellipse><ellipse cx="50" cy="56" rx="27" ry="26" fill="#C68B59"></ellipse><ellipse cx="50" cy="68" rx="14" ry="11" fill="#F3D9B1"></ellipse><circle cx="40" cy="52" r="4" fill="#10304A"></circle><circle cx="60" cy="52" r="4" fill="#10304A"></circle><ellipse cx="50" cy="63" rx="5.5" ry="4" fill="#10304A"></ellipse><path d="M44 72 Q50 77 56 72" stroke="#10304A" stroke-width="2.5" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ o.isCat }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><polygon points="27,42 30,14 47,30" fill="#F4A259"></polygon><polygon points="73,42 70,14 53,30" fill="#F4A259"></polygon><polygon points="31,36 32,22 41,31" fill="#F7C6C7"></polygon><polygon points="69,36 68,22 59,31" fill="#F7C6C7"></polygon><circle cx="50" cy="56" r="27" fill="#F4A259"></circle><ellipse cx="40" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><ellipse cx="60" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><polygon points="46,62 54,62 50,67" fill="#E5737D"></polygon><path d="M50 67 Q46 72 42 70 M50 67 Q54 72 58 70" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M20 60 H35 M21 67 L35 64 M80 60 H65 M79 67 L65 64" stroke="#10304A" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ o.isFish }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><polygon points="68,50 90,32 90,68" fill="#2F6FD0"></polygon><path d="M38 33 Q50 18 62 34 Z" fill="#2F6FD0"></path><ellipse cx="44" cy="50" rx="30" ry="20" fill="#3D8BEB"></ellipse><circle cx="28" cy="46" r="6" fill="#fff"></circle><circle cx="27" cy="46" r="3" fill="#10304A"></circle><path d="M18 56 Q22 59 26 56" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M48 38 Q54 50 48 62 M58 40 Q63 50 58 60" stroke="#9CC6FF" stroke-width="3" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ o.isBird }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><path d="M42 80 v9 M54 80 v9" stroke="#F08A24" stroke-width="3" stroke-linecap="round"></path><circle cx="48" cy="54" r="27" fill="#E94F37"></circle><ellipse cx="50" cy="64" rx="15" ry="14" fill="#FFD5C2"></ellipse><ellipse cx="33" cy="58" rx="12" ry="8" fill="#B83A28" transform="rotate(-25 33 58)"></ellipse><polygon points="73,48 87,53 73,58" fill="#FFB627"></polygon><circle cx="60" cy="45" r="4" fill="#10304A"></circle></svg></sc-if>
+<sc-if value="{{ o.isFrog }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><circle cx="32" cy="38" r="12" fill="#5BBF5B"></circle><circle cx="68" cy="38" r="12" fill="#5BBF5B"></circle><ellipse cx="50" cy="60" rx="34" ry="24" fill="#5BBF5B"></ellipse><circle cx="32" cy="37" r="7" fill="#fff"></circle><circle cx="68" cy="37" r="7" fill="#fff"></circle><circle cx="33" cy="38" r="3.5" fill="#10304A"></circle><circle cx="67" cy="38" r="3.5" fill="#10304A"></circle><path d="M34 64 Q50 76 66 64" stroke="#10304A" stroke-width="3" fill="none" stroke-linecap="round"></path><circle cx="25" cy="62" r="4" fill="#F7A9A8"></circle><circle cx="75" cy="62" r="4" fill="#F7A9A8"></circle></svg></sc-if>
+<sc-if value="{{ o.isBee }}" hint-placeholder-val="{{ false }}"><svg width="128" height="128" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="38" cy="34" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(-20 38 34)"></ellipse><ellipse cx="60" cy="32" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(20 60 32)"></ellipse><ellipse cx="50" cy="58" rx="30" ry="20" fill="#FFC23D"></ellipse><path d="M45 40 Q41 58 45 76" stroke="#10304A" stroke-width="7" fill="none"></path><path d="M60 41 Q56 58 60 75" stroke="#10304A" stroke-width="7" fill="none"></path><circle cx="28" cy="54" r="3.5" fill="#10304A"></circle><polygon points="79,55 90,58 79,62" fill="#10304A"></polygon></svg></sc-if>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isBuild }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 22px">
+              <div style="display: flex; align-items: center; gap: 24px">
+<sc-if value="{{ pic.isDog }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="25" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(18 25 48)"></ellipse><ellipse cx="75" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(-18 75 48)"></ellipse><ellipse cx="50" cy="56" rx="27" ry="26" fill="#C68B59"></ellipse><ellipse cx="50" cy="68" rx="14" ry="11" fill="#F3D9B1"></ellipse><circle cx="40" cy="52" r="4" fill="#10304A"></circle><circle cx="60" cy="52" r="4" fill="#10304A"></circle><ellipse cx="50" cy="63" rx="5.5" ry="4" fill="#10304A"></ellipse><path d="M44 72 Q50 77 56 72" stroke="#10304A" stroke-width="2.5" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isCat }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><polygon points="27,42 30,14 47,30" fill="#F4A259"></polygon><polygon points="73,42 70,14 53,30" fill="#F4A259"></polygon><polygon points="31,36 32,22 41,31" fill="#F7C6C7"></polygon><polygon points="69,36 68,22 59,31" fill="#F7C6C7"></polygon><circle cx="50" cy="56" r="27" fill="#F4A259"></circle><ellipse cx="40" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><ellipse cx="60" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><polygon points="46,62 54,62 50,67" fill="#E5737D"></polygon><path d="M50 67 Q46 72 42 70 M50 67 Q54 72 58 70" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M20 60 H35 M21 67 L35 64 M80 60 H65 M79 67 L65 64" stroke="#10304A" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isFish }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><polygon points="68,50 90,32 90,68" fill="#2F6FD0"></polygon><path d="M38 33 Q50 18 62 34 Z" fill="#2F6FD0"></path><ellipse cx="44" cy="50" rx="30" ry="20" fill="#3D8BEB"></ellipse><circle cx="28" cy="46" r="6" fill="#fff"></circle><circle cx="27" cy="46" r="3" fill="#10304A"></circle><path d="M18 56 Q22 59 26 56" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M48 38 Q54 50 48 62 M58 40 Q63 50 58 60" stroke="#9CC6FF" stroke-width="3" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isBird }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><path d="M42 80 v9 M54 80 v9" stroke="#F08A24" stroke-width="3" stroke-linecap="round"></path><circle cx="48" cy="54" r="27" fill="#E94F37"></circle><ellipse cx="50" cy="64" rx="15" ry="14" fill="#FFD5C2"></ellipse><ellipse cx="33" cy="58" rx="12" ry="8" fill="#B83A28" transform="rotate(-25 33 58)"></ellipse><polygon points="73,48 87,53 73,58" fill="#FFB627"></polygon><circle cx="60" cy="45" r="4" fill="#10304A"></circle></svg></sc-if>
+<sc-if value="{{ pic.isFrog }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><circle cx="32" cy="38" r="12" fill="#5BBF5B"></circle><circle cx="68" cy="38" r="12" fill="#5BBF5B"></circle><ellipse cx="50" cy="60" rx="34" ry="24" fill="#5BBF5B"></ellipse><circle cx="32" cy="37" r="7" fill="#fff"></circle><circle cx="68" cy="37" r="7" fill="#fff"></circle><circle cx="33" cy="38" r="3.5" fill="#10304A"></circle><circle cx="67" cy="38" r="3.5" fill="#10304A"></circle><path d="M34 64 Q50 76 66 64" stroke="#10304A" stroke-width="3" fill="none" stroke-linecap="round"></path><circle cx="25" cy="62" r="4" fill="#F7A9A8"></circle><circle cx="75" cy="62" r="4" fill="#F7A9A8"></circle></svg></sc-if>
+<sc-if value="{{ pic.isBee }}" hint-placeholder-val="{{ false }}"><svg width="140" height="140" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="38" cy="34" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(-20 38 34)"></ellipse><ellipse cx="60" cy="32" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(20 60 32)"></ellipse><ellipse cx="50" cy="58" rx="30" ry="20" fill="#FFC23D"></ellipse><path d="M45 40 Q41 58 45 76" stroke="#10304A" stroke-width="7" fill="none"></path><path d="M60 41 Q56 58 60 75" stroke="#10304A" stroke-width="7" fill="none"></path><circle cx="28" cy="54" r="3.5" fill="#10304A"></circle><polygon points="79,55 90,58 79,62" fill="#10304A"></polygon></svg></sc-if>
+                <div role="img" aria-label="Wort: {{ word }}" style="display: flex; gap: 8px">
+                  <sc-for list="{{ slots }}" as="s" hint-placeholder-count="3">
+                    <span style="width: 68px; height: 84px; border-bottom: 5px solid #9AD3DF; display: flex; align-items: center; justify-content: center; font-family: 'Andika', system-ui, sans-serif; font-size: 58px; color: {{ s.color }}">{{ s.ch }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display: flex; gap: 14px">
+                <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="4">
+                  <button class="tile {{ t.cls }}" type="button" aria-label="Buchstabe {{ t.ch }}" onClick="{{ t.tap }}">{{ t.ch }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isChunk }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 22px">
+              <div style="display: flex; align-items: center; gap: 28px">
+<sc-if value="{{ pic.isDog }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="25" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(18 25 48)"></ellipse><ellipse cx="75" cy="48" rx="9" ry="20" fill="#8B5A2B" transform="rotate(-18 75 48)"></ellipse><ellipse cx="50" cy="56" rx="27" ry="26" fill="#C68B59"></ellipse><ellipse cx="50" cy="68" rx="14" ry="11" fill="#F3D9B1"></ellipse><circle cx="40" cy="52" r="4" fill="#10304A"></circle><circle cx="60" cy="52" r="4" fill="#10304A"></circle><ellipse cx="50" cy="63" rx="5.5" ry="4" fill="#10304A"></ellipse><path d="M44 72 Q50 77 56 72" stroke="#10304A" stroke-width="2.5" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isCat }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><polygon points="27,42 30,14 47,30" fill="#F4A259"></polygon><polygon points="73,42 70,14 53,30" fill="#F4A259"></polygon><polygon points="31,36 32,22 41,31" fill="#F7C6C7"></polygon><polygon points="69,36 68,22 59,31" fill="#F7C6C7"></polygon><circle cx="50" cy="56" r="27" fill="#F4A259"></circle><ellipse cx="40" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><ellipse cx="60" cy="52" rx="4" ry="5.5" fill="#10304A"></ellipse><polygon points="46,62 54,62 50,67" fill="#E5737D"></polygon><path d="M50 67 Q46 72 42 70 M50 67 Q54 72 58 70" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M20 60 H35 M21 67 L35 64 M80 60 H65 M79 67 L65 64" stroke="#10304A" stroke-width="1.6" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isFish }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><polygon points="68,50 90,32 90,68" fill="#2F6FD0"></polygon><path d="M38 33 Q50 18 62 34 Z" fill="#2F6FD0"></path><ellipse cx="44" cy="50" rx="30" ry="20" fill="#3D8BEB"></ellipse><circle cx="28" cy="46" r="6" fill="#fff"></circle><circle cx="27" cy="46" r="3" fill="#10304A"></circle><path d="M18 56 Q22 59 26 56" stroke="#10304A" stroke-width="2" fill="none" stroke-linecap="round"></path><path d="M48 38 Q54 50 48 62 M58 40 Q63 50 58 60" stroke="#9CC6FF" stroke-width="3" fill="none" stroke-linecap="round"></path></svg></sc-if>
+<sc-if value="{{ pic.isBird }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><path d="M42 80 v9 M54 80 v9" stroke="#F08A24" stroke-width="3" stroke-linecap="round"></path><circle cx="48" cy="54" r="27" fill="#E94F37"></circle><ellipse cx="50" cy="64" rx="15" ry="14" fill="#FFD5C2"></ellipse><ellipse cx="33" cy="58" rx="12" ry="8" fill="#B83A28" transform="rotate(-25 33 58)"></ellipse><polygon points="73,48 87,53 73,58" fill="#FFB627"></polygon><circle cx="60" cy="45" r="4" fill="#10304A"></circle></svg></sc-if>
+<sc-if value="{{ pic.isFrog }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><circle cx="32" cy="38" r="12" fill="#5BBF5B"></circle><circle cx="68" cy="38" r="12" fill="#5BBF5B"></circle><ellipse cx="50" cy="60" rx="34" ry="24" fill="#5BBF5B"></ellipse><circle cx="32" cy="37" r="7" fill="#fff"></circle><circle cx="68" cy="37" r="7" fill="#fff"></circle><circle cx="33" cy="38" r="3.5" fill="#10304A"></circle><circle cx="67" cy="38" r="3.5" fill="#10304A"></circle><path d="M34 64 Q50 76 66 64" stroke="#10304A" stroke-width="3" fill="none" stroke-linecap="round"></path><circle cx="25" cy="62" r="4" fill="#F7A9A8"></circle><circle cx="75" cy="62" r="4" fill="#F7A9A8"></circle></svg></sc-if>
+<sc-if value="{{ pic.isBee }}" hint-placeholder-val="{{ false }}"><svg width="150" height="150" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="38" cy="34" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(-20 38 34)"></ellipse><ellipse cx="60" cy="32" rx="11" ry="16" fill="#E4F4FB" stroke="#9AD3DF" stroke-width="2" transform="rotate(20 60 32)"></ellipse><ellipse cx="50" cy="58" rx="30" ry="20" fill="#FFC23D"></ellipse><path d="M45 40 Q41 58 45 76" stroke="#10304A" stroke-width="7" fill="none"></path><path d="M60 41 Q56 58 60 75" stroke="#10304A" stroke-width="7" fill="none"></path><circle cx="28" cy="54" r="3.5" fill="#10304A"></circle><polygon points="79,55 90,58 79,62" fill="#10304A"></polygon></svg></sc-if>
+                <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 48px">I can see a <span style="display: inline-block; min-width: 130px; border-bottom: 5px solid #9AD3DF; text-align: center; color: {{ gapColor }}">{{ gapText }}</span>.</span>
+              </div>
+              <div style="display: flex; gap: 16px">
+                <sc-for list="{{ words }}" as="w" hint-placeholder-count="3">
+                  <button class="btn btn-soft {{ w.cls }}" type="button" disabled="{{ w.disabled }}" onClick="{{ w.pick }}" style="height: 76px; padding: 0 30px; border-radius: 24px; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 36px">{{ w.text }}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <p style="margin: 0; min-height: 28px; font-size: 20px; font-weight: 800; color: {{ msgColor }}">{{ msg }}</p>
+
+          <sc-if value="{{ solved }}" hint-placeholder-val="{{ false }}">
+            <button class="btn btn-teal" type="button" onClick="{{ next }}" style="height: 76px; padding: 0 56px; border-radius: 26px; font-size: 28px">Weiter</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ done }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center">
+          <img class="pop" src="/_blob/f3e4e2b874922ec15c7e0fefc0ca158e" alt="" style="height: 180px; width: auto">
+          <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 44px">Ladung komplett!</h2>
+          <p style="margin: 0; font-size: 21px; line-height: 1.4; color: #3E5A6E; max-width: 540px">Du hast heute <strong>dog, cat, fish, bird, frog</strong> und <strong>bee</strong> an Bord gebracht. Morgen fragt der Kapitän sie noch einmal ab.</p>
+          <div style="display: flex; gap: 16px">
+            <a class="btn btn-teal" href="Hafen.dc.html" style="height: 76px; padding: 0 36px; border-radius: 26px; font-size: 26px">Zurück zum Hafen</a>
+            <a class="btn btn-soft" href="Main.dc.html" style="height: 76px; padding: 0 30px; border-radius: 26px; font-size: 22px">Zur Karte</a>
+          </div>
+        </div>
+      </sc-if>
+    </section>
+  </main>
+
+  <aside style="position: absolute; left: 24px; bottom: 36px; width: 150px; display: flex; flex-direction: column; align-items: center; gap: 10px">
+    <div style="background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; padding: 12px 14px; font-size: 17px; font-weight: 700; line-height: 1.3; text-align: center">{{ kiki }}</div>
+    <img class="bob" src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 130px; width: auto; display: block">
+  </aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.tasks = [
+      { type: 'listen', word: 'dog', options: ['cat', 'dog', 'fish', 'bird'] },
+      { type: 'listen', word: 'frog', options: ['bee', 'dog', 'frog', 'cat'] },
+      { type: 'read', word: 'cat', options: ['bird', 'cat', 'frog', 'fish'] },
+      { type: 'build', word: 'dog', letters: ['g', 'b', 'o', 'd'] },
+      { type: 'listen', word: 'bee', options: ['fish', 'frog', 'bird', 'bee'] },
+      { type: 'read', word: 'fish', options: ['dog', 'fish', 'bee', 'cat'] },
+      { type: 'build', word: 'fish', letters: ['s', 'h', 'a', 'f', 'i'] },
+      { type: 'chunk', word: 'bird', options: ['frog', 'bird', 'bee'] }
+    ];
+    this.de = { dog: 'Hund', cat: 'Katze', fish: 'Fisch', bird: 'Vogel', frog: 'Frosch', bee: 'Biene' };
+    this.state = { idx: 0, tried: [], solved: false, built: '', used: [], wrongTile: false, done: false };
+  }
+  say(text) {
+    try {
+      const u = new window.SpeechSynthesisUtterance(text);
+      u.lang = 'en-GB';
+      u.rate = 0.8;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  pick(choice) {
+    const t = this.tasks[this.state.idx];
+    if (this.state.solved) return;
+    if (choice === t.word) {
+      this.setState({ solved: true });
+      this.say(t.type === 'chunk' ? 'I can see a ' + t.word : t.word);
+    } else {
+      this.setState({ tried: this.state.tried.concat([choice]) });
+    }
+  }
+  tap(i) {
+    const s = this.state;
+    const t = this.tasks[s.idx];
+    if (s.solved || s.used.indexOf(i) !== -1) return;
+    const ch = t.letters[i];
+    if (ch === t.word[s.built.length]) {
+      const built = s.built + ch;
+      const solved = built === t.word;
+      this.setState({ built: built, used: s.used.concat([i]), wrongTile: false, solved: solved });
+      if (solved) this.say(t.word);
+    } else {
+      this.setState({ wrongTile: true });
+    }
+  }
+  flags(name) {
+    return { isDog: name === 'dog', isCat: name === 'cat', isFish: name === 'fish', isBird: name === 'bird', isFrog: name === 'frog', isBee: name === 'bee' };
+  }
+  renderVals() {
+    const s = this.state;
+    const t = this.tasks[Math.min(s.idx, this.tasks.length - 1)];
+    const crates = this.tasks.map((_, i) => {
+      const full = i < s.idx || (i === s.idx && s.solved) || s.done;
+      const cur = i === s.idx && !s.solved && !s.done;
+      return { fill: full ? '#B9775A' : (cur ? '#FFC23D' : '#fff'), border: full ? '#8B5A2B' : (cur ? '#D99A12' : '#C9DDE4') };
+    });
+    const isOpt = t.type === 'listen' || t.type === 'read';
+    const options = (isOpt ? t.options : []).map((o) => Object.assign({
+      label: t.type === 'read' ? 'Bild ' + (t.options.indexOf(o) + 1) : 'Bild ' + (t.options.indexOf(o) + 1),
+      cls: s.solved && o === t.word ? 'pick-right' : (s.tried.indexOf(o) !== -1 ? 'pick-tried' : ''),
+      disabled: s.tried.indexOf(o) !== -1,
+      pick: () => this.pick(o)
+    }, this.flags(o)));
+    const slots = t.type === 'build' ? t.word.split('').map((ch, i) => ({ ch: ch, color: i < s.built.length ? '#10304A' : '#C5D6DE' })) : [];
+    const tiles = t.type === 'build' ? t.letters.map((ch, i) => ({ ch: ch, cls: s.used.indexOf(i) !== -1 ? 'tile-used' : '', tap: () => this.tap(i) })) : [];
+    const words = t.type === 'chunk' ? t.options.map((w) => ({ text: w, disabled: s.tried.indexOf(w) !== -1 || s.solved, cls: s.tried.indexOf(w) !== -1 ? 'pick-tried' : '', pick: () => this.pick(w) })) : [];
+    const labels = { listen: 'Listen and find', read: 'Read and find', build: 'Build the word', chunk: 'Finish the sentence' };
+    const prompts = {
+      listen: ['Hör zu! Welches Tier ist es?', 'Tippe auf „Listen“, dann auf das Bild.'],
+      read: ['Lies das Wort. Welches Bild passt?', 'Tippe aufs Wort, dann hörst du es.'],
+      build: ['Bau das Wort mit den Buchstaben.', 'Die graue Vorlage hilft dir.'],
+      chunk: ['Welches Wort passt in den Satz?', 'Schau dir das Bild an.']
+    };
+    let msg = '';
+    let msgColor = '#0C7C74';
+    if (s.solved) msg = ['Great!', 'Well done!', 'Super!', 'Yes, that\'s right!'][s.idx % 4] + ' – ' + t.word + ' heißt ' + this.de[t.word] + '.';
+    else if (s.wrongTile) { msg = 'Schau auf die Vorlage: Welcher Buchstabe kommt jetzt?'; msgColor = '#B45309'; }
+    else if (s.tried.length) { msg = 'Nicht ganz – hör oder schau noch einmal.'; msgColor = '#B45309'; }
+    const kikiText = s.done ? 'Wow, alles an Bord!' : (s.solved ? 'Super gemacht!' : (t.type === 'build' ? 'Schau genau hin!' : 'Ahoi! Los geht\'s.'));
+    return Object.assign({
+      crates: crates,
+      notDone: !s.done,
+      done: s.done,
+      num: s.idx + 1,
+      stepLabel: labels[t.type],
+      prompt: prompts[t.type][0],
+      promptDe: prompts[t.type][1],
+      isListen: t.type === 'listen',
+      isRead: t.type === 'read',
+      isBuild: t.type === 'build',
+      isChunk: t.type === 'chunk',
+      showOptions: isOpt,
+      word: t.word,
+      options: options,
+      slots: slots,
+      tiles: tiles,
+      words: words,
+      gapText: s.solved ? t.word : '',
+      gapColor: '#0C7C74',
+      solved: s.solved,
+      msg: msg,
+      msgColor: msgColor,
+      kiki: kikiText,
+      speakWord: () => this.say(t.word),
+      next: () => {
+        if (s.idx >= this.tasks.length - 1) this.setState({ done: true });
+        else this.setState({ idx: s.idx + 1, tried: [], solved: false, built: '', used: [], wrongTile: false });
+      },
+      pic: this.flags(t.word)
+    });
+  }
+}
+</script>
+</body>
+</html>

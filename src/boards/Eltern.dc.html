@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Eltern-Bereich</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Nunito',system-ui,sans-serif;font-weight:800;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(3px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 4px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 3px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A}
+.seg-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:none}
+.field{box-sizing:border-box;border:2px solid #C9DDE4;border-radius:14px;background:#fff;font-family:'Nunito',system-ui,sans-serif;color:#10304A}
+.field:focus{border-color:#0C7C74;outline:none}
+a:focus-visible,button:focus-visible{outline:3px solid #10304A;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px 32px; display: flex; flex-direction: column; gap: 20px; background: #F4F7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; height: 64px">
+    <div style="display: flex; align-items: center; gap: 18px">
+      <a class="btn btn-soft" href="Main.dc.html" style="height: 52px; padding: 0 18px; border-radius: 14px; font-size: 16px; box-sizing: border-box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+        Zurück zu Elli
+      </a>
+      <h1 style="margin: 0; font-size: 28px; font-weight: 800">Eltern-Bereich</h1>
+    </div>
+    <span style="font-size: 15px; font-weight: 700; color: #3E5A6E">Beispieldaten im Prototyp</span>
+  </header>
+
+  <sc-if value="{{ locked }}" hint-placeholder-val="{{ true }}">
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center">
+      <section style="width: 480px; background: #fff; border-radius: 28px; padding: 40px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 18px; align-items: center; text-align: center">
+        <div style="width: 72px; height: 72px; border-radius: 50%; background: #E4F1F5; display: flex; align-items: center; justify-content: center">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#10304A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        </div>
+        <h2 style="margin: 0; font-size: 24px; font-weight: 800">Kurz bestätigen, dass du erwachsen bist</h2>
+        <label for="gate" style="font-size: 20px">Was ist 7 × 8?</label>
+        <input id="gate" class="field" type="text" inputmode="numeric" autocomplete="off" value="{{ answer }}" onChange="{{ onAnswer }}" onKeyDown="{{ onGateKey }}" style="width: 180px; height: 64px; font-size: 30px; text-align: center; font-weight: 800">
+        <sc-if value="{{ gateWrong }}" hint-placeholder-val="{{ false }}">
+          <span style="font-size: 16px; font-weight: 700; color: #B45309">Das stimmt nicht ganz – noch einmal.</span>
+        </sc-if>
+        <button class="btn btn-teal" type="button" onClick="{{ unlock }}" style="height: 56px; width: 220px; border-radius: 16px; font-size: 18px">Öffnen</button>
+      </section>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ unlocked }}" hint-placeholder-val="{{ false }}">
+    <main style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Lernwörter der Woche eintragen</h2>
+          <p style="margin: 0; font-size: 16px; line-height: 1.45; color: #3E5A6E">Wörter vom Wochenplan abtippen – Wortart, Mehrzahl, Silben und Tipps werden vorgeschlagen und lassen sich ändern. Die Woche startet am gewählten Datum von selbst.</p>
+          <div style="display: flex; flex-direction: column; gap: 6px; background: #F4F7F9; border-radius: 14px; padding: 12px 16px; font-size: 16px; font-weight: 700">
+            <span>Jetzt: {{ curInfo }}</span>
+            <span style="color: {{ nextColor }}">Nächste Woche: {{ nextInfo }}</span>
+          </div>
+          <a class="btn btn-teal" href="Lernwoche.dc.html#eintragen" style="height: 52px; padding: 0 22px; border-radius: 14px; font-size: 16px; align-self: flex-start">Lernwörter eintragen</a>
+        </section>
+
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Diese Woche</h2>
+          <ol aria-label="Übungstage" style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px">
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Mo</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Di</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #C9DDE4; box-sizing: border-box"></span>Mi</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Do</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; background: #0C7C74"></span>Fr</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed #C9DDE4; box-sizing: border-box"></span>Sa</li>
+            <li style="display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span style="width: 40px; height: 40px; border-radius: 50%; border: 2px dashed #C9DDE4; box-sizing: border-box"></span>So</li>
+          </ol>
+          <p style="margin: 0; font-size: 16px; color: #3E5A6E">4 Expeditionen, Wochenziel erreicht. Ein freier Tag ist eingeplant und völlig in Ordnung.</p>
+        </section>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <section style="background: #fff; border-radius: 24px; padding: 24px 28px; box-shadow: 0 4px 0 #D5E2E8; display: flex; flex-direction: column; gap: 16px">
+          <h2 style="margin: 0; font-size: 21px; font-weight: 800">Welcher Trick sitzt schon?</h2>
+          <p style="margin: 0; font-size: 15px; color: #3E5A6E">Anteil richtig geschriebener Wörter je Strategie, letzte 2 Wochen</p>
+          <sc-for list="{{ strategies }}" as="s" hint-placeholder-count="4">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800">
+                <span>{{ s.name }} <span style="font-weight: 600; color: #3E5A6E">· {{ s.example }}</span></span>
+                <span>{{ s.label }}</span>
+              </div>
+              <div style="height: 14px; border-radius: 999px; background: #E4EDF1; overflow: hidden">
+                <div style="height: 14px; width: {{ s.width }}; border-radius: 999px; background: {{ s.color }}"></div>
+              </div>
+            </div>
+          </sc-for>
+        </section>
+
+        <section style="background: #10304A; color: #fff; border-radius: 24px; padding: 24px 28px; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 14px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #FFC23D">Gesprächsimpuls für heute Abend</span>
+          <p style="margin: 0; font-size: 19px; line-height: 1.45">Frag Elli: „Wie findest du heraus, ob am Ende von <span style="font-family: 'Andika', system-ui, sans-serif">Wald</span> ein d oder ein t steht?“ Lob danach den Trick, nicht das Ergebnis.</p>
+        </section>
+      </div>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { unlocked: false, answer: '', gateWrong: false };
+  }
+  unlock() {
+    if (this.state.answer.trim() === '56') this.setState({ unlocked: true, gateWrong: false });
+    else this.setState({ gateWrong: true });
+  }
+  renderVals() {
+    const s = this.state;
+    let st = null;
+    try { st = JSON.parse(window.localStorage.getItem('wsi.lernwoche.v1') || 'null'); } catch (e) { st = null; }
+    const lab = (w) => { const f = (w.from || '').split('-'); const t = (w.to || w.from || '').split('-'); return f[2] + '.' + (f[1] === t[1] ? '' : f[1] + '.') + '–' + t[2] + '.' + t[1] + '. · ' + w.words.length + ' Wörter'; };
+    const strategies = [
+      { name: 'Mitsprechen', example: 'Ba-na-ne', v: 92 },
+      { name: 'Merken', example: 'Vater, Vogel', v: 78 },
+      { name: 'Nachdenken', example: 'kommen, Biene', v: 70 },
+      { name: 'Verlängern', example: 'Hund, Wald', v: 55 }
+    ].map((x) => ({
+      name: x.name,
+      example: x.example,
+      width: x.v + '%',
+      label: x.v < 60 ? x.v + ' % · gerade dran' : x.v + ' %',
+      color: x.v < 60 ? '#F08A24' : '#0C7C74'
+    }));
+    return {
+      locked: !s.unlocked,
+      unlocked: s.unlocked,
+      answer: s.answer,
+      gateWrong: s.gateWrong,
+      onAnswer: (e) => this.setState({ answer: e.target.value, gateWrong: false }),
+      onGateKey: (e) => { if (e.key === 'Enter') this.unlock(); },
+      unlock: () => this.unlock(),
+      curInfo: st && st.current ? lab(st.current) : '09.–13.11. · 10 Wörter',
+      nextInfo: st && st.next ? lab(st.next) : 'noch nicht eingetragen',
+      nextColor: st && st.next ? '#0C7C74' : '#B45309',
+      strategies: strategies
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="de" manifest="app.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wortschatz-Inseln">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="assets/kiki.png">
+<title>Sammelbuch</title>
+<link rel="stylesheet" href="app.css">
+<style>body{background:#EEF7F9}
+
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(3px)}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.chip-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:0 4px 0 #071B2B}
+.card{transition:transform .12s ease}
+.card:hover{transform:translateY(-3px) rotate(-.6deg)}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4px}
+</style>
+<script>window.__GAPS=[{"cls":"btn","gap":10,"display":"flex"}];</script>
+</head>
+<body>
+<div id="wrap"><div id="stage"></div></div>
+<script type="text/x-tpl" id="tpl">
+
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px 32px; display: flex; flex-direction: column; gap: 20px; background: #EEF7F9; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; gap: 24px; height: 72px">
+    <a class="btn btn-soft" href="Main.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      Karte
+    </a>
+    <img src="assets/kiki.png" alt="" style="height: 72px; width: auto; display: block">
+    <div style="display: flex; flex-direction: column">
+      <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.1">Mein Sammelbuch</h1>
+      <p style="margin: 0; font-size: 18px; color: #3E5A6E">Tippe auf eine Karte, um das Wort zu hören.</p>
+    </div>
+  </header>
+
+  <div role="group" aria-label="Nach Insel filtern" style="display: flex; gap: 12px; flex-wrap: wrap">
+    <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+      <button class="btn {{ c.cls }}" type="button" aria-pressed="{{ c.on }}" onClick="{{ c.pick }}" style="height: 52px; padding: 0 20px; border-radius: 999px; font-size: 18px">{{ c.label }}</button>
+    </sc-for>
+  </div>
+
+  <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; flex: 1; align-content: start">
+    <sc-for list="{{ cards }}" as="k" hint-placeholder-count="8">
+      <li style="display: flex">
+        <button class="card" type="button" onClick="{{ k.say }}" aria-label="{{ k.aria }}" style="flex: 1; height: 168px; border: 3px solid {{ k.border }}; border-style: {{ k.borderStyle }}; border-radius: 26px; background: #fff; padding: 0; overflow: hidden; display: flex; flex-direction: column; cursor: pointer; font-family: inherit; color: #10304A; box-shadow: 0 5px 0 #C9DDE4">
+          <span style="display: flex; align-items: center; justify-content: space-between; width: 100%; box-sizing: border-box; background: {{ k.tint }}; padding: 8px 14px; font-size: 14px; font-weight: 800">
+            <span style="display: flex; align-items: center; gap: 6px"><img src="{{ k.img }}" alt="" style="height: 26px; width: auto">{{ k.island }}</span>
+            <sc-if value="{{ k.mastered }}" hint-placeholder-val="{{ true }}">
+              <span style="display: flex; align-items: center; gap: 4px; color: #075A54"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>gemeistert</span>
+            </sc-if>
+          </span>
+          <span style="flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Andika', system-ui, sans-serif; font-size: 40px">{{ k.word }}</span>
+          <span style="display: flex; align-items: center; justify-content: center; gap: 8px; padding-bottom: 14px">
+            <sc-for list="{{ k.dots }}" as="d" hint-placeholder-count="3">
+              <span style="width: 14px; height: 14px; border-radius: 50%; background: {{ d.fill }}; border: 2px solid #0C7C74; box-sizing: border-box"></span>
+            </sc-for>
+            <sc-if value="{{ k.open }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 13px; font-weight: 800; color: #3E5A6E">noch {{ k.left }}×</span>
+            </sc-if>
+          </span>
+        </button>
+      </li>
+    </sc-for>
+  </ul>
+</div>
+</script>
+<script src="app.js"></script>
+<script src="js/Sammelbuch.js"></script>
+<script src="boot.js"></script>
+</body>
+</html>

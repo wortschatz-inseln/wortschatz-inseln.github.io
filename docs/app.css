@@ -1,0 +1,16 @@
+@font-face{font-family:'Fredoka';font-weight:500;font-style:normal;src:url(fonts/fredoka-latin-500-normal.woff2) format('woff2')}
+@font-face{font-family:'Fredoka';font-weight:600;font-style:normal;src:url(fonts/fredoka-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Fredoka';font-weight:700;font-style:normal;src:url(fonts/fredoka-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-weight:400;font-style:normal;src:url(fonts/nunito-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-weight:600;font-style:normal;src:url(fonts/nunito-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-weight:700;font-style:normal;src:url(fonts/nunito-latin-700-normal.woff2) format('woff2')}
+@font-face{font-family:'Nunito';font-weight:800;font-style:normal;src:url(fonts/nunito-latin-800-normal.woff2) format('woff2')}
+@font-face{font-family:'Andika';font-weight:400;font-style:normal;src:url(fonts/andika-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Andika';font-weight:700;font-style:normal;src:url(fonts/andika-latin-700-normal.woff2) format('woff2')}
+
+html,body{margin:0;padding:0;background:#EEF7F9;-webkit-text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none;touch-action:manipulation}
+#wrap{position:relative;width:100%;overflow:hidden}
+#stage{position:absolute;left:0;top:0;width:1194px;height:834px;-webkit-transform-origin:0 0;transform-origin:0 0}
+button,.btn{-webkit-user-select:none;user-select:none}
+input,textarea{-webkit-user-select:text;user-select:text}

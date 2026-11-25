@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Englisch-Hafen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(3px)}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.tab-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:0 4px 0 #071B2B}
+.card{transition:transform .12s ease}
+a.card:hover{transform:translateY(-4px)}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4px}
+@keyframes glow{0%,100%{box-shadow:0 0 0 5px rgba(255,194,61,.55), 0 6px 0 #D99A12}50%{box-shadow:0 0 0 12px rgba(255,194,61,.2), 0 6px 0 #D99A12}}
+.today{animation:glow 2.4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){.today{animation:none}}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 24px 32px 28px; display: flex; flex-direction: column; gap: 18px; background: #E3F2FB; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <header style="display: flex; align-items: center; gap: 22px; height: 96px">
+    <a class="btn btn-soft" href="Main.dc.html" style="height: 60px; padding: 0 20px; border-radius: 20px; font-size: 19px; box-sizing: border-box">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+      Karte
+    </a>
+    <img src="/_blob/4cbf5fb668e206f2b49be84c54d71fdf" alt="" style="height: 96px; width: auto">
+    <div style="display: flex; flex-direction: column; flex: 1">
+      <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 38px; line-height: 1.1">Englisch-Hafen</h1>
+      <p style="margin: 0; font-size: 18px; color: #3E5A6E">Jedes Thema ist eine Ladung. Bring die Wörter an Bord!</p>
+    </div>
+    <div role="group" aria-label="Klasse" style="display: flex; gap: 8px">
+      <button class="btn {{ c3 }}" type="button" aria-pressed="{{ is3 }}" onClick="{{ set3 }}" style="height: 52px; padding: 0 20px; border-radius: 999px; font-size: 18px">Klasse 3</button>
+      <button class="btn {{ c4 }}" type="button" aria-pressed="{{ is4 }}" onClick="{{ set4 }}" style="height: 52px; padding: 0 20px; border-radius: 999px; font-size: 18px">Klasse 4</button>
+    </div>
+  </header>
+
+  <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; align-content: start; flex: 1">
+    <sc-for list="{{ themes }}" as="t" hint-placeholder-count="11">
+      <li style="display: flex">
+        <sc-if value="{{ t.isToday }}" hint-placeholder-val="{{ false }}">
+          <a class="card today" href="Vokabeltrainer.dc.html" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 26px; background: #FFF4D6; border: 3px solid #FFC23D; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: #10304A">
+            <span style="display: flex; justify-content: space-between; align-items: center">
+              <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 25px">{{ t.en }}</span>
+              <span style="background: #10304A; color: #fff; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 15px; padding: 4px 12px; border-radius: 999px">Heute</span>
+            </span>
+            <span style="font-size: 16px; font-weight: 700; color: #3E5A6E">{{ t.de }}</span>
+            <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 800">
+              <span style="flex: 1; height: 12px; border-radius: 999px; background: #F3E2B5; overflow: hidden"><span style="display: block; height: 12px; width: {{ t.width }}; background: #D99A12; border-radius: 999px"></span></span>
+              {{ t.count }}
+            </span>
+          </a>
+        </sc-if>
+        <sc-if value="{{ t.isOpen }}" hint-placeholder-val="{{ true }}">
+          <div class="card" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 26px; background: #fff; border: 3px solid {{ t.border }}; box-shadow: 0 5px 0 #C9DDE4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between">
+            <span style="display: flex; justify-content: space-between; align-items: center">
+              <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 23px">{{ t.en }}</span>
+              <sc-if value="{{ t.isDone }}" hint-placeholder-val="{{ false }}">
+                <span aria-label="geschafft" style="width: 30px; height: 30px; border-radius: 50%; background: #0C7C74; color: #fff; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+              </sc-if>
+            </span>
+            <span style="font-size: 16px; font-weight: 700; color: #3E5A6E">{{ t.de }}</span>
+            <span style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 800">
+              <span style="flex: 1; height: 12px; border-radius: 999px; background: #E4EDF1; overflow: hidden"><span style="display: block; height: 12px; width: {{ t.width }}; background: #0C7C74; border-radius: 999px"></span></span>
+              {{ t.count }}
+            </span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ t.isLocked }}" hint-placeholder-val="{{ false }}">
+          <div class="card" style="flex: 1; height: 150px; box-sizing: border-box; border-radius: 26px; background: #EEF3F6; border: 3px dashed #B8CCD6; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between">
+            <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 23px; color: #3E5A6E">{{ t.en }}</span>
+            <span style="font-size: 16px; font-weight: 700; color: #3E5A6E">{{ t.de }}</span>
+            <span style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 800; color: #3E5A6E"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>ab Klasse 4</span>
+          </div>
+        </sc-if>
+      </li>
+    </sc-for>
+  </ul>
+
+  <footer style="display: flex; align-items: center; gap: 14px">
+    <img src="/_blob/8afe67a526188b5eb29b4b6893e4e37f" alt="" style="height: 84px; width: auto">
+    <p style="margin: 0; background: #fff; border: 2px solid #C9DDE4; border-radius: 20px; padding: 12px 18px; font-size: 18px; line-height: 1.35"><strong style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600">Kiki:</strong> Bei <strong>Animals</strong> fehlen noch ein paar Wörter. Hören, finden, bauen – los geht's!</p>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { grade: 3 };
+    this.g3 = [
+      ['Hello & me', 'Begrüßen, sich vorstellen', 9, 9],
+      ['Numbers', 'Zahlen bis 20', 13, 13],
+      ['Colours', 'Farben', 10, 10],
+      ['School things', 'Schulsachen', 10, 7],
+      ['My family', 'Familie', 8, 5],
+      ['Animals', 'Tiere', 10, 4, true],
+      ['Food & drinks', 'Essen und Trinken', 10, 0],
+      ['Clothes', 'Kleidung', 9, 0],
+      ['My body', 'Körper', 10, 0],
+      ['Weather & seasons', 'Wetter und Jahreszeiten', 10, 0],
+      ['Festivals', 'Feste im Jahr', 9, 0]
+    ];
+    this.g4 = [
+      ['Shopping', 'Einkaufen', 8], ['My dream house', 'Mein Traumhaus', 10], ['My day', 'Mein Tag, Wochentage', 10],
+      ['Free time', 'Freizeit und Sport', 8], ['My favourite animal', 'Mein Lieblingstier', 10], ['Children of the world', 'Kinder der Welt', 8],
+      ['In town', 'In der Stadt', 8]
+    ];
+  }
+  renderVals() {
+    const g = this.state.grade;
+    const themes = g === 3
+      ? this.g3.map((t) => ({ en: t[0], de: t[1], count: t[3] + '/' + t[2], width: Math.round(t[3] / t[2] * 100) + '%', isToday: !!t[4], isOpen: !t[4], isLocked: false, isDone: t[3] === t[2], border: t[3] === t[2] ? '#0C7C74' : '#C9DDE4' }))
+      : this.g4.map((t) => ({ en: t[0], de: t[1], count: '', width: '0%', isToday: false, isOpen: false, isLocked: true, isDone: false, border: '#C9DDE4' }));
+    return {
+      themes: themes,
+      is3: g === 3, is4: g === 4,
+      c3: g === 3 ? 'tab-on' : 'btn-soft',
+      c4: g === 4 ? 'tab-on' : 'btn-soft',
+      set3: () => this.setState({ grade: 3 }),
+      set4: () => this.setState({ grade: 4 })
+    };
+  }
+}
+</script>
+</body>
+</html>
