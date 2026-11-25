@@ -136,8 +136,10 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
         </div>
         <span style="font-size: 16px; font-weight: 800; color: #8A4B08; background: #FFF4D6; border-radius: 999px; padding: 6px 14px">⭐ {{ allStars }} gesamt</span>
       </header>
+      <sc-if value="{{ hasPacksApp }}" hint-placeholder-val="{{ true }}">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #5C7A2E">Aus der App</h2>
       <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-content: start">
-        <sc-for list="{{ packs }}" as="b" hint-placeholder-count="6">
+        <sc-for list="{{ packsApp }}" as="b" hint-placeholder-count="6">
           <li style="display: flex">
             <button class="card" type="button" onClick="{{ b.open }}" style="flex: 1; height: 168px; box-sizing: border-box; border-radius: 24px; background: {{ b.bg }}; border: 3px solid {{ b.border }}; box-shadow: 0 5px 0 #D6E2C4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; font-family: inherit; color: #10304A; cursor: pointer; text-align: left">
               <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
@@ -153,6 +155,27 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
           </li>
         </sc-for>
       </ul>
+      </sc-if>
+      <sc-if value="{{ hasPacksOwn }}" hint-placeholder-val="{{ true }}">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #5C7A2E">Eigene Lernwörter</h2>
+      <ul style="list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; align-content: start">
+        <sc-for list="{{ packsOwn }}" as="b" hint-placeholder-count="6">
+          <li style="display: flex">
+            <button class="card" type="button" onClick="{{ b.open }}" style="flex: 1; height: 168px; box-sizing: border-box; border-radius: 24px; background: {{ b.bg }}; border: 3px solid {{ b.border }}; box-shadow: 0 5px 0 #D6E2C4; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; font-family: inherit; color: #10304A; cursor: pointer; text-align: left">
+              <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+                <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 22px">{{ b.title }}</span>
+                <span style="font-size: 13px; font-weight: 800; background: {{ b.chipBg }}; color: {{ b.chipFg }}; border-radius: 999px; padding: 3px 10px">{{ b.status }}</span>
+              </span>
+              <span style="font-family: 'Andika', system-ui, sans-serif; font-size: 17px; line-height: 1.35; color: #3E5A6E">{{ b.words }}</span>
+              <span style="display: flex; align-items: center; gap: 10px; width: 100%">
+                <span style="flex: 1; height: 12px; border-radius: 6px; background: #fff; border: 2px solid #C9DDE4; box-sizing: border-box; overflow: hidden"><span style="display: block; height: 100%; width: {{ b.pct }}; background: #0C7C74"></span></span>
+                <span style="font-size: 14px; font-weight: 800; color: #5C7A2E">{{ b.label }}</span>
+              </span>
+            </button>
+          </li>
+        </sc-for>
+      </ul>
+      </sc-if>
     </div>
   </sc-if>
 
@@ -213,15 +236,16 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
           Abbrechen
         </button>
-        <h1 style="margin: 0; font-size: 28px; font-weight: 800; flex: 1">Lernwörter für die kommende Woche</h1>
+        <h1 style="margin: 0; font-size: 28px; font-weight: 800; flex: 1">{{ edHeading }}</h1>
         <button class="btn btn-soft" type="button" onClick="{{ loadCurrent }}" style="height: 48px; padding: 0 16px; border-radius: 14px; font-size: 15px">{{ edCurrentInfo }} · bearbeiten</button>
       </header>
 
       <main style="flex: 1; min-height: 0; display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 18px">
         <section style="background: #fff; border-radius: 24px; padding: 20px 22px; box-shadow: 0 4px 0 #D6E2C4; display: flex; flex-direction: column; gap: 10px; min-height: 0">
+          <label style="display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">Titel (optional)<input type="text" autocomplete="off" placeholder="z. B. Probe Sachkunde" value="{{ edTitle }}" onChange="{{ onTitle }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 12px; font-family: inherit; font-size: 16px; color: #10304A; min-width: 0"></label>
           <div style="display: flex; gap: 10px">
-            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">Von<input type="date" value="{{ edFrom }}" onChange="{{ onFrom }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
-            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">Bis<input type="date" value="{{ edTo }}" onChange="{{ onTo }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
+            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">{{ edFromLabel }}<input type="date" value="{{ edFrom }}" onChange="{{ onFrom }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
+            <label style="flex: 1; display: flex; flex-direction: column; gap: 4px; font-size: 14px; font-weight: 800; color: #3E5A6E">{{ edToLabel }}<input type="date" value="{{ edTo }}" onChange="{{ onTo }}" style="height: 44px; border: 2px solid #C9DDE4; border-radius: 12px; padding: 0 8px; font-family: inherit; font-size: 16px; color: #10304A"></label>
           </div>
           <label for="edtext" style="font-size: 15px; font-weight: 800">Lernwörter abtippen</label>
           <span style="font-size: 13px; color: #3E5A6E; line-height: 1.35">Ein Wort pro Zeile, Nomen gern mit Artikel. Mehrzahl optional: „der Hund, die Hunde“</span>
@@ -259,7 +283,7 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
           <div style="display: flex; align-items: center; gap: 12px; border-top: 2px solid #EEF3E4; padding-top: 12px">
             <button class="btn btn-soft" type="button" onClick="{{ addRow }}" style="height: 48px; padding: 0 16px; border-radius: 14px; font-size: 16px">+ Wort</button>
             <span aria-live="polite" style="flex: 1; font-size: 15px; font-weight: 800; color: {{ edMsgColor }}">{{ edMsg }}</span>
-            <button class="btn btn-soft" type="button" onClick="{{ saveNow }}" style="height: 52px; padding: 0 18px; border-radius: 16px; font-size: 16px">Sofort starten</button>
+            <sc-if value="{{ edOwnMode }}" hint-placeholder-val="{{ true }}"><button class="btn btn-soft" type="button" onClick="{{ saveNow }}" style="height: 52px; padding: 0 18px; border-radius: 16px; font-size: 16px">Sofort starten</button></sc-if>
             <button class="btn btn-teal" type="button" onClick="{{ savePlan }}" style="height: 52px; padding: 0 20px; border-radius: 16px; font-size: 17px">{{ planLabel }}</button>
           </div>
         </section>

@@ -18,8 +18,12 @@ window.__Component = class Component extends DCLogic {
   }
   lab(w) {
     if (!w || !w.words || !w.words.length) return "noch keine";
-    const f = (w.from || "").split("-"), t = (w.to || w.from || "").split("-");
-    return f[2] + "." + (f[1] === t[1] ? "" : f[1] + ".") + "\u2013" + t[2] + "." + t[1] + ". (" + w.words.length + " W\xF6rter)";
+    let d = "";
+    if (w.from) {
+      const f = w.from.split("-"), t = (w.to || w.from).split("-");
+      d = f[2] + "." + (f[1] === t[1] ? "" : f[1] + ".") + "\u2013" + t[2] + "." + t[1] + ".";
+    }
+    return (w.title ? w.title + (d ? " \xB7 " + d : "") : d || "Eigene W\xF6rter") + " (" + w.words.length + " W\xF6rter)";
   }
   validPin(p) {
     return /^[0-9]{4,6}$/.test(p);
@@ -136,7 +140,7 @@ window.__Component = class Component extends DCLogic {
     const tabs = [["lern", "Lernwochen"], ["kids", "Kinder"], ["backup", "Sicherung"], ["code", "Eltern-Code"]].map((t) => ({ label: t[1], on: s.tab === t[0], cls: s.tab === t[0] ? "seg-on" : "btn-soft", pick: () => this.setState({ tab: t[0], msg: "", delId: "" }) }));
     const kidRows = W.profiles().map((p) => {
       const d = W.profileData(p.id);
-      return { name: p.name, cur: this.lab(d && d.current), nxt: d && d.next ? this.lab(d.next) : "noch nicht eingetragen", canEdit: dev.mode === "own", isApp: dev.mode === "app", edit: () => {
+      return { name: p.name, cur: this.lab(d && d.current), nxt: d && d.next ? this.lab(d.next) : "noch nicht eingetragen", canEdit: true, isApp: false, editLabel: dev.mode === "app" ? "Eigene Lernw\xF6rter hinzuf\xFCgen" : "Lernw\xF6rter eintragen", own: d ? (d.shelf || []).filter((b) => b.week.source !== "app").length + (d.current && d.current.words && d.current.words.length && d.current.source !== "app" ? 1 : 0) : 0, edit: () => {
         W.setActive(p.id);
         W.unlock();
         window.location.href = "Lernwoche.html#eintragen";

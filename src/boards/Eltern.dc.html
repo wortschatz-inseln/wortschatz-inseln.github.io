@@ -173,7 +173,7 @@ a:focus-visible,button:focus-visible{outline:3px solid #10304A;outline-offset:3p
             </button>
             <button class="{{ modeAppCls }}" type="button" onClick="{{ pickApp }}" style="flex: 1; text-align: left; border-radius: 20px; padding: 14px 18px; font-family: inherit; color: #10304A; cursor: pointer; display: flex; flex-direction: column; gap: 6px">
               <span style="font-size: 18px; font-weight: 800">Lernwoche aus der App</span>
-              <span style="font-size: 15px; line-height: 1.4; color: #3E5A6E">Neue Wochen kommen mit App-Updates. Eigene Wochen bleiben im Lernregal.</span>
+              <span style="font-size: 15px; line-height: 1.4; color: #3E5A6E">Neue Wochen kommen mit App-Updates. Eigene Lernwörter könnt ihr trotzdem hinzufügen – sie liegen im Lernregal.</span>
             </button>
           </div>
           <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
@@ -181,10 +181,10 @@ a:focus-visible,button:focus-visible{outline:3px solid #10304A;outline-offset:3p
               <li style="display: flex; align-items: center; justify-content: space-between; gap: 16px; background: #F4F7F9; border-radius: 16px; padding: 12px 18px">
                 <span style="display: flex; flex-direction: column; gap: 2px">
                   <span style="font-size: 19px; font-weight: 800">{{ r.name }}</span>
-                  <span style="font-size: 15px; color: #3E5A6E">Jetzt: {{ r.cur }} · Nächste: {{ r.nxt }}</span>
+                  <span style="font-size: 15px; color: #3E5A6E">Jetzt: {{ r.cur }} · Nächste: {{ r.nxt }} · Eigene Pakete: {{ r.own }}</span>
                 </span>
                 <sc-if value="{{ r.canEdit }}" hint-placeholder-val="{{ true }}">
-                  <button class="btn btn-teal" type="button" onClick="{{ r.edit }}" style="height: 48px; padding: 0 20px; border-radius: 14px; font-size: 16px">Lernwörter eintragen</button>
+                  <button class="btn btn-teal" type="button" onClick="{{ r.edit }}" style="height: 48px; padding: 0 20px; border-radius: 14px; font-size: 16px">{{ r.editLabel }}</button>
                 </sc-if>
                 <sc-if value="{{ r.isApp }}" hint-placeholder-val="{{ false }}">
                   <span style="font-size: 15px; font-weight: 700; color: #3E5A6E">kommt aus der App</span>
@@ -270,8 +270,9 @@ class Component extends DCLogic {
   }
   lab(w) {
     if (!w || !w.words || !w.words.length) return 'noch keine';
-    const f = (w.from || '').split('-'), t = (w.to || w.from || '').split('-');
-    return f[2] + '.' + (f[1] === t[1] ? '' : f[1] + '.') + '–' + t[2] + '.' + t[1] + '. (' + w.words.length + ' Wörter)';
+    let d = '';
+    if (w.from) { const f = w.from.split('-'), t = (w.to || w.from).split('-'); d = f[2] + '.' + (f[1] === t[1] ? '' : f[1] + '.') + '–' + t[2] + '.' + t[1] + '.'; }
+    return (w.title ? w.title + (d ? ' · ' + d : '') : (d || 'Eigene Wörter')) + ' (' + w.words.length + ' Wörter)';
   }
   validPin(p) { return /^[0-9]{4,6}$/.test(p); }
   finish() {
@@ -338,7 +339,7 @@ class Component extends DCLogic {
     const tabs = [['lern', 'Lernwochen'], ['kids', 'Kinder'], ['backup', 'Sicherung'], ['code', 'Eltern-Code']].map((t) => ({ label: t[1], on: s.tab === t[0], cls: s.tab === t[0] ? 'seg-on' : 'btn-soft', pick: () => this.setState({ tab: t[0], msg: '', delId: '' }) }));
     const kidRows = W.profiles().map((p) => {
       const d = W.profileData(p.id);
-      return { name: p.name, cur: this.lab(d && d.current), nxt: d && d.next ? this.lab(d.next) : 'noch nicht eingetragen', canEdit: dev.mode === 'own', isApp: dev.mode === 'app', edit: () => { W.setActive(p.id); W.unlock(); window.location.href = 'Lernwoche.dc.html#eintragen'; } };
+      return { name: p.name, cur: this.lab(d && d.current), nxt: d && d.next ? this.lab(d.next) : 'noch nicht eingetragen', canEdit: true, isApp: false, editLabel: dev.mode === 'app' ? 'Eigene Lernwörter hinzufügen' : 'Lernwörter eintragen', own: d ? ((d.shelf || []).filter((b) => b.week.source !== 'app').length + (d.current && d.current.words && d.current.words.length && d.current.source !== 'app' ? 1 : 0)) : 0, edit: () => { W.setActive(p.id); W.unlock(); window.location.href = 'Lernwoche.dc.html#eintragen'; } };
     });
     const kidList = W.profiles().map((p) => ({
       name: p.name,

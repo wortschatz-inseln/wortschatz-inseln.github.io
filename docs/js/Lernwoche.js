@@ -79,7 +79,7 @@ window.__Component = class Component extends DCLogic {
     this.state = { screen: "hub", i: 0, phase: "ask", input: "", attempt: "", cuts: [], caps: [], picked: [], wrongPick: "", done: [], msg: "", wasWrong: false, results: null, showIdea: false, self1: false, self2: false, written: [], round: 1, missed: [], tries: 0, dictReady: false, rep: 1, errs: [], stufe: 1, pool: [], repRefs: [], lastReward: null, truheOpen: false, done: this.store.progress.done.slice(), gateAns: "", gateWrong: false, edFrom: "", edTo: "", edText: "", edSent: "", rows: [], edMsg: "", edOk: true, hubMsg: "" };
     try {
       if (window.location.hash === "#eintragen") {
-        if (window.WSI && window.WSI.isUnlocked() && window.WSI.dev().mode === "own") {
+        if (window.WSI && window.WSI.isUnlocked()) {
           this.state.screen = "edit";
           this.state.wantEditor = true;
         } else window.location.replace("Eltern.html");
@@ -233,6 +233,18 @@ window.__Component = class Component extends DCLogic {
     f.setDate(f.getDate() + 4);
     return [this.iso(d), this.iso(f)];
   }
+  weekName(w) {
+    const d = w.from ? this.dateLabel(w.from, w.to) : "";
+    if (w.title) return w.title + (d ? " \xB7 " + d : "");
+    return d || "Eigene W\xF6rter";
+  }
+  isAppMode() {
+    try {
+      return window.WSI.dev().mode === "app";
+    } catch (e) {
+      return false;
+    }
+  }
   dateLabel(from, to) {
     const p = (x) => {
       const a2 = (x || "").split("-");
@@ -298,7 +310,7 @@ window.__Component = class Component extends DCLogic {
     pg.kept = pg.kept || [];
     this.persist();
     this.applyWeek();
-    this.setState(Object.assign({ screen: "hub", hubMsg: "Du \xFCbst jetzt: " + this.dateLabel(b.week.from, b.week.to) }, this.reset()));
+    this.setState(Object.assign({ screen: "hub", hubMsg: "Du \xFCbst jetzt: " + this.weekName(b.week) }, this.reset()));
   }
   packTotal() {
     return 3 * (Object.keys(this.ex).length - 1) + 1;
@@ -526,7 +538,7 @@ window.__Component = class Component extends DCLogic {
     const nm = this.nextMonday();
     const wk = this.store.next;
     const rows = wk ? wk.words.map((x) => ({ w: x.w, art: x.art || "", typ: x.typ, pl: x.pl || "", syl: x.syl.join("-"), flag: false })) : [];
-    this.setState({ screen: "edit", edFrom: wk ? wk.from : nm[0], edTo: wk ? wk.to : nm[1], edText: "", edSent: wk ? (wk.sentences || []).join("\n") : "", rows, edMsg: wk ? "Die geplante Woche ist geladen \u2013 du kannst sie \xE4ndern." : "", edOk: true });
+    this.setState({ screen: "edit", edTitle: wk ? wk.title || "" : "", edFrom: wk ? wk.from : this.isAppMode() ? "" : nm[0], edTo: wk ? wk.to : this.isAppMode() ? "" : nm[1], edText: "", edSent: wk ? (wk.sentences || []).join("\n") : "", rows, edMsg: wk ? "Die geplante Woche ist geladen \u2013 du kannst sie \xE4ndern." : "", edOk: true });
   }
   saveWeek(now) {
     const s = this.state;
@@ -545,12 +557,19 @@ window.__Component = class Component extends DCLogic {
       this.setState({ edMsg: "H\xF6chstens 16 W\xF6rter pro Woche, bitte.", edOk: false });
       return;
     }
-    if (!s.edFrom) {
+    const appMode = this.isAppMode();
+    if (!s.edFrom && !appMode) {
       this.setState({ edMsg: "Bitte ein Startdatum w\xE4hlen.", edOk: false });
       return;
     }
     const sentences = s.edSent.split("\n").map((t) => t.replace(/\s+/g, " ").trim()).filter((t) => t.split(" ").length >= 3).map((t) => /[.!?]$/.test(t) ? t : t + ".");
-    const week = { id: s.edFrom + "#" + Date.now(), from: s.edFrom, to: s.edTo || s.edFrom, words: rows.map((r) => this.buildWord(r)), sentences };
+    const week = { id: (s.edFrom || "eigen") + "#" + Date.now(), from: s.edFrom || "", to: s.edTo || s.edFrom || "", title: (s.edTitle || "").trim().slice(0, 30), source: "own", added: Date.now(), words: rows.map((r) => this.buildWord(r)), sentences };
+    if (appMode) {
+      this.store.shelf = (this.store.shelf || []).concat([{ week, progress: { id: week.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 } }]);
+      this.persist();
+      this.setState({ screen: "regal", hubMsg: "" });
+      return;
+    }
     const today = this.iso(/* @__PURE__ */ new Date());
     if (now || week.from <= today) {
       this.archiveCurrent();
@@ -578,10 +597,16 @@ window.__Component = class Component extends DCLogic {
     };
     const cur = this.store.current;
     return {
-      edCurrentInfo: "Aktuell: " + this.dateLabel(cur.from, cur.to) + " \xB7 " + cur.words.length + " W\xF6rter",
+      edTitle: s.edTitle || "",
+      onTitle: (e) => this.setState({ edTitle: e.target.value }),
+      edOwnMode: !this.isAppMode(),
+      edHeading: this.isAppMode() ? "Eigene Lernw\xF6rter f\xFCrs Lernregal" : "Lernw\xF6rter f\xFCr die kommende Woche",
+      edFromLabel: this.isAppMode() ? "Von (optional)" : "Von",
+      edToLabel: this.isAppMode() ? "Bis (optional)" : "Bis",
+      edCurrentInfo: "Aktuell: " + this.weekName(cur) + " \xB7 " + cur.words.length + " W\xF6rter",
       loadCurrent: () => {
         const wk = this.store.current;
-        this.setState({ edFrom: wk.from, edTo: wk.to, edSent: (wk.sentences || []).join("\n"), rows: wk.words.map((x) => ({ w: x.w, art: x.art || "", typ: x.typ, pl: x.pl || "", syl: x.syl.join("-"), flag: false })), edMsg: "Die aktuelle Woche ist geladen. \u201ESofort starten\u201C \xFCbernimmt die \xC4nderungen (Fortschritt beginnt neu).", edOk: true });
+        this.setState({ edTitle: wk.title || "", edFrom: wk.from, edTo: wk.to, edSent: (wk.sentences || []).join("\n"), rows: wk.words.map((x) => ({ w: x.w, art: x.art || "", typ: x.typ, pl: x.pl || "", syl: x.syl.join("-"), flag: false })), edMsg: "Die aktuelle Woche ist geladen. \u201ESofort starten\u201C \xFCbernimmt die \xC4nderungen (Fortschritt beginnt neu).", edOk: true });
       },
       edFrom: s.edFrom,
       edTo: s.edTo,
@@ -636,7 +661,7 @@ window.__Component = class Component extends DCLogic {
       edMsgColor: s.edOk ? "#0C7C74" : "#B45309",
       saveNow: () => this.saveWeek(true),
       savePlan: () => this.saveWeek(false),
-      planLabel: s.edFrom ? "Ab " + s.edFrom.split("-")[2] + "." + s.edFrom.split("-")[1] + ". planen" : "Planen"
+      planLabel: this.isAppMode() ? "Ins Lernregal legen" : s.edFrom ? "Ab " + s.edFrom.split("-")[2] + "." + s.edFrom.split("-")[1] + ". planen" : "Planen"
     };
   }
   shuf(a) {
@@ -987,9 +1012,12 @@ window.__Component = class Component extends DCLogic {
       packPct: ps.pct,
       packLabel: ps.label + " \xDCbungen",
       toRegal: () => this.setState({ screen: "regal", hubMsg: "" }),
-      packs: [{ week: this.store.current, progress: pr, now: true }].concat(shelfList.slice().sort((x, y) => x.week.from < y.week.from ? 1 : -1)).map((b) => {
+      packs: [{ week: this.store.current, progress: pr, now: true }].filter((b) => b.week.words.length).concat(shelfList.slice().sort((x, y) => {
+        const k = (b) => b.week.from || new Date(b.week.added || 0).toISOString().slice(0, 10);
+        return k(x) < k(y) ? 1 : -1;
+      })).map((b) => {
         const st2 = this.packStat(b.week, b.progress), cl = { "Neu": ["#EEF3E4", "#5C7A2E"], "In Arbeit": ["#FFF4D6", "#8A4B08"], "Geschafft": ["#D8F0EC", "#075A54"] }[st2.status];
-        return { title: this.dateLabel(b.week.from, b.week.to), words: b.week.words.slice(0, 5).map((x) => x.w).join(" \xB7 ") + (b.week.words.length > 5 ? " \u2026" : ""), status: b.now ? "Aktuell \xB7 " + st2.status : st2.status, chipBg: cl[0], chipFg: cl[1], pct: st2.pct, label: st2.label, bg: b.now ? "#FFF8E6" : "#fff", border: b.now ? "#FFC23D" : st2.status === "Geschafft" ? "#0C7C74" : "#D6E2C4", open: () => b.now ? this.setState({ screen: "hub", hubMsg: "" }) : this.openPack(b.week.id) };
+        return { src: b.week.source === "app" ? "app" : "own", title: this.weekName(b.week), words: b.week.words.slice(0, 5).map((x) => x.w).join(" \xB7 ") + (b.week.words.length > 5 ? " \u2026" : ""), status: b.now ? "Aktuell \xB7 " + st2.status : st2.status, chipBg: cl[0], chipFg: cl[1], pct: st2.pct, label: st2.label, bg: b.now ? "#FFF8E6" : "#fff", border: b.now ? "#FFC23D" : st2.status === "Geschafft" ? "#0C7C74" : "#D6E2C4", open: () => b.now ? this.setState({ screen: "hub", hubMsg: "" }) : this.openPack(b.week.id) };
       }),
       isGate: s.screen === "gate",
       isEdit: s.screen === "edit",
@@ -1007,7 +1035,7 @@ window.__Component = class Component extends DCLogic {
       toTruhe: () => this.setState({ screen: "truhe", truheOpen: false }),
       doneCount: 0,
       totalCount: shown.length + 1,
-      weekSub: this.words.length ? "Lernw\xF6rter vom " + this.dateLabel(cur.from, cur.to) + " \u2013 starte mit der Satz-Werkstatt!" : "Hier warten die \xDCbungen \u2013 die Lernw\xF6rter tragen die Eltern ein.",
+      weekSub: this.words.length ? "Lernw\xF6rter: " + this.weekName(cur) + " \u2013 starte mit der Satz-Werkstatt!" : "Hier warten die \xDCbungen \u2013 die Lernw\xF6rter tragen die Eltern ein.",
       noWords: this.words.length === 0,
       hasWords: this.words.length > 0,
       hasNote: !!(s.hubMsg || nx),
@@ -1025,6 +1053,10 @@ window.__Component = class Component extends DCLogic {
       }).map((c, i) => ({ c, i })).sort((x, y) => x.c.fin - y.c.fin || x.i - y.i).map((x) => x.c),
       toHub: () => this.setState({ screen: "hub", hubMsg: "", rep: 1, errs: [], stufe: 1, pool: [], repRefs: [] })
     };
+    base.packsApp = base.packs.filter((p) => p.src === "app");
+    base.packsOwn = base.packs.filter((p) => p.src === "own");
+    base.hasPacksApp = base.packsApp.length > 0;
+    base.hasPacksOwn = base.packsOwn.length > 0;
     if (s.screen === "hub" || s.screen === "regal") return base;
     if (s.screen === "truhe") {
       const rw = this.rewards[pr.opened % this.rewards.length];
