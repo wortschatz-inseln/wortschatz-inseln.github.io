@@ -2,7 +2,7 @@
 
 Lern-App für Elli und Tom. Läuft im Browser, auch auf dem alten iPad (iOS 10).
 
-**Öffnen:** https://alexanderwehrens-commits.github.io/wortschatz-inseln/
+**Öffnen:** https://wortschatz-inseln.github.io/
 
 ## Auf dem iPad
 1. Link in Safari öffnen.
