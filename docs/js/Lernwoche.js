@@ -1294,7 +1294,7 @@ window.__Component = class Component extends DCLogic {
       hasNote: !!(s.hubMsg || nx),
       note: s.hubMsg || (nx ? "Ab " + this.dateLabel(nx.from, nx.to) + " warten " + nx.words.length + " neue W\xF6rter" : ""),
       toGate: () => this.setState({ screen: "gate", gateAns: "", gateWrong: false }),
-      chips: this.words.map((x) => ({ w: (x.art ? x.art + " " : "") + x.w, size: n > 12 ? "21px" : "26px" })),
+      chips: this.words.map((x) => ({ w: (x.art ? x.art + " " : "") + x.w, size: n > 12 ? "16px" : "18px" })),
       cards: this.hubCards = shown.map((k) => {
         const mx = this.isSingle(k) ? 1 : 3;
         const lv = [1, 2, 3].slice(0, mx);
