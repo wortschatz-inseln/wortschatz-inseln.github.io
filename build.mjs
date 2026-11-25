@@ -17,7 +17,7 @@ const blob = {
 for (const f of fs.readdirSync(SRC + '/assets')) fs.copyFileSync(`${SRC}/assets/${f}`, `${OUT}/assets/${f}`);
 
 // Schriften (selbst gehostet)
-const fonts = [['fredoka', [500, 600, 700], 'Fredoka'], ['nunito', [400, 600, 700, 800], 'Nunito'], ['andika', [400, 700], 'Andika']];
+const fonts = [['fredoka', [500, 600, 700], 'Fredoka'], ['nunito', [400, 600, 700, 800], 'Nunito'], ['andika', [400, 700], 'Andika'], ['playwrite-de-sas', [300, 400], 'Schreibschrift']];
 let fontCss = '';
 for (const [pkg, ws, fam] of fonts) for (const w of ws) {
   const fn = `${pkg}-latin-${w}-normal.woff2`;

@@ -26,13 +26,16 @@ window.__Component = class Component extends DCLogic {
       satz: { title: "Satz-Werkstatt", desc: "Erst ansehen, dann nur h\xF6ren \u2013 eigene S\xE4tze schreiben", meta: "3 Runden \xB7 10 W\xF6rter" },
       diktat: { title: "Wort-Diktat", desc: "H\xF6ren und richtig schreiben", meta: "Rechtschreibung \xB7 10 W\xF6rter" },
       silben: { title: "Silben-Schnitt", desc: "W\xF6rter in Silben trennen", meta: "Silbenb\xF6gen \xB7 7 W\xF6rter" },
+      koenig: { title: "Silbenk\xF6nige", desc: "In jeder Silbe den K\xF6nig finden", meta: "Vokale \xB7 7 W\xF6rter" },
       plural: { title: "Einer \u2013 viele", desc: "Aus Einzahl wird Mehrzahl", meta: "Einzahl / Mehrzahl \xB7 4 W\xF6rter" },
       wortart: { title: "Wort-Detektiv", desc: "Nomen rot, Verb blau, Adjektiv gr\xFCn", meta: "Wortarten \xB7 10 W\xF6rter" },
       gross: { title: "Gro\xDF oder klein?", desc: "Im Satz die gro\xDFen W\xF6rter finden", meta: "Gro\xDFschreibung \xB7 4 S\xE4tze" },
       abc: { title: "ABC-Reihe", desc: "W\xF6rter wie im W\xF6rterbuch ordnen", meta: "Nachschlagen \xB7 3 Runden" },
       zeichen: { title: "Satz-Ende", desc: "Punkt, Fragezeichen oder Ausrufezeichen?", meta: "Satzarten" },
       gefuehl: { title: "Gef\xFChle-W\xF6rter", desc: "Welches Gef\xFChl passt in den Satz?", meta: "Nomen f\xFCr Gef\xFChle" },
-      zerleg: { title: "Wort-Zerleger", desc: "Lange Nomen teilen und nachschlagen", meta: "W\xF6rterbuch" }
+      zerleg: { title: "Wort-Zerleger", desc: "Lange Nomen teilen und nachschlagen", meta: "W\xF6rterbuch" },
+      spur: { title: "Schreibschrift", desc: "W\xF6rter mit dem Finger nachspuren", meta: "Schreibschrift \xB7 10 W\xF6rter" },
+      heft: { title: "Sch\xF6nschrift", desc: "Ins Heft schreiben und selbst bewerten", meta: "Heft \xB7 10 W\xF6rter" }
     };
     this.zeichen = [
       ["Welche Aufgaben hat ein Klassensprecher", "?"],
@@ -108,6 +111,12 @@ window.__Component = class Component extends DCLogic {
       this.setState(Object.assign({ hubMsg: "Neue Lernwoche aus der App." }, this.reset()));
     }).catch(() => {
     });
+  }
+  componentDidUpdate() {
+    try {
+      this.syncSpur();
+    } catch (e) {
+    }
   }
   componentDidMount() {
     this.syncApp();
@@ -195,6 +204,8 @@ window.__Component = class Component extends DCLogic {
     if (screen === "satz") return this.state.round === 3 ? this.state.missed.map((n) => w[n]) : w;
     if (screen === "diktat" || screen === "wortart") return w;
     if (screen === "silben") return w.filter((x) => x.syl.length > 1);
+    if (screen === "koenig") return w.filter((x) => !!this.kingTokens(x));
+    if (screen === "spur" || screen === "heft") return w;
     if (screen === "plural") return w.filter((x) => !!x.pl);
     if (screen === "gross") return this.grossList();
     if (screen === "abc") return this.abcRounds.concat(this.bookAbc);
@@ -202,6 +213,186 @@ window.__Component = class Component extends DCLogic {
     if (screen === "gefuehl") return this.gefuehle;
     if (screen === "zerleg") return this.zerleg;
     return [];
+  }
+  kingTokens(it) {
+    const re = /^(.*?)(aa|ee|oo|au|äu|eu|ei|ie|ai|[aeiouäöü])(.*)$/i;
+    const out = [];
+    const syl = it.syl && it.syl.length ? it.syl : [it.w];
+    for (let k = 0; k < syl.length; k++) {
+      const m = syl[k].match(re);
+      if (!m) return null;
+      const push = (t, king, first2) => out.push({ t, king, sp: first2 && k > 0 });
+      let first = true;
+      m[1].split("").forEach((c) => {
+        push(c, false, first);
+        first = false;
+      });
+      push(m[2], true, first);
+      m[3].split("").forEach((c) => push(c, false, false));
+    }
+    return out;
+  }
+  spurText(ctx, it, color, line) {
+    const W = 740;
+    let sz = 120;
+    ctx.textBaseline = "alphabetic";
+    for (; sz > 50; sz -= 4) {
+      ctx.font = sz + "px 'Schreibschrift', cursive";
+      if (ctx.measureText(it.w).width <= W - 70) break;
+    }
+    const x = (W - ctx.measureText(it.w).width) / 2;
+    ctx.fillStyle = color;
+    ctx.fillText(it.w, x, 168);
+    if (line) {
+      ctx.lineWidth = line;
+      ctx.lineJoin = "round";
+      ctx.strokeStyle = color;
+      ctx.strokeText(it.w, x, 168);
+    }
+  }
+  spurSetup() {
+    if (this._spurOn) return;
+    this._spurOn = true;
+    this._strokes = [];
+    const self = this;
+    const isC = (e) => !!(e.target && e.target.id === "spurc");
+    const pos = (e) => {
+      const c = document.getElementById("spurc");
+      if (!c) return null;
+      const r = c.getBoundingClientRect();
+      const t = e.touches && e.touches[0] || e.changedTouches && e.changedTouches[0] || e;
+      return { x: (t.clientX - r.left) * c.width / r.width, y: (t.clientY - r.top) * c.height / r.height };
+    };
+    const down = (e) => {
+      if (!isC(e) || self.state.screen !== "spur" || self.state.phase !== "ask") return;
+      const p = pos(e);
+      if (!p) return;
+      if (e.cancelable) e.preventDefault();
+      self._cur = [p];
+      self._strokes.push(self._cur);
+      self.spurDraw();
+    };
+    const move = (e) => {
+      if (!self._cur) return;
+      const p = pos(e);
+      if (!p) return;
+      if (e.cancelable) e.preventDefault();
+      self._cur.push(p);
+      self.spurDraw();
+    };
+    const up = () => {
+      self._cur = null;
+    };
+    document.addEventListener("touchstart", down, false);
+    document.addEventListener("touchmove", move, false);
+    document.addEventListener("touchend", up, false);
+    document.addEventListener("touchcancel", up, false);
+    document.addEventListener("mousedown", down, false);
+    document.addEventListener("mousemove", move, false);
+    document.addEventListener("mouseup", up, false);
+    try {
+      if (document.fonts && document.fonts.load) document.fonts.load("96px 'Schreibschrift'").then(() => {
+        this._spurKey = null;
+        this.syncSpur();
+      });
+    } catch (e) {
+    }
+  }
+  spurDraw(width, ctx0) {
+    const c = document.getElementById("spurc");
+    if (!c && !ctx0) return;
+    const ctx = ctx0 || c.getContext("2d");
+    if (!ctx0) ctx.clearRect(0, 0, 740, 250);
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.lineWidth = width || 12;
+    ctx.strokeStyle = "#075A54";
+    ctx.fillStyle = "#075A54";
+    (this._strokes || []).forEach((st) => {
+      if (st.length === 1) {
+        ctx.beginPath();
+        ctx.arc(st[0].x, st[0].y, (width || 12) / 2, 0, 6.3);
+        ctx.fill();
+        return;
+      }
+      ctx.beginPath();
+      ctx.moveTo(st[0].x, st[0].y);
+      for (let k = 1; k < st.length; k++) ctx.lineTo(st[k].x, st[k].y);
+      ctx.stroke();
+    });
+  }
+  syncSpur() {
+    const s = this.state;
+    if (!s || s.screen !== "spur") return;
+    this.spurSetup();
+    const g = document.getElementById("spurg");
+    const c = document.getElementById("spurc");
+    if (!g || !c) return;
+    const it = this.items("spur")[s.i];
+    if (!it) return;
+    const wk = [this.store.current.id, s.i, s.rep, s.tries, it.w].join("|");
+    if (wk !== this._spurWord) {
+      this._spurWord = wk;
+      this._strokes = [];
+      this._cur = null;
+      c.getContext("2d").clearRect(0, 0, 740, 250);
+    }
+    const key = wk + "|" + s.phase;
+    if (key === this._spurKey) return;
+    this._spurKey = key;
+    const ctx = g.getContext("2d");
+    ctx.clearRect(0, 0, 740, 250);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#B8D8E4";
+    [[120, 0], [168, 1], [214, 0]].forEach((l) => {
+      ctx.beginPath();
+      if (ctx.setLineDash) ctx.setLineDash(l[1] ? [] : [8, 8]);
+      ctx.moveTo(14, l[0]);
+      ctx.lineTo(726, l[0]);
+      ctx.stroke();
+    });
+    if (ctx.setLineDash) ctx.setLineDash([]);
+    this.spurText(ctx, it, s.phase === "right" ? "#8FD0C6" : "#C3D4DC");
+  }
+  spurScore() {
+    const c = document.getElementById("spurc");
+    const it = this.items("spur")[this.state.i];
+    if (!c || !it) return null;
+    const mk = () => {
+      const x = document.createElement("canvas");
+      x.width = 740;
+      x.height = 250;
+      return x;
+    };
+    const core = mk(), tol = mk(), thick = mk();
+    this.spurText(core.getContext("2d"), it, "#000", 0);
+    this.spurText(tol.getContext("2d"), it, "#000", 34);
+    this.spurDraw(44, thick.getContext("2d"));
+    const d = (x) => x.getContext("2d").getImageData(0, 0, 740, 250).data;
+    const a = d(core), b = d(thick), t = d(tol), u = d(c);
+    let cn = 0, ch = 0, un = 0, ui = 0;
+    for (let p = 3; p < a.length; p += 4) {
+      if (a[p] > 100) {
+        cn++;
+        if (b[p] > 100) ch++;
+      }
+      if (u[p] > 100) {
+        un++;
+        if (t[p] > 100) ui++;
+      }
+    }
+    return { none: un < 400, cov: cn ? ch / cn : 0, prec: un ? ui / un : 0 };
+  }
+  clearSpur() {
+    this._strokes = [];
+    this._cur = null;
+    this.spurDraw();
+  }
+  rateHeft(n) {
+    const s = this.state;
+    if (s.phase !== "ask") return;
+    if (n === 1) this.setState({ errs: this.errList(), phase: "right", picked: ["1"], msg: "Mut zur \xDCbung \u2013 das schreiben wir gleich noch einmal." });
+    else this.setState({ phase: "right", picked: [String(n)], msg: n === 3 ? "Richtig sch\xF6n! \u2728" : "Gut gemacht!" });
   }
   say(text, rate) {
     try {
@@ -215,7 +406,7 @@ window.__Component = class Component extends DCLogic {
   }
   open(key, stufe) {
     if (!this.baseItems(key).length) return;
-    const st = key === "satz" ? 1 : stufe || 1;
+    const st = this.isSingle(key) ? 1 : stufe || 1;
     const pool = st > 1 ? this.mkTasks(key, this.baseItems(key).map((_, k) => k), st - 2) : [];
     this.setState(Object.assign({ screen: key, i: 0, rep: 1, errs: [], stufe: st, pool, repRefs: [], lastReward: null }, this.reset(), key === "satz" ? { written: [], round: 1, missed: [] } : {}));
   }
@@ -312,8 +503,11 @@ window.__Component = class Component extends DCLogic {
     this.applyWeek();
     this.setState(Object.assign({ screen: "hub", hubMsg: "Du \xFCbst jetzt: " + this.weekName(b.week) }, this.reset()));
   }
+  isSingle(k) {
+    return k === "satz" || k === "spur" || k === "heft";
+  }
   packTotal() {
-    return 3 * (Object.keys(this.ex).length - 1) + 1;
+    return Object.keys(this.ex).reduce((a, k) => a + (this.isSingle(k) ? 1 : 3), 0);
   }
   packStat(wk, pg) {
     const tot = this.packTotal(), d = Math.min(tot, (pg.done || []).length);
@@ -819,6 +1013,43 @@ window.__Component = class Component extends DCLogic {
       if (v === 0) return { mode: "choice", prompt: "Welches Gef\xFChl passt?", sub: "Angst, Schmerz, Gl\xFCck oder Wut", show: ex.replace("___", "\u25A2\u25A2\u25A2"), options: this.shuf(["Angst", "Schmerz", "Gl\xFCck", "Wut"]), answer: it[1], okMsg: "Richtig! " + full, badMsg: "Lies den Satz mit dem Wort laut: Passt es?" };
       return { mode: "type", prompt: "Schreib das passende Gef\xFChl-Wort.", sub: "Gef\xFChle sind Nomen \u2013 denk an den Anfangsbuchstaben.", show: ex.replace("___", "\u25A2\u25A2\u25A2"), answer: it[1], okMsg: "Richtig! " + full, badMsg: "Nicht ganz. Gef\xFChle sind Nomen und werden gro\xDFgeschrieben." };
     }
+    if (screen === "koenig") {
+      const tk = this.kingTokens(it);
+      if (!tk) return null;
+      const kings = tk.filter((t) => t.king).map((t) => t.t.toLowerCase());
+      const word = it.syl.join(" \xB7 ");
+      const bad = "Nicht ganz. Jede Silbe hat genau einen K\xF6nig \u2013 einen Vokal oder Doppellaut.";
+      if (v === 0) {
+        const pick = tk.filter((t) => t.king)[Math.floor(Math.random() * kings.length)].t;
+        const oth = [];
+        tk.forEach((t) => {
+          const l = t.t.toLowerCase();
+          if (!t.king && kings.indexOf(l) === -1 && oth.indexOf(l) === -1) oth.push(l);
+        });
+        if (oth.length < 2) return null;
+        return { mode: "choice", prompt: "Welcher Teil ist ein K\xF6nig?", sub: "In jeder Silbe wohnt genau ein K\xF6nig.", show: word, options: this.shuf([pick.toLowerCase()].concat(this.shuf(oth).slice(0, 2))), answer: pick.toLowerCase(), okMsg: "Richtig! Die K\xF6nige: " + kings.join(" \u2013 ") + ".", badMsg: bad };
+      }
+      const V = ["a", "e", "i", "o", "u", "au", "ei", "ie"];
+      const ans = kings.join(" \u2013 ");
+      const alts = [];
+      const add = (a) => {
+        const x = a.join(" \u2013 ");
+        if (x !== ans && alts.indexOf(x) === -1) alts.push(x);
+      };
+      this.shuf(kings.map((_, k) => k)).forEach((k) => {
+        const a = kings.slice();
+        a[k] = this.shuf(V.filter((x) => x !== kings[k]))[0];
+        add(a);
+      });
+      const cons = tk.filter((t) => !t.king).map((t) => t.t.toLowerCase());
+      if (cons.length) this.shuf(kings.map((_, k) => k)).forEach((k) => {
+        const a = kings.slice();
+        a[k] = cons[Math.floor(Math.random() * cons.length)];
+        add(a);
+      });
+      if (alts.length < 2) return null;
+      return { mode: "choice", prompt: "Welche K\xF6nige wohnen im Wort?", sub: "Sprich das Wort in Silben.", show: word, options: this.shuf([ans].concat(this.shuf(alts).slice(0, 2))), answer: ans, okMsg: "Richtig! Die K\xF6nige: " + ans + ".", badMsg: bad, speak: it.syl.join(" - "), slow: true };
+    }
     if (screen === "zerleg") {
       const A = it.a.replace(/^(der|die|das) /, "");
       const B = it.b.replace(/^(der|die|das) /, "");
@@ -878,6 +1109,28 @@ window.__Component = class Component extends DCLogic {
       const got = s.cuts.slice().sort((a, b) => a - b);
       if (got.join(",") === expected.join(",")) this.right("Genau! " + it.syl.join(" \u2013 ") + (it.w === "Ecke" ? ". ck bleibt zusammen!" : "."));
       else this.setState({ errs: this.errList(), msg: "Noch nicht. Sprich langsam und klatsche bei jeder Silbe." });
+    }
+    if (s.screen === "koenig") {
+      const tk = this.kingTokens(it);
+      const kg = [];
+      tk.forEach((t, k) => {
+        if (t.king) kg.push(k);
+      });
+      const got = s.picked.slice().sort((a, b) => a - b);
+      if (got.join(",") === kg.join(",")) this.right("Genau! Die K\xF6nige: " + tk.filter((t) => t.king).map((t) => t.t.toLowerCase()).join(" \u2013 ") + ".");
+      else if (got.length !== kg.length) this.setState({ errs: this.errList(), msg: "Noch nicht. Jede Silbe hat genau einen K\xF6nig. Wie viele Silben hat das Wort?" });
+      else this.setState({ errs: this.errList(), msg: "Fast! K\xF6nige sind a, e, i, o, u, \xE4, \xF6, \xFC und au, \xE4u, eu, ei, ie." });
+    }
+    if (s.screen === "spur") {
+      const r = this.spurScore();
+      if (!r) return;
+      if (r.none) {
+        this.setState({ msg: "Fahr das Wort mit dem Finger nach \u2013 von links nach rechts." });
+        return;
+      }
+      if (r.cov >= 0.6 && r.prec >= 0.5) this.right("Sauber gespurt!");
+      else if (s.tries >= 2) this.setState({ errs: this.errList(), phase: "right", msg: "Gut gek\xE4mpft! Das spuren wir sp\xE4ter noch einmal." });
+      else this.setState({ tries: s.tries + 1, msg: r.cov < 0.6 ? "Da fehlt noch ein St\xFCck. Spur das ganze Wort nach." : "Bleib n\xE4her an der Linie \u2013 versuch es noch einmal." });
     }
     if (s.screen === "zerleg") {
       if (s.cuts.length === 1 && s.cuts[0] === it.cut) this.right("Genau! Im W\xF6rterbuch suchst du: " + it.a + " und " + it.b + ".");
@@ -1001,8 +1254,8 @@ window.__Component = class Component extends DCLogic {
     const cur = this.store.current;
     const nx = this.store.next;
     const n = this.words.length;
-    const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems("silben").length, plural: this.baseItems("plural").length, gross: this.grossList().length, abc: this.baseItems("abc").length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length };
-    const metaOf = { satz: "3 Runden \xB7 " + n + " W\xF6rter", diktat: "Rechtschreibung \xB7 " + n + " W\xF6rter", silben: "Silbenb\xF6gen \xB7 " + cnt.silben + " W\xF6rter", plural: "Einzahl / Mehrzahl \xB7 " + cnt.plural + " W\xF6rter", wortart: "Wortarten \xB7 " + n + " W\xF6rter", gross: cnt.gross ? "Gro\xDFschreibung \xB7 " + cnt.gross + " S\xE4tze" : "Erst S\xE4tze in der Satz-Werkstatt schreiben", abc: "Nachschlagen \xB7 " + cnt.abc + " Runden", zeichen: "Satzarten \xB7 " + cnt.zeichen + " S\xE4tze", gefuehl: "Nomen f\xFCr Gef\xFChle \xB7 " + cnt.gefuehl + " S\xE4tze", zerleg: "W\xF6rterbuch \xB7 " + cnt.zerleg + " W\xF6rter" };
+    const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems("silben").length, plural: this.baseItems("plural").length, gross: this.grossList().length, abc: this.baseItems("abc").length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length, koenig: this.baseItems("koenig").length, spur: n, heft: n };
+    const metaOf = { satz: "3 Runden \xB7 " + n + " W\xF6rter", diktat: "Rechtschreibung \xB7 " + n + " W\xF6rter", silben: "Silbenb\xF6gen \xB7 " + cnt.silben + " W\xF6rter", plural: "Einzahl / Mehrzahl \xB7 " + cnt.plural + " W\xF6rter", wortart: "Wortarten \xB7 " + n + " W\xF6rter", gross: cnt.gross ? "Gro\xDFschreibung \xB7 " + cnt.gross + " S\xE4tze" : "Erst S\xE4tze in der Satz-Werkstatt schreiben", abc: "Nachschlagen \xB7 " + cnt.abc + " Runden", zeichen: "Satzarten \xB7 " + cnt.zeichen + " S\xE4tze", gefuehl: "Nomen f\xFCr Gef\xFChle \xB7 " + cnt.gefuehl + " S\xE4tze", zerleg: "W\xF6rterbuch \xB7 " + cnt.zerleg + " W\xF6rter", koenig: "Vokale \xB7 " + cnt.koenig + " W\xF6rter", spur: "Schreibschrift \xB7 " + n + " W\xF6rter", heft: "Heft \xB7 " + n + " W\xF6rter" };
     const shown = keys.filter((k) => cnt[k] > 0 || k === "gross" && n > 0);
     const base = {
       isHub: s.screen === "hub",
@@ -1043,7 +1296,7 @@ window.__Component = class Component extends DCLogic {
       toGate: () => this.setState({ screen: "gate", gateAns: "", gateWrong: false }),
       chips: this.words.map((x) => ({ w: (x.art ? x.art + " " : "") + x.w, size: n > 12 ? "21px" : "26px" })),
       cards: shown.map((k) => {
-        const mx = k === "satz" ? 1 : 3;
+        const mx = this.isSingle(k) ? 1 : 3;
         const lv = [1, 2, 3].slice(0, mx);
         const ds = lv.map((n2) => pr.done.indexOf(k + "#" + n2) !== -1);
         const fl = lv.map((n2) => pr.flaw.indexOf(k + "#" + n2) !== -1);
@@ -1097,6 +1350,9 @@ window.__Component = class Component extends DCLogic {
       zeichen: ["Welches Zeichen geh\xF6rt ans Ende?", "Aussage: Punkt \xB7 Frage: ? \xB7 Aufforderung oder Ausruf: !"],
       gefuehl: ["Welches Gef\xFChl passt?", "Angst, Schmerz, Gl\xFCck oder Wut"],
       zerleg: ["Welche zwei Nomen stecken im Wort?", "Setz einen Strich, wo das erste Nomen endet."],
+      koenig: ["Wo wohnen die Silbenk\xF6nige?", "Tippe in jeder Silbe den K\xF6nig an: einen Vokal oder Doppellaut."],
+      spur: ["Spur das Wort nach.", "Fahr mit dem Finger auf der Schrift entlang \u2013 von links nach rechts."],
+      heft: ["Schreib das Wort ins Heft.", "Zweimal in Sch\xF6nschrift. Dann bewertest du dich selbst."],
       abc: ["Bring die W\xF6rter in ABC-Reihenfolge.", "Tippe das Wort an, das zuerst kommt. \xE4 wird wie a einsortiert."]
     };
     const v = Object.assign(base, {
@@ -1126,7 +1382,7 @@ window.__Component = class Component extends DCLogic {
       hasReward: !!s.lastReward,
       rewardText: !s.lastReward ? "" : s.lastReward.replay ? "Sch\xF6n ge\xFCbt! Diese Stufe z\xE4hlte schon." : "\u2B50 +" + (s.lastReward.flaw ? "2 Sterne \u2013 ohne Fehler!" : "1 Stern") + (s.lastReward.medal ? " \xB7 \u{1F3C5} Meister-Medaille!" : "") + (s.lastReward.chest ? " \xB7 Schatztruhe voll!" : " \xB7 Truhe: " + s.lastReward.inChest + " von 4"),
       finishBtn: chests > pr.opened ? "Zur Lernwoche \u2013 deine Truhe wartet!" : "Zur Lernwoche",
-      finishText: s.screen === "satz" ? s.written.length + " eigene S\xE4tze! Zeig sie Mama oder Papa und lies sie zusammen vor." : "Du hast alle Aufgaben bei \u201E" + this.ex[s.screen].title + "\u201C gel\xF6st." + (s.errs.length ? " Noch wackelig \u2013 das \xFCben wir bald noch einmal: " + s.errs.map((r) => this.refName(s.screen, r)).join(", ") + "." : " Such dir das n\xE4chste Spiel aus!"),
+      finishText: s.screen === "heft" ? "Alle W\xF6rter stehen in deinem Heft. Zeig es Mama oder Papa!" : s.screen === "spur" ? "Alle W\xF6rter sch\xF6n nachgespurt \u2013 bald schreibst du sie ganz allein!" : s.screen === "satz" ? s.written.length + " eigene S\xE4tze! Zeig sie Mama oder Papa und lies sie zusammen vor." : "Du hast alle Aufgaben bei \u201E" + this.ex[s.screen].title + "\u201C gel\xF6st." + (s.errs.length ? " Noch wackelig \u2013 das \xFCben wir bald noch einmal: " + s.errs.map((r) => this.refName(s.screen, r)).join(", ") + "." : " Such dir das n\xE4chste Spiel aus!"),
       written: s.written.map((x) => ({ t: x.t, r: "R" + x.round })),
       prompt: prompts[s.screen][0],
       subPrompt: prompts[s.screen][1],
@@ -1137,6 +1393,9 @@ window.__Component = class Component extends DCLogic {
       isWortart: ["wortart", "zeichen", "gefuehl"].indexOf(s.screen) !== -1,
       isGross: s.screen === "gross",
       isAbc: s.screen === "abc",
+      isKoenig: s.screen === "koenig",
+      isSpur: s.screen === "spur",
+      isHeft: s.screen === "heft",
       asking: !finished && s.phase === "ask",
       answered,
       input: s.input,
@@ -1161,12 +1420,35 @@ window.__Component = class Component extends DCLogic {
             pr.done = pr.done.concat([key]);
             if (flaw) pr.flaw = pr.flaw.concat([key]);
             this.persist();
-            upd.lastReward = { replay: false, flaw, chest: pr.done.length % 4 === 0, inChest: pr.done.length % 4, medal: s.screen !== "satz" && [1, 2, 3].every((m) => pr.done.indexOf(s.screen + "#" + m) !== -1) };
+            upd.lastReward = { replay: false, flaw, chest: pr.done.length % 4 === 0, inChest: pr.done.length % 4, medal: !this.isSingle(s.screen) && [1, 2, 3].every((m) => pr.done.indexOf(s.screen + "#" + m) !== -1) };
           } else upd.lastReward = { replay: true };
         }
         this.setState(upd);
         if (s.screen === "satz" && s.round >= 2 && n2 < list.length) this.say((list[n2].art ? list[n2].art + " " : "") + list[n2].w);
       },
+      kTokens: [],
+      hBtns: [],
+      spurShow: "",
+      heftWord: "",
+      signed: !!pr.signed,
+      notSigned: !pr.signed,
+      signWrong: !!s.signWrong,
+      signPin: s.signPin || "",
+      onSignPin: (e) => this.setState({ signPin: e.target.value, signWrong: false }),
+      doSign: () => {
+        let ok = false;
+        try {
+          ok = window.WSI.checkPin(s.signPin);
+        } catch (e) {
+        }
+        if (ok) {
+          pr.signed = true;
+          pr.bonus = (pr.bonus || 0) + 1;
+          this.persist();
+          this.setState({ signPin: "", signWrong: false });
+        } else this.setState({ signWrong: true });
+      },
+      clearSpur: () => this.clearSpur(),
       letters: [],
       silLetters: [],
       silSolution: "",
@@ -1214,7 +1496,7 @@ window.__Component = class Component extends DCLogic {
     if (taskRound) {
       const t = it;
       v.isTask = true;
-      v.isDiktat = v.isSilben = v.isPlural = v.isWortart = v.isGross = v.isAbc = false;
+      v.isDiktat = v.isSilben = v.isPlural = v.isWortart = v.isGross = v.isAbc = v.isKoenig = v.isSpur = v.isHeft = false;
       v.prompt = t.prompt;
       v.subPrompt = t.sub;
       v.roundLabel = "Stufe " + s.stufe + " \xB7 " + names[s.stufe] + (s.rep > 1 ? " \xB7 Wiederholung" : "");
@@ -1312,6 +1594,24 @@ window.__Component = class Component extends DCLogic {
       });
       v.silSolution = it.syl.join(" \u2013 ");
       v.speakSlow = () => this.say(it.syl.join(" - "), 0.5);
+    }
+    if (s.screen === "koenig") {
+      const tk = this.kingTokens(it);
+      v.kTokens = tk.map((t, k) => {
+        const on = s.picked.indexOf(k) !== -1;
+        const good = s.phase === "right" && t.king;
+        return { t: t.t, crown: on || good ? "\u{1F451}" : "", ml: t.sp ? "26px" : "4px", bg: good ? "#D8F0EC" : on ? "#FFE08A" : "#F8FCFD", bd: good ? "#0C7C74" : on ? "#F0B429" : "#C9DDE4", toggle: () => {
+          if (s.phase !== "ask") return;
+          this.setState({ picked: on ? s.picked.filter((c) => c !== k) : s.picked.concat([k]), msg: "" });
+        } };
+      });
+      v.speakSlow = () => this.say(it.syl.join(" - "), 0.5);
+    }
+    if (s.screen === "heft") {
+      v.heftWord = it.w;
+      v.speak = () => this.say(it.w);
+      const rate = [[1, "\u2605", "Noch wackelig"], [2, "\u2605\u2605", "Ganz ordentlich"], [3, "\u2605\u2605\u2605", "Richtig sch\xF6n"]];
+      v.hBtns = rate.map((r) => ({ stars: r[1], label: r[2], cls: s.phase === "right" ? s.picked[0] === String(r[0]) ? "btn-good" : "btn-soft" : "btn-soft", disabled: s.phase === "right", pick: () => this.rateHeft(r[0]) }));
     }
     if (s.screen === "plural") {
       v.singular = it.art + " " + it.w;

@@ -198,6 +198,7 @@
     for (var k in vals) sc[k] = vals[k];
     for (var i = 0; i < tpl.length; i++) ev(tpl[i], sc, out);
     patchKids(stage, out);
+    try { if (comp.componentDidUpdate) comp.componentDidUpdate(); } catch (e) { if (window.console) console.error(e); }
   }
   function fit() {
     var w = window.innerWidth, h = window.innerHeight;

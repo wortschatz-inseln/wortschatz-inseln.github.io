@@ -321,6 +321,19 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                   <sc-for list="{{ written }}" as="x" hint-placeholder-count="3"><li>{{ x.t }} <span style="font-family: 'Nunito', system-ui, sans-serif; font-size: 13px; font-weight: 800; color: #5C7A2E">{{ x.r }}</span></li></sc-for>
                 </ol>
               </sc-if>
+              <sc-if value="{{ isHeft }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; background: #F2F6E9; border-radius: 20px; padding: 12px 20px">
+                  <sc-if value="{{ signed }}" hint-placeholder-val="{{ false }}"><span style="font-size: 18px; font-weight: 800; color: #075A54">✓ Abgezeichnet – danke, Mama oder Papa! ⭐</span></sc-if>
+                  <sc-if value="{{ notSigned }}" hint-placeholder-val="{{ true }}">
+                    <span style="font-size: 16px; font-weight: 800; color: #5C7A2E">Mama oder Papa: Heft ansehen und mit dem Eltern-Code abzeichnen (+1 ⭐)</span>
+                    <div style="display: flex; gap: 10px; align-items: center">
+                      <input id="signpin" class="word-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Code" value="{{ signPin }}" onChange="{{ onSignPin }}" style="width: 130px; height: 52px; font-size: 24px">
+                      <button class="btn btn-soft" type="button" onClick="{{ doSign }}" style="height: 52px; padding: 0 22px; border-radius: 16px; font-size: 18px">Abzeichnen</button>
+                    </div>
+                    <sc-if value="{{ signWrong }}" hint-placeholder-val="{{ false }}"><span style="font-size: 15px; font-weight: 800; color: #B45309">Der Code stimmt nicht.</span></sc-if>
+                  </sc-if>
+                </div>
+              </sc-if>
               <button class="btn btn-teal" type="button" onClick="{{ toHub }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">{{ finishBtn }}</button>
             </div>
           </sc-if>
@@ -477,6 +490,53 @@ a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:4p
                 </div>
               </sc-if>
 
+              <sc-if value="{{ isKoenig }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 18px">
+                  <button class="btn btn-soft" type="button" onClick="{{ speakSlow }}" style="height: 56px; padding: 0 20px; border-radius: 18px; font-size: 18px">Langsam vorsprechen</button>
+                  <div style="display: flex; align-items: flex-end; flex-wrap: wrap; justify-content: center; max-width: 760px">
+                    <sc-for list="{{ kTokens }}" as="k" hint-placeholder-count="6">
+                      <span style="display: flex; flex-direction: column; align-items: center; margin: 0 2px 0 {{ k.ml }}">
+                        <span style="height: 40px; font-size: 32px; line-height: 40px">{{ k.crown }}</span>
+                        <button type="button" aria-label="{{ k.t }}" onClick="{{ k.toggle }}" style="font-family: 'Andika', system-ui, sans-serif; font-size: 58px; line-height: 70px; min-width: 56px; height: 76px; padding: 0 6px; border-radius: 16px; border: 3px solid {{ k.bd }}; background: {{ k.bg }}; color: #10304A; cursor: pointer">{{ k.t }}</button>
+                      </span>
+                    </sc-for>
+                  </div>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <button class="btn btn-teal" type="button" onClick="{{ check }}" style="height: 76px; padding: 0 44px; border-radius: 26px; font-size: 26px">Prüfen</button>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isSpur }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 14px">
+                  <div style="position: relative; width: 740px; height: 250px; background: #fff; border: 3px solid #D6E2C4; border-radius: 22px; overflow: hidden; box-sizing: content-box">
+                    <canvas id="spurg" width="740" height="250" style="position: absolute; left: 0; top: 0; width: 740px; height: 250px"></canvas>
+                    <canvas id="spurc" width="740" height="250" style="position: absolute; left: 0; top: 0; width: 740px; height: 250px; touch-action: none"></canvas>
+                  </div>
+                  <sc-if value="{{ asking }}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; gap: 16px">
+                      <button class="btn btn-soft" type="button" onClick="{{ clearSpur }}" style="height: 68px; padding: 0 28px; border-radius: 22px; font-size: 22px">Neu anfangen</button>
+                      <button class="btn btn-teal" type="button" onClick="{{ check }}" style="height: 68px; padding: 0 40px; border-radius: 22px; font-size: 24px">Fertig</button>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ isHeft }}" hint-placeholder-val="{{ false }}">
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 18px; width: 100%">
+                  <div style="width: 700px; box-sizing: border-box; border: 3px solid #D6E2C4; border-radius: 22px; padding: 18px 10px 26px; background: #FFFEF6; text-align: center; border-bottom: 6px solid #B8D8E4">
+                    <span style="font-family: 'Schreibschrift', cursive; font-size: 88px; line-height: 120px; color: #10304A">{{ heftWord }}</span>
+                  </div>
+                  <button class="btn btn-soft" type="button" onClick="{{ speak }}" style="height: 56px; padding: 0 20px; border-radius: 18px; font-size: 18px">Vorsprechen</button>
+                  <p style="margin: 0; font-size: 18px; font-weight: 800; color: #3E5A6E">Wie schön ist dein Wort im Heft geworden?</p>
+                  <div style="display: flex; gap: 14px; flex-wrap: wrap; justify-content: center">
+                    <sc-for list="{{ hBtns }}" as="h" hint-placeholder-count="3">
+                      <button class="btn {{ h.cls }}" type="button" disabled="{{ h.disabled }}" onClick="{{ h.pick }}" style="height: 92px; min-width: 190px; padding: 0 22px; border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-size: 30px; color: #E09A12">{{ h.stars }}</span><span style="font-size: 18px">{{ h.label }}</span></button>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
               <sc-if value="{{ isPlural }}" hint-placeholder-val="{{ false }}">
                 <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%">
                   <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; width: 100%">
@@ -586,13 +646,16 @@ class Component extends DCLogic {
       satz: { title: 'Satz-Werkstatt', desc: 'Erst ansehen, dann nur hören – eigene Sätze schreiben', meta: '3 Runden · 10 Wörter' },
       diktat: { title: 'Wort-Diktat', desc: 'Hören und richtig schreiben', meta: 'Rechtschreibung · 10 Wörter' },
       silben: { title: 'Silben-Schnitt', desc: 'Wörter in Silben trennen', meta: 'Silbenbögen · 7 Wörter' },
+      koenig: { title: 'Silbenkönige', desc: 'In jeder Silbe den König finden', meta: 'Vokale · 7 Wörter' },
       plural: { title: 'Einer – viele', desc: 'Aus Einzahl wird Mehrzahl', meta: 'Einzahl / Mehrzahl · 4 Wörter' },
       wortart: { title: 'Wort-Detektiv', desc: 'Nomen rot, Verb blau, Adjektiv grün', meta: 'Wortarten · 10 Wörter' },
       gross: { title: 'Groß oder klein?', desc: 'Im Satz die großen Wörter finden', meta: 'Großschreibung · 4 Sätze' },
       abc: { title: 'ABC-Reihe', desc: 'Wörter wie im Wörterbuch ordnen', meta: 'Nachschlagen · 3 Runden' },
       zeichen: { title: 'Satz-Ende', desc: 'Punkt, Fragezeichen oder Ausrufezeichen?', meta: 'Satzarten' },
       gefuehl: { title: 'Gefühle-Wörter', desc: 'Welches Gefühl passt in den Satz?', meta: 'Nomen für Gefühle' },
-      zerleg: { title: 'Wort-Zerleger', desc: 'Lange Nomen teilen und nachschlagen', meta: 'Wörterbuch' }
+      zerleg: { title: 'Wort-Zerleger', desc: 'Lange Nomen teilen und nachschlagen', meta: 'Wörterbuch' },
+      spur: { title: 'Schreibschrift', desc: 'Wörter mit dem Finger nachspuren', meta: 'Schreibschrift · 10 Wörter' },
+      heft: { title: 'Schönschrift', desc: 'Ins Heft schreiben und selbst bewerten', meta: 'Heft · 10 Wörter' }
     };
     this.zeichen = [
       ['Welche Aufgaben hat ein Klassensprecher', '?'], ['Er soll gut vermitteln können', '.'], ['Er soll sich mit den meisten Kindern gut verstehen', '.'], ['Natürlich darf er auch lustig sein', '.!'], ['Wählt Hugo', '!'],
@@ -638,6 +701,7 @@ class Component extends DCLogic {
       this.setState(Object.assign({ hubMsg: 'Neue Lernwoche aus der App.' }, this.reset()));
     }).catch(() => {});
   }
+  componentDidUpdate() { try { this.syncSpur(); } catch (e) {} }
   componentDidMount() {
     this.syncApp();
     try {
@@ -709,6 +773,8 @@ class Component extends DCLogic {
     if (screen === 'satz') return this.state.round === 3 ? this.state.missed.map((n) => w[n]) : w;
     if (screen === 'diktat' || screen === 'wortart') return w;
     if (screen === 'silben') return w.filter((x) => x.syl.length > 1);
+    if (screen === 'koenig') return w.filter((x) => !!this.kingTokens(x));
+    if (screen === 'spur' || screen === 'heft') return w;
     if (screen === 'plural') return w.filter((x) => !!x.pl);
     if (screen === 'gross') return this.grossList();
     if (screen === 'abc') return this.abcRounds.concat(this.bookAbc);
@@ -716,6 +782,115 @@ class Component extends DCLogic {
     if (screen === 'gefuehl') return this.gefuehle;
     if (screen === 'zerleg') return this.zerleg;
     return [];
+  }
+  kingTokens(it) {
+    const re = /^(.*?)(aa|ee|oo|au|äu|eu|ei|ie|ai|[aeiouäöü])(.*)$/i;
+    const out = [];
+    const syl = it.syl && it.syl.length ? it.syl : [it.w];
+    for (let k = 0; k < syl.length; k++) {
+      const m = syl[k].match(re);
+      if (!m) return null;
+      const push = (t, king, first) => out.push({ t: t, king: king, sp: first && k > 0 });
+      let first = true;
+      m[1].split('').forEach((c) => { push(c, false, first); first = false; });
+      push(m[2], true, first);
+      m[3].split('').forEach((c) => push(c, false, false));
+    }
+    return out;
+  }
+  spurText(ctx, it, color, line) {
+    const W = 740;
+    let sz = 120;
+    ctx.textBaseline = 'alphabetic';
+    for (; sz > 50; sz -= 4) { ctx.font = sz + "px 'Schreibschrift', cursive"; if (ctx.measureText(it.w).width <= W - 70) break; }
+    const x = (W - ctx.measureText(it.w).width) / 2;
+    ctx.fillStyle = color;
+    ctx.fillText(it.w, x, 168);
+    if (line) { ctx.lineWidth = line; ctx.lineJoin = 'round'; ctx.strokeStyle = color; ctx.strokeText(it.w, x, 168); }
+  }
+  spurSetup() {
+    if (this._spurOn) return;
+    this._spurOn = true;
+    this._strokes = [];
+    const self = this;
+    const isC = (e) => !!(e.target && e.target.id === 'spurc');
+    const pos = (e) => {
+      const c = document.getElementById('spurc');
+      if (!c) return null;
+      const r = c.getBoundingClientRect();
+      const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+      return { x: (t.clientX - r.left) * c.width / r.width, y: (t.clientY - r.top) * c.height / r.height };
+    };
+    const down = (e) => { if (!isC(e) || self.state.screen !== 'spur' || self.state.phase !== 'ask') return; const p = pos(e); if (!p) return; if (e.cancelable) e.preventDefault(); self._cur = [p]; self._strokes.push(self._cur); self.spurDraw(); };
+    const move = (e) => { if (!self._cur) return; const p = pos(e); if (!p) return; if (e.cancelable) e.preventDefault(); self._cur.push(p); self.spurDraw(); };
+    const up = () => { self._cur = null; };
+    document.addEventListener('touchstart', down, false);
+    document.addEventListener('touchmove', move, false);
+    document.addEventListener('touchend', up, false);
+    document.addEventListener('touchcancel', up, false);
+    document.addEventListener('mousedown', down, false);
+    document.addEventListener('mousemove', move, false);
+    document.addEventListener('mouseup', up, false);
+    try { if (document.fonts && document.fonts.load) document.fonts.load("96px 'Schreibschrift'").then(() => { this._spurKey = null; this.syncSpur(); }); } catch (e) {}
+  }
+  spurDraw(width, ctx0) {
+    const c = document.getElementById('spurc');
+    if (!c && !ctx0) return;
+    const ctx = ctx0 || c.getContext('2d');
+    if (!ctx0) ctx.clearRect(0, 0, 740, 250);
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = width || 12; ctx.strokeStyle = '#075A54'; ctx.fillStyle = '#075A54';
+    (this._strokes || []).forEach((st) => {
+      if (st.length === 1) { ctx.beginPath(); ctx.arc(st[0].x, st[0].y, (width || 12) / 2, 0, 6.3); ctx.fill(); return; }
+      ctx.beginPath(); ctx.moveTo(st[0].x, st[0].y);
+      for (let k = 1; k < st.length; k++) ctx.lineTo(st[k].x, st[k].y);
+      ctx.stroke();
+    });
+  }
+  syncSpur() {
+    const s = this.state;
+    if (!s || s.screen !== 'spur') return;
+    this.spurSetup();
+    const g = document.getElementById('spurg');
+    const c = document.getElementById('spurc');
+    if (!g || !c) return;
+    const it = this.items('spur')[s.i];
+    if (!it) return;
+    const wk = [this.store.current.id, s.i, s.rep, s.tries, it.w].join('|');
+    if (wk !== this._spurWord) { this._spurWord = wk; this._strokes = []; this._cur = null; c.getContext('2d').clearRect(0, 0, 740, 250); }
+    const key = wk + '|' + s.phase;
+    if (key === this._spurKey) return;
+    this._spurKey = key;
+    const ctx = g.getContext('2d');
+    ctx.clearRect(0, 0, 740, 250);
+    ctx.lineWidth = 2; ctx.strokeStyle = '#B8D8E4';
+    [[120, 0], [168, 1], [214, 0]].forEach((l) => { ctx.beginPath(); if (ctx.setLineDash) ctx.setLineDash(l[1] ? [] : [8, 8]); ctx.moveTo(14, l[0]); ctx.lineTo(726, l[0]); ctx.stroke(); });
+    if (ctx.setLineDash) ctx.setLineDash([]);
+    this.spurText(ctx, it, s.phase === 'right' ? '#8FD0C6' : '#C3D4DC');
+  }
+  spurScore() {
+    const c = document.getElementById('spurc');
+    const it = this.items('spur')[this.state.i];
+    if (!c || !it) return null;
+    const mk = () => { const x = document.createElement('canvas'); x.width = 740; x.height = 250; return x; };
+    const core = mk(), tol = mk(), thick = mk();
+    this.spurText(core.getContext('2d'), it, '#000', 0);
+    this.spurText(tol.getContext('2d'), it, '#000', 34);
+    this.spurDraw(44, thick.getContext('2d'));
+    const d = (x) => x.getContext('2d').getImageData(0, 0, 740, 250).data;
+    const a = d(core), b = d(thick), t = d(tol), u = d(c);
+    let cn = 0, ch = 0, un = 0, ui = 0;
+    for (let p = 3; p < a.length; p += 4) {
+      if (a[p] > 100) { cn++; if (b[p] > 100) ch++; }
+      if (u[p] > 100) { un++; if (t[p] > 100) ui++; }
+    }
+    return { none: un < 400, cov: cn ? ch / cn : 0, prec: un ? ui / un : 0 };
+  }
+  clearSpur() { this._strokes = []; this._cur = null; this.spurDraw(); }
+  rateHeft(n) {
+    const s = this.state;
+    if (s.phase !== 'ask') return;
+    if (n === 1) this.setState({ errs: this.errList(), phase: 'right', picked: ['1'], msg: 'Mut zur Übung – das schreiben wir gleich noch einmal.' });
+    else this.setState({ phase: 'right', picked: [String(n)], msg: n === 3 ? 'Richtig schön! ✨' : 'Gut gemacht!' });
   }
   say(text, rate) {
     try {
@@ -728,7 +903,7 @@ class Component extends DCLogic {
   }
   open(key, stufe) {
     if (!this.baseItems(key).length) return;
-    const st = key === 'satz' ? 1 : (stufe || 1);
+    const st = this.isSingle(key) ? 1 : (stufe || 1);
     const pool = st > 1 ? this.mkTasks(key, this.baseItems(key).map((_, k) => k), st - 2) : [];
     this.setState(Object.assign({ screen: key, i: 0, rep: 1, errs: [], stufe: st, pool: pool, repRefs: [], lastReward: null }, this.reset(), key === 'satz' ? { written: [], round: 1, missed: [] } : {}));
   }
@@ -793,7 +968,8 @@ class Component extends DCLogic {
     this.applyWeek();
     this.setState(Object.assign({ screen: 'hub', hubMsg: 'Du übst jetzt: ' + this.weekName(b.week) }, this.reset()));
   }
-  packTotal() { return 3 * (Object.keys(this.ex).length - 1) + 1; }
+  isSingle(k) { return k === 'satz' || k === 'spur' || k === 'heft'; }
+  packTotal() { return Object.keys(this.ex).reduce((a, k) => a + (this.isSingle(k) ? 1 : 3), 0); }
   packStat(wk, pg) {
     const tot = this.packTotal(), d = Math.min(tot, (pg.done || []).length);
     const status = d === 0 ? 'Neu' : (d >= tot ? 'Geschafft' : 'In Arbeit');
@@ -1217,6 +1393,29 @@ class Component extends DCLogic {
       if (v === 0) return { mode: 'choice', prompt: 'Welches Gefühl passt?', sub: 'Angst, Schmerz, Glück oder Wut', show: ex.replace('___', '▢▢▢'), options: this.shuf(['Angst', 'Schmerz', 'Glück', 'Wut']), answer: it[1], okMsg: 'Richtig! ' + full, badMsg: 'Lies den Satz mit dem Wort laut: Passt es?' };
       return { mode: 'type', prompt: 'Schreib das passende Gefühl-Wort.', sub: 'Gefühle sind Nomen – denk an den Anfangsbuchstaben.', show: ex.replace('___', '▢▢▢'), answer: it[1], okMsg: 'Richtig! ' + full, badMsg: 'Nicht ganz. Gefühle sind Nomen und werden großgeschrieben.' };
     }
+    if (screen === 'koenig') {
+      const tk = this.kingTokens(it);
+      if (!tk) return null;
+      const kings = tk.filter((t) => t.king).map((t) => t.t.toLowerCase());
+      const word = it.syl.join(' · ');
+      const bad = 'Nicht ganz. Jede Silbe hat genau einen König – einen Vokal oder Doppellaut.';
+      if (v === 0) {
+        const pick = tk.filter((t) => t.king)[Math.floor(Math.random() * kings.length)].t;
+        const oth = [];
+        tk.forEach((t) => { const l = t.t.toLowerCase(); if (!t.king && kings.indexOf(l) === -1 && oth.indexOf(l) === -1) oth.push(l); });
+        if (oth.length < 2) return null;
+        return { mode: 'choice', prompt: 'Welcher Teil ist ein König?', sub: 'In jeder Silbe wohnt genau ein König.', show: word, options: this.shuf([pick.toLowerCase()].concat(this.shuf(oth).slice(0, 2))), answer: pick.toLowerCase(), okMsg: 'Richtig! Die Könige: ' + kings.join(' – ') + '.', badMsg: bad };
+      }
+      const V = ['a', 'e', 'i', 'o', 'u', 'au', 'ei', 'ie'];
+      const ans = kings.join(' – ');
+      const alts = [];
+      const add = (a) => { const x = a.join(' – '); if (x !== ans && alts.indexOf(x) === -1) alts.push(x); };
+      this.shuf(kings.map((_, k) => k)).forEach((k) => { const a = kings.slice(); a[k] = this.shuf(V.filter((x) => x !== kings[k]))[0]; add(a); });
+      const cons = tk.filter((t) => !t.king).map((t) => t.t.toLowerCase());
+      if (cons.length) this.shuf(kings.map((_, k) => k)).forEach((k) => { const a = kings.slice(); a[k] = cons[Math.floor(Math.random() * cons.length)]; add(a); });
+      if (alts.length < 2) return null;
+      return { mode: 'choice', prompt: 'Welche Könige wohnen im Wort?', sub: 'Sprich das Wort in Silben.', show: word, options: this.shuf([ans].concat(this.shuf(alts).slice(0, 2))), answer: ans, okMsg: 'Richtig! Die Könige: ' + ans + '.', badMsg: bad, speak: it.syl.join(' - '), slow: true };
+    }
     if (screen === 'zerleg') {
       const A = it.a.replace(/^(der|die|das) /, '');
       const B = it.b.replace(/^(der|die|das) /, '');
@@ -1271,6 +1470,22 @@ class Component extends DCLogic {
       const got = s.cuts.slice().sort((a, b) => a - b);
       if (got.join(',') === expected.join(',')) this.right('Genau! ' + it.syl.join(' – ') + (it.w === 'Ecke' ? '. ck bleibt zusammen!' : '.'));
       else this.setState({ errs: this.errList(), msg: 'Noch nicht. Sprich langsam und klatsche bei jeder Silbe.' });
+    }
+    if (s.screen === 'koenig') {
+      const tk = this.kingTokens(it);
+      const kg = []; tk.forEach((t, k) => { if (t.king) kg.push(k); });
+      const got = s.picked.slice().sort((a, b) => a - b);
+      if (got.join(',') === kg.join(',')) this.right('Genau! Die Könige: ' + tk.filter((t) => t.king).map((t) => t.t.toLowerCase()).join(' – ') + '.');
+      else if (got.length !== kg.length) this.setState({ errs: this.errList(), msg: 'Noch nicht. Jede Silbe hat genau einen König. Wie viele Silben hat das Wort?' });
+      else this.setState({ errs: this.errList(), msg: 'Fast! Könige sind a, e, i, o, u, ä, ö, ü und au, äu, eu, ei, ie.' });
+    }
+    if (s.screen === 'spur') {
+      const r = this.spurScore();
+      if (!r) return;
+      if (r.none) { this.setState({ msg: 'Fahr das Wort mit dem Finger nach – von links nach rechts.' }); return; }
+      if (r.cov >= 0.6 && r.prec >= 0.5) this.right('Sauber gespurt!');
+      else if (s.tries >= 2) this.setState({ errs: this.errList(), phase: 'right', msg: 'Gut gekämpft! Das spuren wir später noch einmal.' });
+      else this.setState({ tries: s.tries + 1, msg: r.cov < 0.6 ? 'Da fehlt noch ein Stück. Spur das ganze Wort nach.' : 'Bleib näher an der Linie – versuch es noch einmal.' });
     }
     if (s.screen === 'zerleg') {
       if (s.cuts.length === 1 && s.cuts[0] === it.cut) this.right('Genau! Im Wörterbuch suchst du: ' + it.a + ' und ' + it.b + '.');
@@ -1391,8 +1606,8 @@ class Component extends DCLogic {
     const cur = this.store.current;
     const nx = this.store.next;
     const n = this.words.length;
-    const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems('silben').length, plural: this.baseItems('plural').length, gross: this.grossList().length, abc: this.baseItems('abc').length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length };
-    const metaOf = { satz: '3 Runden · ' + n + ' Wörter', diktat: 'Rechtschreibung · ' + n + ' Wörter', silben: 'Silbenbögen · ' + cnt.silben + ' Wörter', plural: 'Einzahl / Mehrzahl · ' + cnt.plural + ' Wörter', wortart: 'Wortarten · ' + n + ' Wörter', gross: cnt.gross ? 'Großschreibung · ' + cnt.gross + ' Sätze' : 'Erst Sätze in der Satz-Werkstatt schreiben', abc: 'Nachschlagen · ' + cnt.abc + ' Runden', zeichen: 'Satzarten · ' + cnt.zeichen + ' Sätze', gefuehl: 'Nomen für Gefühle · ' + cnt.gefuehl + ' Sätze', zerleg: 'Wörterbuch · ' + cnt.zerleg + ' Wörter' };
+    const cnt = { satz: n, diktat: n, wortart: n, silben: this.baseItems('silben').length, plural: this.baseItems('plural').length, gross: this.grossList().length, abc: this.baseItems('abc').length, zeichen: this.zeichen.length, gefuehl: this.gefuehle.length, zerleg: this.zerleg.length, koenig: this.baseItems('koenig').length, spur: n, heft: n };
+    const metaOf = { satz: '3 Runden · ' + n + ' Wörter', diktat: 'Rechtschreibung · ' + n + ' Wörter', silben: 'Silbenbögen · ' + cnt.silben + ' Wörter', plural: 'Einzahl / Mehrzahl · ' + cnt.plural + ' Wörter', wortart: 'Wortarten · ' + n + ' Wörter', gross: cnt.gross ? 'Großschreibung · ' + cnt.gross + ' Sätze' : 'Erst Sätze in der Satz-Werkstatt schreiben', abc: 'Nachschlagen · ' + cnt.abc + ' Runden', zeichen: 'Satzarten · ' + cnt.zeichen + ' Sätze', gefuehl: 'Nomen für Gefühle · ' + cnt.gefuehl + ' Sätze', zerleg: 'Wörterbuch · ' + cnt.zerleg + ' Wörter', koenig: 'Vokale · ' + cnt.koenig + ' Wörter', spur: 'Schreibschrift · ' + n + ' Wörter', heft: 'Heft · ' + n + ' Wörter' };
     const shown = keys.filter((k) => cnt[k] > 0 || (k === 'gross' && n > 0));
     const base = {
       isHub: s.screen === 'hub',
@@ -1430,7 +1645,7 @@ class Component extends DCLogic {
       toGate: () => this.setState({ screen: 'gate', gateAns: '', gateWrong: false }),
       chips: this.words.map((x) => ({ w: (x.art ? x.art + ' ' : '') + x.w, size: n > 12 ? '21px' : '26px' })),
       cards: shown.map((k) => {
-        const mx = k === 'satz' ? 1 : 3;
+        const mx = this.isSingle(k) ? 1 : 3;
         const lv = [1, 2, 3].slice(0, mx);
         const ds = lv.map((n) => pr.done.indexOf(k + '#' + n) !== -1);
         const fl = lv.map((n) => pr.flaw.indexOf(k + '#' + n) !== -1);
@@ -1472,6 +1687,9 @@ class Component extends DCLogic {
       zeichen: ['Welches Zeichen gehört ans Ende?', 'Aussage: Punkt · Frage: ? · Aufforderung oder Ausruf: !'],
       gefuehl: ['Welches Gefühl passt?', 'Angst, Schmerz, Glück oder Wut'],
       zerleg: ['Welche zwei Nomen stecken im Wort?', 'Setz einen Strich, wo das erste Nomen endet.'],
+      koenig: ['Wo wohnen die Silbenkönige?', 'Tippe in jeder Silbe den König an: einen Vokal oder Doppellaut.'],
+      spur: ['Spur das Wort nach.', 'Fahr mit dem Finger auf der Schrift entlang – von links nach rechts.'],
+      heft: ['Schreib das Wort ins Heft.', 'Zweimal in Schönschrift. Dann bewertest du dich selbst.'],
       abc: ['Bring die Wörter in ABC-Reihenfolge.', 'Tippe das Wort an, das zuerst kommt. ä wird wie a einsortiert.']
     };
     const v = Object.assign(base, {
@@ -1493,7 +1711,7 @@ class Component extends DCLogic {
       hasReward: !!s.lastReward,
       rewardText: !s.lastReward ? '' : (s.lastReward.replay ? 'Schön geübt! Diese Stufe zählte schon.' : '⭐ +' + (s.lastReward.flaw ? '2 Sterne – ohne Fehler!' : '1 Stern') + (s.lastReward.medal ? ' · 🏅 Meister-Medaille!' : '') + (s.lastReward.chest ? ' · Schatztruhe voll!' : ' · Truhe: ' + s.lastReward.inChest + ' von 4')),
       finishBtn: chests > pr.opened ? 'Zur Lernwoche – deine Truhe wartet!' : 'Zur Lernwoche',
-      finishText: s.screen === 'satz' ? (s.written.length + ' eigene Sätze! Zeig sie Mama oder Papa und lies sie zusammen vor.') : 'Du hast alle Aufgaben bei „' + this.ex[s.screen].title + '“ gelöst.' + (s.errs.length ? ' Noch wackelig – das üben wir bald noch einmal: ' + s.errs.map((r) => this.refName(s.screen, r)).join(', ') + '.' : ' Such dir das nächste Spiel aus!'),
+      finishText: s.screen === 'heft' ? 'Alle Wörter stehen in deinem Heft. Zeig es Mama oder Papa!' : s.screen === 'spur' ? 'Alle Wörter schön nachgespurt – bald schreibst du sie ganz allein!' : s.screen === 'satz' ? (s.written.length + ' eigene Sätze! Zeig sie Mama oder Papa und lies sie zusammen vor.') : 'Du hast alle Aufgaben bei „' + this.ex[s.screen].title + '“ gelöst.' + (s.errs.length ? ' Noch wackelig – das üben wir bald noch einmal: ' + s.errs.map((r) => this.refName(s.screen, r)).join(', ') + '.' : ' Such dir das nächste Spiel aus!'),
       written: s.written.map((x) => ({ t: x.t, r: 'R' + x.round })),
       prompt: prompts[s.screen][0],
       subPrompt: prompts[s.screen][1],
@@ -1504,6 +1722,9 @@ class Component extends DCLogic {
       isWortart: ['wortart', 'zeichen', 'gefuehl'].indexOf(s.screen) !== -1,
       isGross: s.screen === 'gross',
       isAbc: s.screen === 'abc',
+      isKoenig: s.screen === 'koenig',
+      isSpur: s.screen === 'spur',
+      isHeft: s.screen === 'heft',
       asking: !finished && s.phase === 'ask',
       answered: answered,
       input: s.input,
@@ -1526,12 +1747,13 @@ class Component extends DCLogic {
             pr.done = pr.done.concat([key]);
             if (flaw) pr.flaw = pr.flaw.concat([key]);
             this.persist();
-            upd.lastReward = { replay: false, flaw: flaw, chest: pr.done.length % 4 === 0, inChest: pr.done.length % 4, medal: s.screen !== 'satz' && [1, 2, 3].every((m) => pr.done.indexOf(s.screen + '#' + m) !== -1) };
+            upd.lastReward = { replay: false, flaw: flaw, chest: pr.done.length % 4 === 0, inChest: pr.done.length % 4, medal: !this.isSingle(s.screen) && [1, 2, 3].every((m) => pr.done.indexOf(s.screen + '#' + m) !== -1) };
           } else upd.lastReward = { replay: true };
         }
         this.setState(upd);
         if (s.screen === 'satz' && s.round >= 2 && n < list.length) this.say((list[n].art ? list[n].art + ' ' : '') + list[n].w);
       },
+      kTokens: [], hBtns: [], spurShow: '', heftWord: '', signed: !!pr.signed, notSigned: !pr.signed, signWrong: !!s.signWrong, signPin: s.signPin || '', onSignPin: (e) => this.setState({ signPin: e.target.value, signWrong: false }), doSign: () => { let ok = false; try { ok = window.WSI.checkPin(s.signPin); } catch (e) {} if (ok) { pr.signed = true; pr.bonus = (pr.bonus || 0) + 1; this.persist(); this.setState({ signPin: '', signWrong: false }); } else this.setState({ signWrong: true }); }, clearSpur: () => this.clearSpur(),
       letters: [], silLetters: [], silSolution: '', singular: '', plural: '', shownWord: '', typeButtons: [], tokens: [], abcPicked: [], abcLeft: [],
       speak: () => {}, speakSlow: () => {}, satzWord: '', idea: '', showIdea: false, results: [], hasResults: false, isSelf: false, satzAsking: false, satzLocked: false, wordShown: false, wordHidden: false, isTask: false, tHasShow: false, tShow: '', tSize: '54px', tHasSpeak: false, tSpeakFn: () => {}, tChoice: false, tType: false, tOrder: false, tOptions: [], tPicked: [], tLeft: [], roundLabel: '', speakSlowWord: () => {}, markedTokens: [], hasMarks: false
     });
@@ -1539,7 +1761,7 @@ class Component extends DCLogic {
     if (taskRound) {
       const t = it;
       v.isTask = true;
-      v.isDiktat = v.isSilben = v.isPlural = v.isWortart = v.isGross = v.isAbc = false;
+      v.isDiktat = v.isSilben = v.isPlural = v.isWortart = v.isGross = v.isAbc = v.isKoenig = v.isSpur = v.isHeft = false;
       v.prompt = t.prompt;
       v.subPrompt = t.sub;
       v.roundLabel = 'Stufe ' + s.stufe + ' · ' + names[s.stufe] + (s.rep > 1 ? ' · Wiederholung' : '');
@@ -1625,6 +1847,21 @@ class Component extends DCLogic {
       });
       v.silSolution = it.syl.join(' – ');
       v.speakSlow = () => this.say(it.syl.join(' - '), 0.5);
+    }
+    if (s.screen === 'koenig') {
+      const tk = this.kingTokens(it);
+      v.kTokens = tk.map((t, k) => {
+        const on = s.picked.indexOf(k) !== -1;
+        const good = s.phase === 'right' && t.king;
+        return { t: t.t, crown: on || good ? '👑' : '', ml: t.sp ? '26px' : '4px', bg: good ? '#D8F0EC' : (on ? '#FFE08A' : '#F8FCFD'), bd: good ? '#0C7C74' : (on ? '#F0B429' : '#C9DDE4'), toggle: () => { if (s.phase !== 'ask') return; this.setState({ picked: on ? s.picked.filter((c) => c !== k) : s.picked.concat([k]), msg: '' }); } };
+      });
+      v.speakSlow = () => this.say(it.syl.join(' - '), 0.5);
+    }
+    if (s.screen === 'heft') {
+      v.heftWord = it.w;
+      v.speak = () => this.say(it.w);
+      const rate = [[1, '★', 'Noch wackelig'], [2, '★★', 'Ganz ordentlich'], [3, '★★★', 'Richtig schön']];
+      v.hBtns = rate.map((r) => ({ stars: r[1], label: r[2], cls: s.phase === 'right' ? (s.picked[0] === String(r[0]) ? 'btn-good' : 'btn-soft') : 'btn-soft', disabled: s.phase === 'right', pick: () => this.rateHeft(r[0]) }));
     }
     if (s.screen === 'plural') {
       v.singular = it.art + ' ' + it.w;
