@@ -1,184 +1,534 @@
 {
- "version": 1,
- "week": {
-  "id": "app-2026-11-09",
-  "from": "2026-11-09",
-  "to": "2026-11-13",
-  "words": [
-   {
-    "w": "plötzlich",
-    "idea2": "Denk an etwas Überraschendes.",
-    "forms": "plötzlich",
-    "idea": "Was passiert plötzlich?",
-    "typ": "Adjektiv",
-    "syl": [
-     "plötz",
-     "lich"
-    ],
-    "crit": [
-     4,
-     5
-    ],
-    "tip": "Nach kurzem ö kommt tz."
-   },
-   {
-    "w": "streiten",
-    "idea2": "Denk an Geschwister oder Freunde, die sich nicht einig sind.",
-    "forms": "streit|stritt",
-    "idea": "Wer streitet – und worüber?",
-    "typ": "Verb",
-    "syl": [
-     "strei",
-     "ten"
-    ],
-    "crit": [
-     3,
-     4
-    ],
-    "tip": "Achte auf ei und auf st am Anfang."
-   },
-   {
-    "w": "Angst",
-    "idea2": "Denk an etwas Gruseliges.",
-    "forms": "Angst|Ängst",
-    "idea": "Wovor hat jemand Angst?",
-    "art": "die",
-    "pl": "Ängste",
-    "typ": "Nomen",
-    "syl": [
-     "Angst"
-    ],
-    "crit": [
-     0
-    ],
-    "tip": "Nomen schreibt man groß: die Angst."
-   },
-   {
-    "w": "Urlaub",
-    "idea2": "Denk an Ferien und Reisen.",
-    "forms": "Urlaub",
-    "idea": "Wohin fahrt ihr in den Urlaub?",
-    "art": "der",
-    "pl": "Urlaube",
-    "typ": "Nomen",
-    "syl": [
-     "Ur",
-     "laub"
-    ],
-    "crit": [
-     0,
-     5
-    ],
-    "tip": "Verlängere: die Urlau-be – deshalb b am Ende."
-   },
-   {
-    "w": "immer",
-    "idea2": "Was machst du jeden Tag?",
-    "forms": "immer",
-    "idea": "Was machst du immer?",
-    "typ": "anderes",
-    "syl": [
-     "im",
-     "mer"
-    ],
-    "crit": [
-     1,
-     2
-    ],
-    "tip": "Kurzes i, dann zwei m."
-   },
-   {
-    "w": "Ecke",
-    "idea2": "Denk an dein Zimmer.",
-    "forms": "Ecke",
-    "idea": "Was steht in der Ecke?",
-    "art": "die",
-    "pl": "Ecken",
-    "typ": "Nomen",
-    "syl": [
-     "E",
-     "cke"
-    ],
-    "crit": [
-     0,
-     1,
-     2
-    ],
-    "tip": "Nach kurzem E kommt ck. Und groß, weil Nomen."
-   },
-   {
-    "w": "Spaß",
-    "idea2": "Was machst du richtig gern?",
-    "forms": "Spaß|Späß",
-    "idea": "Was macht dir Spaß?",
-    "art": "der",
-    "pl": "Späße",
-    "typ": "Nomen",
-    "syl": [
-     "Spaß"
-    ],
-    "crit": [
-     0,
-     3
-    ],
-    "tip": "Nach langem a kommt ß. Und groß: der Spaß."
-   },
-   {
-    "w": "ärgern",
-    "idea2": "Was findest du doof?",
-    "forms": "ärger|ärgr",
-    "idea": "Worüber ärgert sich jemand?",
-    "typ": "Verb",
-    "syl": [
-     "är",
-     "gern"
-    ],
-    "crit": [
-     0
-    ],
-    "tip": "ä, weil es von Ärger kommt."
-   },
-   {
-    "w": "spät",
-    "idea2": "Denk an die Uhr und ans Zubettgehen.",
-    "forms": "spät",
-    "idea": "Wer kommt zu spät?",
-    "typ": "Adjektiv",
-    "syl": [
-     "spät"
-    ],
-    "crit": [
-     2,
-     3
-    ],
-    "tip": "spät mit ä – verlängere: später, deshalb t."
-   },
-   {
-    "w": "Unterricht",
-    "idea2": "Denk an die Schule.",
-    "forms": "Unterricht",
-    "idea": "Was macht ihr im Unterricht?",
-    "art": "der",
-    "typ": "Nomen",
-    "syl": [
-     "Un",
-     "ter",
-     "richt"
-    ],
-    "crit": [
-     0,
-     7,
-     8
-    ],
-    "tip": "Groß, weil Nomen. Am Ende: richt mit ch."
-   }
-  ],
-  "sentences": [
-   "Plötzlich hatte der Hund große Angst.",
-   "Im Urlaub haben wir immer viel Spaß.",
-   "Die Kinder streiten in der Ecke.",
-   "Nach dem Unterricht kommt Paul spät nach Hause."
-  ],
-  "source": "app"
- }
+ "version": 2,
+ "weeks": [
+  {
+   "id": "app-2026-11-09",
+   "from": "2026-11-09",
+   "to": "2026-11-13",
+   "words": [
+    {
+     "w": "plötzlich",
+     "idea2": "Denk an etwas Überraschendes.",
+     "forms": "plötzlich",
+     "idea": "Was passiert plötzlich?",
+     "typ": "Adjektiv",
+     "syl": [
+      "plötz",
+      "lich"
+     ],
+     "crit": [
+      4,
+      5
+     ],
+     "tip": "Nach kurzem ö kommt tz."
+    },
+    {
+     "w": "streiten",
+     "idea2": "Denk an Geschwister oder Freunde, die sich nicht einig sind.",
+     "forms": "streit|stritt",
+     "idea": "Wer streitet – und worüber?",
+     "typ": "Verb",
+     "syl": [
+      "strei",
+      "ten"
+     ],
+     "crit": [
+      3,
+      4
+     ],
+     "tip": "Achte auf ei und auf st am Anfang."
+    },
+    {
+     "w": "Angst",
+     "idea2": "Denk an etwas Gruseliges.",
+     "forms": "Angst|Ängst",
+     "idea": "Wovor hat jemand Angst?",
+     "art": "die",
+     "pl": "Ängste",
+     "typ": "Nomen",
+     "syl": [
+      "Angst"
+     ],
+     "crit": [
+      0
+     ],
+     "tip": "Nomen schreibt man groß: die Angst."
+    },
+    {
+     "w": "Urlaub",
+     "idea2": "Denk an Ferien und Reisen.",
+     "forms": "Urlaub",
+     "idea": "Wohin fahrt ihr in den Urlaub?",
+     "art": "der",
+     "pl": "Urlaube",
+     "typ": "Nomen",
+     "syl": [
+      "Ur",
+      "laub"
+     ],
+     "crit": [
+      0,
+      5
+     ],
+     "tip": "Verlängere: die Urlau-be – deshalb b am Ende."
+    },
+    {
+     "w": "immer",
+     "idea2": "Was machst du jeden Tag?",
+     "forms": "immer",
+     "idea": "Was machst du immer?",
+     "typ": "anderes",
+     "syl": [
+      "im",
+      "mer"
+     ],
+     "crit": [
+      1,
+      2
+     ],
+     "tip": "Kurzes i, dann zwei m."
+    },
+    {
+     "w": "Ecke",
+     "idea2": "Denk an dein Zimmer.",
+     "forms": "Ecke",
+     "idea": "Was steht in der Ecke?",
+     "art": "die",
+     "pl": "Ecken",
+     "typ": "Nomen",
+     "syl": [
+      "E",
+      "cke"
+     ],
+     "crit": [
+      0,
+      1,
+      2
+     ],
+     "tip": "Nach kurzem E kommt ck. Und groß, weil Nomen."
+    },
+    {
+     "w": "Spaß",
+     "idea2": "Was machst du richtig gern?",
+     "forms": "Spaß|Späß",
+     "idea": "Was macht dir Spaß?",
+     "art": "der",
+     "pl": "Späße",
+     "typ": "Nomen",
+     "syl": [
+      "Spaß"
+     ],
+     "crit": [
+      0,
+      3
+     ],
+     "tip": "Nach langem a kommt ß. Und groß: der Spaß."
+    },
+    {
+     "w": "ärgern",
+     "idea2": "Was findest du doof?",
+     "forms": "ärger|ärgr",
+     "idea": "Worüber ärgert sich jemand?",
+     "typ": "Verb",
+     "syl": [
+      "är",
+      "gern"
+     ],
+     "crit": [
+      0
+     ],
+     "tip": "ä, weil es von Ärger kommt."
+    },
+    {
+     "w": "spät",
+     "idea2": "Denk an die Uhr und ans Zubettgehen.",
+     "forms": "spät",
+     "idea": "Wer kommt zu spät?",
+     "typ": "Adjektiv",
+     "syl": [
+      "spät"
+     ],
+     "crit": [
+      2,
+      3
+     ],
+     "tip": "spät mit ä – verlängere: später, deshalb t."
+    },
+    {
+     "w": "Unterricht",
+     "idea2": "Denk an die Schule.",
+     "forms": "Unterricht",
+     "idea": "Was macht ihr im Unterricht?",
+     "art": "der",
+     "typ": "Nomen",
+     "syl": [
+      "Un",
+      "ter",
+      "richt"
+     ],
+     "crit": [
+      0,
+      7,
+      8
+     ],
+     "tip": "Groß, weil Nomen. Am Ende: richt mit ch."
+    }
+   ],
+   "sentences": [
+    "Plötzlich hatte der Hund große Angst.",
+    "Im Urlaub haben wir immer viel Spaß.",
+    "Die Kinder streiten in der Ecke.",
+    "Nach dem Unterricht kommt Paul spät nach Hause."
+   ],
+   "source": "app"
+  },
+  {
+   "id": "app-2026-11-16",
+   "from": "2026-11-16",
+   "to": "2026-11-20",
+   "source": "app",
+   "words": [
+    {
+     "w": "jung",
+     "idea2": "Denk an ein Baby-Tier.",
+     "forms": "jung",
+     "idea": "Wer ist noch jung?",
+     "typ": "Adjektiv",
+     "syl": [
+      "jung"
+     ],
+     "crit": [
+      3
+     ],
+     "tip": "Verlängere: junge – deshalb g am Ende."
+    },
+    {
+     "w": "schrecklich",
+     "idea2": "Denk an einen Albtraum.",
+     "forms": "schrecklich",
+     "idea": "Was war schrecklich?",
+     "typ": "Adjektiv",
+     "syl": [
+      "schreck",
+      "lich"
+     ],
+     "crit": [
+      5,
+      6
+     ],
+     "tip": "Nach kurzem e kommt ck. Am Ende: lich."
+    },
+    {
+     "w": "gefährlich",
+     "idea2": "Denk an etwas, wo man aufpassen muss.",
+     "forms": "gefährlich",
+     "idea": "Was ist gefährlich?",
+     "typ": "Adjektiv",
+     "syl": [
+      "ge",
+      "fähr",
+      "lich"
+     ],
+     "crit": [
+      3,
+      4
+     ],
+     "tip": "ä, weil es von Gefahr kommt. Dann h."
+    },
+    {
+     "w": "also",
+     "idea2": "Denk an einen Schluss: …, also …",
+     "forms": "also",
+     "idea": "Was sagst du mit „also“?",
+     "typ": "anderes",
+     "syl": [
+      "al",
+      "so"
+     ],
+     "crit": [
+      0
+     ],
+     "tip": "also – erst al, dann so."
+    },
+    {
+     "w": "doch",
+     "idea2": "Denk an: Das stimmt doch nicht!",
+     "forms": "doch",
+     "idea": "Wann sagst du „doch“?",
+     "typ": "anderes",
+     "syl": [
+      "doch"
+     ],
+     "crit": [
+      2,
+      3
+     ],
+     "tip": "Langes o, am Ende ch."
+    },
+    {
+     "w": "Schmetterling",
+     "idea2": "Denk an eine bunte Wiese.",
+     "forms": "Schmetterling",
+     "idea": "Wo fliegt ein Schmetterling?",
+     "art": "der",
+     "pl": "Schmetterlinge",
+     "typ": "Nomen",
+     "syl": [
+      "Schmet",
+      "ter",
+      "ling"
+     ],
+     "crit": [
+      0,
+      5,
+      6
+     ],
+     "tip": "Groß, weil Nomen. Nach kurzem e kommt tt."
+    },
+    {
+     "w": "krabbeln",
+     "idea2": "Denk an ein Baby oder einen Käfer.",
+     "forms": "krabbel|krabbl",
+     "idea": "Wer krabbelt?",
+     "typ": "Verb",
+     "syl": [
+      "krab",
+      "beln"
+     ],
+     "crit": [
+      3,
+      4
+     ],
+     "tip": "Nach kurzem a kommt bb."
+    },
+    {
+     "w": "Kuh",
+     "idea2": "Denk an einen Bauernhof.",
+     "forms": "Kuh|Küh",
+     "idea": "Wo steht die Kuh?",
+     "art": "die",
+     "pl": "Kühe",
+     "typ": "Nomen",
+     "syl": [
+      "Kuh"
+     ],
+     "crit": [
+      0,
+      2
+     ],
+     "tip": "Groß, weil Nomen. Das h bleibt: Kuh – Kühe."
+    },
+    {
+     "w": "gehen",
+     "idea2": "Denk an einen Weg.",
+     "forms": "geh|ging|gegangen",
+     "idea": "Wohin gehst du?",
+     "typ": "Verb",
+     "syl": [
+      "ge",
+      "hen"
+     ],
+     "crit": [
+      2
+     ],
+     "tip": "Das h hört man nicht, aber es gehört dazu."
+    },
+    {
+     "w": "sehen",
+     "idea2": "Denk an etwas Schönes.",
+     "forms": "seh|sieh|sah|gesehen",
+     "idea": "Was siehst du?",
+     "typ": "Verb",
+     "syl": [
+      "se",
+      "hen"
+     ],
+     "crit": [
+      2
+     ],
+     "tip": "Das stumme h gehört dazu: sehen."
+    }
+   ],
+   "sentences": [
+    "Das Baby will schon krabbeln, aber noch nicht gehen.",
+    "Der junge Schmetterling kann schon gut sehen.",
+    "Das war schrecklich gefährlich, also lauf nicht weg.",
+    "Doch, die Kuh steht auf der Wiese."
+   ]
+  },
+  {
+   "id": "app-2026-11-23",
+   "from": "2026-11-23",
+   "to": "2026-11-27",
+   "source": "app",
+   "words": [
+    {
+     "w": "Elefant",
+     "idea2": "Denk an den Zoo.",
+     "forms": "Elefant",
+     "idea": "Was kann ein Elefant?",
+     "art": "der",
+     "pl": "Elefanten",
+     "typ": "Nomen",
+     "syl": [
+      "E",
+      "le",
+      "fant"
+     ],
+     "crit": [
+      0,
+      3
+     ],
+     "tip": "Groß, weil Nomen. Elefant schreibt man mit f."
+    },
+    {
+     "w": "als",
+     "idea2": "Denk an einen Vergleich.",
+     "forms": "als",
+     "idea": "Wer ist größer als du?",
+     "typ": "anderes",
+     "syl": [
+      "als"
+     ],
+     "crit": [
+      2
+     ],
+     "tip": "als mit s am Ende – nicht mit ß."
+    },
+    {
+     "w": "wie",
+     "idea2": "Denk an eine Frage.",
+     "forms": "wie",
+     "idea": "Wie geht es dir?",
+     "typ": "anderes",
+     "syl": [
+      "wie"
+     ],
+     "crit": [
+      1,
+      2
+     ],
+     "tip": "Langes i schreibt man hier mit ie."
+    },
+    {
+     "w": "ja",
+     "idea2": "Denk an etwas, das du gern willst.",
+     "forms": "ja",
+     "idea": "Wann sagst du ja?",
+     "typ": "anderes",
+     "syl": [
+      "ja"
+     ],
+     "crit": [
+      0
+     ],
+     "tip": "ja – nur zwei Buchstaben: j und a."
+    },
+    {
+     "w": "nein",
+     "idea2": "Denk an etwas, das du nicht willst.",
+     "forms": "nein",
+     "idea": "Wann sagst du nein?",
+     "typ": "anderes",
+     "syl": [
+      "nein"
+     ],
+     "crit": [
+      1,
+      2
+     ],
+     "tip": "nein mit ei, nicht mit ie."
+    },
+    {
+     "w": "wütend",
+     "idea2": "Denk an einen Streit.",
+     "forms": "wütend",
+     "idea": "Wer ist wütend?",
+     "typ": "Adjektiv",
+     "syl": [
+      "wü",
+      "tend"
+     ],
+     "crit": [
+      1,
+      5
+     ],
+     "tip": "ü, weil es von Wut kommt. Am Ende d: wütende."
+    },
+    {
+     "w": "fertig",
+     "idea2": "Denk an deine Hausaufgaben.",
+     "forms": "fertig",
+     "idea": "Wann bist du fertig?",
+     "typ": "Adjektiv",
+     "syl": [
+      "fer",
+      "tig"
+     ],
+     "crit": [
+      0,
+      4,
+      5
+     ],
+     "tip": "Am Anfang f. Am Ende ig."
+    },
+    {
+     "w": "Pferd",
+     "idea2": "Denk an einen Reiterhof.",
+     "forms": "Pferd",
+     "idea": "Wer reitet auf dem Pferd?",
+     "art": "das",
+     "pl": "Pferde",
+     "typ": "Nomen",
+     "syl": [
+      "Pferd"
+     ],
+     "crit": [
+      0,
+      1,
+      4
+     ],
+     "tip": "Groß, weil Nomen. Pf am Anfang. Verlängere: Pferde – deshalb d."
+    },
+    {
+     "w": "Dieb",
+     "idea2": "Denk an ein Märchen.",
+     "forms": "Dieb",
+     "idea": "Was stiehlt der Dieb?",
+     "art": "der",
+     "pl": "Diebe",
+     "typ": "Nomen",
+     "syl": [
+      "Dieb"
+     ],
+     "crit": [
+      0,
+      1,
+      3
+     ],
+     "tip": "Groß, weil Nomen. ie, und verlängere: Diebe – deshalb b."
+    },
+    {
+     "w": "klug",
+     "idea2": "Denk an ein schlaues Tier.",
+     "forms": "klug",
+     "idea": "Wer ist klug?",
+     "typ": "Adjektiv",
+     "syl": [
+      "klug"
+     ],
+     "crit": [
+      3
+     ],
+     "tip": "Verlängere: kluge – deshalb g am Ende."
+    }
+   ],
+   "sentences": [
+    "Der Elefant ist größer als das Pferd.",
+    "Wütend jagt der Hund den Dieb.",
+    "Nein, ich bin noch nicht fertig.",
+    "Ja, der Elefant ist wirklich klug."
+   ]
+  }
+ ]
 }

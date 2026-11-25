@@ -698,14 +698,23 @@ class Component extends DCLogic {
   syncApp() {
     if (!window.WSI || window.WSI.dev().mode !== 'app') return;
     fetch('data/lernwoche.json').then((r) => r.json()).then((d) => {
-      const wk = d && d.week; if (!wk || !wk.id) return;
+      const list = d && d.weeks ? d.weeks.slice() : (d && d.week ? [d.week] : []);
+      list.sort((a, b) => (a.from < b.from ? -1 : 1));
       const st = this.store, today = this.iso(new Date());
-      if (st.current.id === wk.id || (st.next && st.next.id === wk.id) || (st.shelf || []).some((b) => b.week.id === wk.id)) return;
-      if (wk.from > today) { st.next = wk; this.persist(); this.setState({}); return; }
-      this.archiveCurrent();
-      st.current = wk; st.progress = { id: wk.id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 };
-      this.persist(); this.applyWeek();
-      this.setState(Object.assign({ hubMsg: 'Neue Lernwoche aus der App.' }, this.reset()));
+      let changed = false, newCur = false;
+      const fresh = (id) => ({ id: id, done: [], kept: [], flaw: [], opened: 0, bonus: 0 });
+      list.forEach((wk) => {
+        if (!wk || !wk.id) return;
+        if (st.current.id === wk.id || (st.next && st.next.id === wk.id) || (st.shelf || []).some((b) => b.week.id === wk.id)) return;
+        changed = true;
+        if (wk.from > today) { if (!st.next) st.next = wk; return; }
+        if (st.current.words && st.current.words.length && st.current.from > wk.from) { st.shelf = (st.shelf || []).concat([{ week: wk, progress: fresh(wk.id) }]); return; }
+        this.archiveCurrent();
+        st.current = wk; st.progress = fresh(wk.id); newCur = true;
+      });
+      if (!changed) return;
+      this.persist();
+      if (newCur) { this.applyWeek(); this.setState(Object.assign({ hubMsg: 'Neue Lernwoche aus der App.' }, this.reset())); } else this.setState({});
     }).catch(() => {});
   }
   componentDidUpdate() { try { this.syncSpur(); } catch (e) {} }
