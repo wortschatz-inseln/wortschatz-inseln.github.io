@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Mathe-Inseln</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+body{margin:0}
+a{color:#0C7C74}a:hover{color:#075A54}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:none;cursor:pointer;text-decoration:none;font-family:'Fredoka',system-ui,sans-serif;font-weight:600;transition:transform .08s ease, box-shadow .08s ease}
+.btn:active{transform:translateY(4px)}
+.btn[disabled]{cursor:default;transform:none}
+.btn-teal{background:#0C7C74;color:#fff;box-shadow:0 6px 0 #075A54}
+.btn-teal:hover{color:#fff}
+.btn-sun{background:#FFC23D;color:#10304A;box-shadow:0 6px 0 #D99A12}
+.btn-sun:hover{color:#10304A}
+.btn-soft{background:#fff;color:#10304A;border:2px solid #C9DDE4;box-shadow:0 4px 0 #C9DDE4}
+.btn-soft:hover{color:#10304A;border-color:#9AD3DF}
+.btn-on{background:#10304A;color:#fff;border:2px solid #10304A;box-shadow:0 4px 0 #071B2B}
+.btn-good{background:#E6F5F2;color:#075A54;border:3px solid #0C7C74;box-shadow:none}
+.btn-red{background:#FDE7E5;color:#9B1C1C;border:3px solid #E5484D;box-shadow:none}
+.card{cursor:pointer;font-family:inherit;color:#10304A}
+.card:active{transform:translateY(3px)}
+a:focus-visible,button:focus-visible{outline:4px solid #10304A;outline-offset:3px}
+</style>
+</helmet>
+<div style="width: 1194px; height: 834px; box-sizing: border-box; padding: 20px 28px; display: flex; flex-direction: column; gap: 14px; background: #FFF4E0; font-family: 'Nunito', system-ui, sans-serif; color: #10304A; overflow: hidden">
+
+  <sc-if value="{{ isHub }}" hint-placeholder-val="{{ true }}">
+    <header style="display: flex; align-items: center; gap: 18px; height: 64px; flex: none">
+      <a class="btn btn-soft" href="Main.dc.html" style="height: 56px; padding: 0 18px; border-radius: 18px; font-size: 18px; box-sizing: border-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+        Zurück
+      </a>
+      <div style="display: flex; flex-direction: column; flex: 1">
+        <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 32px; line-height: 1.1">Mathe-Inseln</h1>
+        <p style="margin: 0; font-size: 16px; color: #3E5A6E">Wähle ein Thema. Pro Runde 8 Aufgaben – bis zu 3 Sterne.</p>
+      </div>
+      <span style="font-weight: 800; font-size: 17px; color: #3E5A6E">{{ starTotal }} ★</span>
+      <div role="group" aria-label="Klasse wählen" style="display: flex; gap: 8px">
+        <button class="btn {{ c3 }}" type="button" onClick="{{ setK3 }}" style="height: 52px; padding: 0 22px; border-radius: 999px; font-size: 19px">Klasse 3</button>
+        <button class="btn {{ c4 }}" type="button" onClick="{{ setK4 }}" style="height: 52px; padding: 0 22px; border-radius: 999px; font-size: 19px">Klasse 4</button>
+      </div>
+    </header>
+    <div style="flex: 1; display: flex; flex-wrap: wrap; gap: 12px; align-content: flex-start">
+      <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+        <section style="width: 563px; box-sizing: border-box; background: {{ g.bg }}; border: 3px solid {{ g.bd }}; border-radius: 24px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; align-items: center; gap: 10px">
+            <span style="font-size: 30px; line-height: 34px">{{ g.ic }}</span>
+            <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 21px">{{ g.title }}</span>
+            <span style="font-size: 14px; color: #3E5A6E; font-weight: 700">{{ g.sub }}</span>
+          </div>
+          <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px">
+            <sc-for list="{{ g.cards }}" as="k" hint-placeholder-count="4">
+              <li style="width: 168px; display: flex">
+                <button class="card" type="button" onClick="{{ k.open }}" style="flex: 1; height: 120px; box-sizing: border-box; border-radius: 20px; background: #fff; border: 3px solid {{ g.bd }}; box-shadow: 0 4px 0 {{ g.bd }}; padding: 6px 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; text-align: center">
+                  <span style="font-size: 30px; line-height: 34px">{{ k.ic }}</span>
+                  <span style="font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 17px; line-height: 1.1">{{ k.title }}</span>
+                  <span style="font-size: 12px; color: #3E5A6E; font-weight: 700; line-height: 1.15">{{ k.sub }}</span>
+                  <span style="font-size: 18px; letter-spacing: 2px; color: #E8A400">{{ k.stars }}</span>
+                </button>
+              </li>
+            </sc-for>
+          </ul>
+        </section>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPlay }}" hint-placeholder-val="{{ false }}">
+    <header style="display: flex; align-items: center; gap: 18px; height: 64px; flex: none">
+      <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 56px; padding: 0 18px; border-radius: 18px; font-size: 18px; box-sizing: border-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+        Themen
+      </button>
+      <div style="display: flex; flex-direction: column; flex: 1">
+        <h1 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 30px; line-height: 1.1">{{ topicIc }} {{ topicTitle }}</h1>
+        <p style="margin: 0; font-size: 16px; color: #3E5A6E">Klasse {{ klasse }} · Aufgabe {{ num }} von 8</p>
+      </div>
+      <div style="display: flex; gap: 6px" aria-hidden="true">
+        <sc-for list="{{ dots }}" as="d" hint-placeholder-count="8">
+          <span style="width: 20px; height: 20px; border-radius: 50%; background: {{ d.bg }}; border: 3px solid {{ d.bd }}; box-sizing: border-box"></span>
+        </sc-for>
+      </div>
+    </header>
+    <main style="flex: 1; display: flex; gap: 20px; min-height: 0">
+      <section aria-live="polite" style="flex: 1; min-width: 0; background: #fff; border-radius: 32px; box-shadow: 0 8px 0 #E8D9BC; padding: 24px 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px">
+        <span style="font-weight: 800; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: #C47A00">{{ kind }}</span>
+        <p style="margin: 0; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: {{ qSize }}; line-height: 1.3; text-align: center; max-width: 640px">{{ q }}</p>
+        <sc-if value="{{ hasImg }}" hint-placeholder-val="{{ false }}">
+          <img src="{{ img }}" alt="" style="height: {{ imgH }}px; width: auto; max-width: 600px">
+        </sc-if>
+        <sc-if value="{{ isNum }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; align-items: center; min-height: 76px">
+            <div style="min-width: 240px; height: 76px; box-sizing: border-box; padding: 0 22px; border-radius: 20px; border: 4px solid {{ boxBd }}; background: {{ boxBg }}; display: flex; align-items: center; justify-content: center; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 42px">{{ shown }}<span style="font-size: 26px; color: #3E5A6E; margin-left: 10px">{{ unit }}</span></div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ isChoice }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; max-width: 640px">
+            <sc-for list="{{ opts }}" as="o" hint-placeholder-count="4">
+              <button class="btn {{ o.cls }}" type="button" onClick="{{ o.pick }}" style="min-width: 150px; height: 72px; padding: 0 22px; border-radius: 22px; font-family: 'Andika', system-ui, sans-serif; font-weight: 700; font-size: 28px; box-sizing: border-box">{{ o.t }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+        <p style="margin: 0; min-height: 54px; font-size: 20px; font-weight: 800; text-align: center; color: {{ msgColor }}; max-width: 620px; line-height: 1.3">{{ msg }}</p>
+        <sc-if value="{{ answered }}" hint-placeholder-val="{{ false }}">
+          <button class="btn btn-teal" type="button" onClick="{{ next }}" style="height: 66px; padding: 0 52px; border-radius: 24px; font-size: 26px">{{ nextLabel }}</button>
+        </sc-if>
+      </section>
+      <sc-if value="{{ isNum }}" hint-placeholder-val="{{ true }}">
+        <section aria-label="Zahlenfeld" style="width: 330px; flex: none; background: #F3E6C9; border-radius: 28px; padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; align-self: flex-start">
+          <sc-for list="{{ padRows }}" as="row" hint-placeholder-count="5">
+            <div style="display: flex; gap: 10px">
+              <sc-for list="{{ row.keys }}" as="k" hint-placeholder-count="3">
+                <button type="button" onClick="{{ k.press }}" style="flex: 1; height: 84px; min-width: 0; padding: 0; border-radius: 18px; border: none; border-bottom: 6px solid {{ k.edge }}; background: {{ k.bg }}; color: {{ k.fg }}; font-family: 'Andika', system-ui, sans-serif; font-size: {{ k.size }}; font-weight: 700; cursor: pointer">{{ k.l }}</button>
+              </sc-for>
+            </div>
+          </sc-for>
+        </section>
+      </sc-if>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+    <main style="flex: 1; display: flex; align-items: center; justify-content: center">
+      <section style="width: 760px; background: #fff; border-radius: 36px; box-shadow: 0 8px 0 #E8D9BC; padding: 40px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+        <span style="font-size: 64px; letter-spacing: 8px; color: #E8A400">{{ doneStars }}</span>
+        <h2 style="margin: 0; font-family: 'Fredoka', system-ui, sans-serif; font-weight: 600; font-size: 40px">{{ doneTitle }}</h2>
+        <p style="margin: 0; font-size: 22px; color: #3E5A6E">{{ right }} von 8 Aufgaben gleich beim ersten Versuch richtig.</p>
+        <p style="margin: 0; font-size: 18px; color: #3E5A6E; min-height: 26px">{{ doneNote }}</p>
+        <div style="display: flex; gap: 14px; margin-top: 8px">
+          <button class="btn btn-teal" type="button" onClick="{{ again }}" style="height: 72px; padding: 0 36px; border-radius: 24px; font-size: 24px">Noch eine Runde</button>
+          <button class="btn btn-soft" type="button" onClick="{{ toHub }}" style="height: 72px; padding: 0 36px; border-radius: 24px; font-size: 24px; box-sizing: border-box">Andere Themen</button>
+        </div>
+      </section>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1194,"height":834}}'>
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pk = (a) => a[Math.floor(Math.random() * a.length)];
+const shuf = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+const grp = (s) => (String(s).length >= 5 ? String(s).replace(/\B(?=(\d{3})+(?!\d))/g, ' ') : String(s));
+const g = (n) => grp(n);
+const money = (c) => Math.floor(c / 100) + ',' + (c % 100 < 10 ? '0' : '') + (c % 100);
+const rnd = (n, step) => Math.floor(n / step + 0.5) * step;
+const pad2 = (n) => (n < 10 ? '0' : '') + n;
+const uri = (svg) => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+
+function clockSvg(h, m) {
+  let s = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="94" fill="#fff" stroke="#10304A" stroke-width="6"/>';
+  for (let i = 0; i < 60; i++) {
+    const a = i * 6 * Math.PI / 180, l = i % 5 === 0 ? 10 : 4;
+    s += '<line x1="' + (100 + (88 - l) * Math.sin(a)).toFixed(1) + '" y1="' + (100 - (88 - l) * Math.cos(a)).toFixed(1) + '" x2="' + (100 + 88 * Math.sin(a)).toFixed(1) + '" y2="' + (100 - 88 * Math.cos(a)).toFixed(1) + '" stroke="#10304A" stroke-width="' + (i % 5 === 0 ? 3 : 1.5) + '"/>';
+  }
+  for (let i = 1; i <= 12; i++) {
+    const a = i * 30 * Math.PI / 180;
+    s += '<text x="' + (100 + 66 * Math.sin(a)).toFixed(1) + '" y="' + (100 - 66 * Math.cos(a) + 7).toFixed(1) + '" font-family="Arial" font-weight="bold" font-size="20" text-anchor="middle" fill="#10304A">' + i + '</text>';
+  }
+  const hand = (ang, len, w, col) => { const a = ang * Math.PI / 180; return '<line x1="100" y1="100" x2="' + (100 + len * Math.sin(a)).toFixed(1) + '" y2="' + (100 - len * Math.cos(a)).toFixed(1) + '" stroke="' + col + '" stroke-width="' + w + '" stroke-linecap="round"/>'; };
+  s += hand((h % 12) * 30 + m * 0.5, 44, 8, '#10304A') + hand(m * 6, 66, 5, '#D9534F') + '<circle cx="100" cy="100" r="6" fill="#10304A"/></svg>';
+  return uri(s);
+}
+function rectSvg(a, b, unit, sq) {
+  const W = 300, H = 170, sc = Math.min((W - 60) / a, (H - 50) / b), w = a * sc, h = b * sc, x = (360 - w) / 2, y = 24;
+  let s = '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="' + (h + 70) + '" viewBox="0 0 360 ' + (h + 70) + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" fill="#FFE9A8" stroke="#10304A" stroke-width="4"/>';
+  s += '<text x="180" y="' + (y - 7) + '" font-family="Arial" font-weight="bold" font-size="20" text-anchor="middle" fill="#10304A">' + (sq ? 'a' : 'Länge') + ' = ' + a + ' ' + unit + '</text>';
+  if (!sq) s += '<text x="' + (x + w + 10) + '" y="' + (y + h / 2 + 7) + '" font-family="Arial" font-weight="bold" font-size="20" fill="#10304A">' + b + ' ' + unit + '</text>';
+  return uri(s + '</svg>');
+}
+function chartSvg(cats, vals) {
+  const bx = 56, base = 210, top = 20, sc = (base - top) / 12;
+  let s = '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" viewBox="0 0 400 250">';
+  for (let v = 0; v <= 12; v++) {
+    const y = base - v * sc;
+    s += '<line x1="' + bx + '" y1="' + y.toFixed(1) + '" x2="390" y2="' + y.toFixed(1) + '" stroke="' + (v % 2 === 0 ? '#9AA9B5' : '#E3EAEF') + '" stroke-width="1"/>';
+    if (v % 2 === 0) s += '<text x="' + (bx - 8) + '" y="' + (y + 5).toFixed(1) + '" font-family="Arial" font-size="14" text-anchor="end" fill="#10304A">' + v + '</text>';
+  }
+  const cols = ['#3D8BEB', '#F08A24', '#4CAF50', '#C45BD0'];
+  for (let i = 0; i < 4; i++) {
+    const x = bx + 20 + i * 82, h = vals[i] * sc;
+    s += '<rect x="' + x + '" y="' + (base - h).toFixed(1) + '" width="52" height="' + h.toFixed(1) + '" fill="' + cols[i] + '"/>';
+    s += '<text x="' + (x + 26) + '" y="232" font-family="Arial" font-weight="bold" font-size="14" text-anchor="middle" fill="#10304A">' + cats[i] + '</text>';
+  }
+  return uri(s + '<line x1="' + bx + '" y1="' + base + '" x2="390" y2="' + base + '" stroke="#10304A" stroke-width="3"/><line x1="' + bx + '" y1="' + top + '" x2="' + bx + '" y2="' + base + '" stroke="#10304A" stroke-width="3"/></svg>');
+}
+
+const GEN = {
+  mal(k) {
+    const t = ri(0, k === 3 ? 3 : 5);
+    if (t === 0) { const a = ri(2, 10), b = ri(2, 10); return { q: a + ' · ' + b + ' = ?', ans: String(a * b), hint: b > 5 ? 'Zerlege: ' + a + ' · ' + b + ' = ' + a + ' · 5 + ' + a + ' · ' + (b - 5) + '.' : 'Tausche die Zahlen: ' + b + ' · ' + a + ' ist das Gleiche.' }; }
+    if (t === 1) { const a = ri(2, 10), b = ri(2, 10); return { q: a * b + ' : ' + a + ' = ?', ans: String(b), hint: 'Frag dich: ' + a + ' mal wie viel ergibt ' + a * b + '?' }; }
+    if (t === 2) { const a = ri(2, 9), b = ri(2, 9); return { q: a + ' · ' + b * 10 + ' = ?', ans: String(a * b * 10), hint: 'Rechne ' + a + ' · ' + b + ' und hänge eine Null an.' }; }
+    if (t === 3) { const a = ri(2, 10), b = ri(2, 10); return { q: '? · ' + a + ' = ' + a * b, ans: String(b), hint: 'Welche Zahl mal ' + a + ' ergibt ' + a * b + '? Denk an die ' + a + 'er-Reihe.' }; }
+    if (t === 4) { const a = ri(2, 9), b = ri(2, 9); return { q: a * 10 + ' · ' + b * 10 + ' = ?', ans: String(a * b * 100), hint: 'Rechne ' + a + ' · ' + b + ' und hänge zwei Nullen an.' }; }
+    const a = ri(2, 9), b = ri(2, 9); return { q: g(a * b * 100) + ' : ' + b * 10 + ' = ?', ans: String(a * 10), hint: 'Rechne ' + a * b * 10 + ' : ' + b + ' = ' + a * 10 + '? Streiche bei beiden Zahlen eine Null.' };
+  },
+  plus(k) {
+    if (k === 3) {
+      const t = ri(0, 3);
+      if (t === 0) { const a = ri(120, 780), b = ri(110, 999 - a); return { q: a + ' + ' + b + ' = ?', ans: String(a + b), hint: 'Rechne in Schritten: erst die Hunderter, dann die Zehner, dann die Einer.' }; }
+      if (t === 1) { const a = ri(300, 990), b = ri(110, a - 50); return { q: a + ' − ' + b + ' = ?', ans: String(a - b), hint: 'Zieh in Schritten ab: erst die Hunderter, dann Zehner, dann Einer.' }; }
+      if (t === 2) { const a = ri(120, 780), c = ri(a + 60, 999); return { q: a + ' + ? = ' + c, ans: String(c - a), hint: 'Das ist die Umkehraufgabe: ' + c + ' − ' + a + '.' }; }
+      const b = ri(110, 600), c = ri(120, 380); return { q: '? − ' + b + ' = ' + c, ans: String(b + c), hint: 'Mach die Umkehraufgabe: ' + c + ' + ' + b + '.' };
+    }
+    const sc = pk([100, 1000, 10000]), t = ri(0, 3);
+    if (t === 3) { const a = ri(12, 98) * 10000; return { q: g(a) + ' + ? = 1\u00a0000\u00a0000', ans: String(1000000 - a), hint: 'Wie viel fehlt bis zur Million?' }; }
+    const a = ri(12, 89) * sc, b = ri(12, 89) * sc;
+    if (t === 0 || t === 2) return { q: g(a) + ' + ' + g(b) + ' = ?', ans: String(a + b), hint: 'Rechne ' + a / sc + ' + ' + b / sc + ' und hänge die Nullen wieder an.' };
+    const hi = Math.max(a, b), lo = Math.min(a, b);
+    return { q: g(hi) + ' − ' + g(lo) + ' = ?', ans: String(hi - lo), hint: 'Rechne ' + hi / sc + ' − ' + lo / sc + ' und hänge die Nullen wieder an.' };
+  },
+  schradd(k) {
+    const stack = 'Schreibe die Zahlen genau untereinander (Einer unter Einer …). Rechne von rechts nach links und merke dir den Übertrag.';
+    if (k === 3) {
+      if (ri(0, 1)) { const a = ri(230, 790), b = ri(150, 999 - a); return { q: a + ' + ' + b + ' = ?', ans: String(a + b), hint: stack }; }
+      const a = ri(500, 999), b = ri(120, a - 30); return { q: a + ' − ' + b + ' = ?', ans: String(a - b), hint: stack };
+    }
+    const t = ri(0, 2);
+    if (t === 0) { const a = ri(1200, 38000), b = ri(1200, 38000), c = ri(500, 9000); return { q: g(a) + ' + ' + g(b) + ' + ' + g(c) + ' = ?', ans: String(a + b + c), hint: stack }; }
+    if (t === 1) { const a = ri(12000, 98000), b = ri(2000, a - 1000); return { q: g(a) + ' − ' + g(b) + ' = ?', ans: String(a - b), hint: stack }; }
+    const a = ri(120000, 480000), b = ri(120000, 480000); return { q: g(a) + ' + ' + g(b) + ' = ?', ans: String(a + b), hint: stack };
+  },
+  schrmal(k) {
+    const t = ri(0, 2);
+    if (t === 0) { const a = ri(120, 999), b = ri(2, 9); return { q: a + ' · ' + b + ' = ?', ans: String(a * b), hint: 'Rechne von rechts: Einer, Zehner, Hunderter – und denk an den Übertrag.' }; }
+    if (t === 1) { const a = ri(1200, 9999), b = ri(2, 9); return { q: g(a) + ' · ' + b + ' = ?', ans: String(a * b), hint: 'Rechne Stelle für Stelle von rechts. Übertrag nicht vergessen!' }; }
+    const a = ri(12, 98), b = ri(11, 59); return { q: a + ' · ' + b + ' = ?', ans: String(a * b), hint: 'Zerlege: ' + a + ' · ' + b + ' = ' + a + ' · ' + Math.floor(b / 10) * 10 + ' + ' + a + ' · ' + (b % 10) + '.' };
+  },
+  schrdiv(k) {
+    const d = ri(2, 9), q = ri(40, 999);
+    if (ri(0, 2) === 0) { const r = ri(1, d - 1); return { q: g(q * d + r) + ' : ' + d + ' = ?', ans: q + 'R' + r, kb: 'r', kind: 'Schriftlich dividieren (mit Rest)', hint: 'Teile Stelle für Stelle. Was am Ende übrig bleibt, ist der Rest.' }; }
+    return { q: g(q * d) + ' : ' + d + ' = ?', ans: String(q), hint: 'Teile von links: erst die Hunderter, dann Zehner, dann Einer. Was übrig bleibt, nimmst du zur nächsten Stelle mit.' };
+  },
+  rest(k) {
+    const d = ri(2, 9), q = ri(k === 3 ? 3 : 10, k === 3 ? 10 : 99), r = ri(1, d - 1), a = q * d + r;
+    return { q: a + ' : ' + d + ' = ?', ans: q + 'R' + r, kb: 'r', hint: 'Welche Zahl aus der ' + d + 'er-Reihe liegt direkt unter ' + a + '? Der Rest ist der Unterschied.' };
+  },
+  zahl(k) {
+    const t = ri(0, 4);
+    if (t === 0) {
+      const n = k === 3 ? pk([699, 700, 999, 100, 800, 1000, ri(101, 998)]) : pk([9999, 99999, 100000, 250000, 399999, 500000, ri(10001, 999998)]);
+      return ri(0, 1) ? { q: 'Was ist der Nachfolger von ' + g(n) + '?', ans: String(n + 1), hint: 'Der Nachfolger ist die Zahl direkt danach (+ 1).' } : { q: 'Was ist der Vorgänger von ' + g(n) + '?', ans: String(n - 1), hint: 'Der Vorgänger ist die Zahl direkt davor (− 1).' };
+    }
+    if (t === 1) {
+      const names = k === 3 ? ['Einer', 'Zehner', 'Hunderter'] : ['Einer', 'Zehner', 'Hunderter', 'Tausender', 'Zehntausender', 'Hunderttausender'];
+      const len = names.length, n = ri(Math.pow(10, len - 1), Math.pow(10, len) - 1), p = ri(0, len - 1), s = String(n);
+      return { q: 'Welche Ziffer steht in ' + g(n) + ' an der ' + names[p] + '-Stelle?', ans: s.charAt(len - 1 - p), hint: 'Die Stellen von rechts: E, Z, H, T, ZT, HT. Zähle von hinten ab.' };
+    }
+    if (t === 2) {
+      if (k === 3) { const n = ri(5, 50) * 20; return ri(0, 1) ? { q: 'Die Hälfte von ' + n + ' ist …', ans: String(n / 2), hint: 'Teile durch 2.' } : { q: 'Das Doppelte von ' + n / 2 + ' ist …', ans: String(n), hint: 'Rechne mal 2.' }; }
+      const n = ri(5, 99) * 2000; return ri(0, 1) ? { q: 'Die Hälfte von ' + g(n) + ' ist …', ans: String(n / 2), hint: 'Teile durch 2. Halbiere erst die Tausender.' } : { q: 'Das Doppelte von ' + g(n / 2) + ' ist …', ans: String(n), hint: 'Rechne mal 2.' };
+    }
+    if (t === 3) {
+      if (k === 3) { const h = ri(1, 9), z = ri(0, 9), e = ri(1, 9); return { q: h + ' H + ' + z + ' Z + ' + e + ' E = ?', ans: String(h * 100 + z * 10 + e), hint: 'H = Hunderter, Z = Zehner, E = Einer. Schreibe die Ziffern nebeneinander.' }; }
+      const ht = ri(1, 9), zt = ri(0, 9), th = ri(0, 9), h = ri(0, 9);
+      return { q: ht + ' HT + ' + zt + ' ZT + ' + th + ' T + ' + h + ' H = ?', ans: String(ht * 100000 + zt * 10000 + th * 1000 + h * 100), hint: 'HT = Hunderttausender, ZT = Zehntausender, T = Tausender, H = Hunderter.' };
+    }
+    const base = k === 3 ? ri(100, 990) : ri(10000, 990000);
+    const a = base, b = base + pk([10, 100, 1000].slice(0, k === 3 ? 2 : 3)) * pk([1, -1, 2]);
+    const big = ri(0, 1);
+    const hi = Math.max(a, b), lo = Math.min(a, b);
+    return { q: 'Welche Zahl ist ' + (big ? 'größer' : 'kleiner') + '?', choice: [g(a), g(b)], ans: g(big ? hi : lo), hint: 'Vergleiche die Ziffern von links nach rechts.' };
+  },
+  rund(k) {
+    if (ri(0, 2) < 2) {
+      const places = k === 3 ? [['Zehner', 10], ['Hunderter', 100]] : [['Hunderter', 100], ['Tausender', 1000], ['Zehntausender', 10000]];
+      const p = pk(places), n = k === 3 ? ri(101, 998) : ri(1001, 989999);
+      return { q: 'Runde ' + g(n) + ' auf ' + p[0] + '.', ans: String(rnd(n, p[1])), hint: 'Schau auf die Stelle rechts davon: 0 bis 4 abrunden, 5 bis 9 aufrunden.' };
+    }
+    if (k === 3) { const a = ri(120, 690), b = ri(110, 999 - a); return { q: 'Überschlage ' + a + ' + ' + b + '. Runde beide Zahlen auf Hunderter.', ans: String(rnd(a, 100) + rnd(b, 100)), hint: 'Erst runden: ' + a + ' ≈ ' + rnd(a, 100) + '. Dann die gerundeten Zahlen addieren.' }; }
+    if (ri(0, 1)) { const a = ri(1200, 9800), b = ri(1100, 9800); return { q: 'Überschlage ' + g(a) + ' + ' + g(b) + '. Runde beide Zahlen auf Tausender.', ans: String(rnd(a, 1000) + rnd(b, 1000)), hint: 'Erst runden: ' + g(a) + ' ≈ ' + g(rnd(a, 1000)) + '. Dann addieren.' }; }
+    const a = ri(120, 990), b = ri(2, 9); return { q: 'Überschlage ' + a + ' · ' + b + '. Runde ' + a + ' auf Hunderter.', ans: String(rnd(a, 100) * b), hint: 'Erst runden: ' + a + ' ≈ ' + rnd(a, 100) + '. Dann mal ' + b + '.' };
+  },
+  geld(k) {
+    const t = ri(0, 3);
+    if (t === 0) { const c = pk([0, 5, 10, 20, 25, 40, 50, 75, 90, 95]), x = ri(1, 29) * 100 + c; return { q: money(x) + ' € = ? ct', ans: String(x), hint: '1 € sind 100 ct. Die Euro mal 100, dann die Cent dazu.' }; }
+    if (t === 1) { const x = ri(105, 2999); return { q: x + ' ct = ? €', ans: money(x), kb: 'c', unit: '€', hint: '100 ct sind 1 €. Die letzten zwei Ziffern sind die Cent, hinter dem Komma.' }; }
+    if (t === 2) { const pay = pk([5, 10, 20, 50]), price = rnd(ri(120, pay * 100 - 30), 5); return { q: 'Du bezahlst mit ' + pay + ' €. Der Einkauf kostet ' + money(price) + ' €. Wie viel Rückgeld bekommst du?', ans: money(pay * 100 - price), kb: 'c', unit: '€', hint: 'Rechne ' + pay + ' € − ' + money(price) + ' €. Oder zähle vom Preis bis zum Schein hoch.' }; }
+    if (k === 3) { const n = ri(2, 5), p = pk([30, 45, 55, 60, 80]); return { q: n + ' Brötchen kosten je ' + money(p) + ' €. Wie viel zahlst du?', ans: money(n * p), kb: 'c', unit: '€', hint: 'Rechne ' + n + ' · ' + p + ' ct und wandle dann in € um.' }; }
+    const n = ri(2, 6), p = pk([120, 135, 150, 180, 250]), s = pk([45, 85, 95, 120]);
+    return { q: n + ' Hefte à ' + money(p) + ' € und ein Stift für ' + money(s) + ' €. Was kostet das zusammen?', ans: money(n * p + s), kb: 'c', unit: '€', hint: 'Erst ' + n + ' · ' + money(p) + ' €, dann den Stift dazu.' };
+  },
+  zeit(k) {
+    const t = ri(0, 3);
+    if (t === 0) {
+      const h = ri(1, 12), m = k === 3 ? pk([0, 15, 30, 45, 5, 10, 20, 25, 35, 40, 50, 55]) : ri(0, 59);
+      const f = (hh, mm) => ((hh - 1 + 12) % 12 + 1) + ':' + pad2(mm) + ' Uhr';
+      const set = [f(h, m)];
+      const cand = [f(h, (m + 5) % 60), f(h + 1, m), f(m % 12 === 0 ? 12 : m % 12, (h * 5) % 60), f(h - 1, m), f(h, (m + 55) % 60), f(h, (m + 30) % 60)];
+      shuf(cand).forEach((c) => { if (set.length < 4 && set.indexOf(c) < 0) set.push(c); });
+      return { q: 'Wie spät ist es?', img: clockSvg(h, m), imgH: 210, choice: shuf(set), ans: f(h, m), hint: 'Der kurze Zeiger zeigt die Stunde, der lange Zeiger die Minuten (jeder Strich = 1 Minute).' };
+    }
+    if (t === 1) {
+      const sh = ri(7, 17), sm = pk([0, 10, 15, 20, 30, 40, 45, 50]), d = ri(3, 16) * 5, em = sh * 60 + sm + d;
+      return { q: 'Der Film beginnt um ' + sh + ':' + pad2(sm) + ' Uhr und endet um ' + Math.floor(em / 60) + ':' + pad2(em % 60) + ' Uhr. Wie viele Minuten dauert er?', ans: String(d), unit: 'min', hint: 'Zähle bis zur vollen Stunde und dann weiter bis zur Endzeit.' };
+    }
+    const pool = k === 3
+      ? [['2 h = ? min', 120, 'min', '1 h = 60 min'], ['3 h = ? min', 180, 'min', '1 h = 60 min'], ['120 min = ? h', 2, 'h', '60 min = 1 h'], ['1 Tag = ? h', 24, 'h', 'Ein Tag hat 24 Stunden.'], ['1 Woche = ? Tage', 7, 'Tage', 'Eine Woche hat 7 Tage.'], ['2 h 15 min = ? min', 135, 'min', '2 h = 120 min, dazu 15 min.'], ['1 Jahr = ? Monate', 12, 'Monate', 'Ein Jahr hat 12 Monate.']]
+      : [['3 h 20 min = ? min', 200, 'min', '3 h = 180 min, dazu 20 min.'], ['¾ h = ? min', 45, 'min', '1 h = 60 min. Ein Viertel davon sind 15 min.'], ['½ Tag = ? h', 12, 'h', '1 Tag = 24 h.'], ['240 min = ? h', 4, 'h', '60 min = 1 h.'], ['2 Wochen = ? Tage', 14, 'Tage', '1 Woche = 7 Tage.'], ['4 min = ? s', 240, 's', '1 min = 60 s.'], ['1 h 40 min = ? min', 100, 'min', '1 h = 60 min, dazu 40 min.']];
+    const it = pk(pool); return { q: it[0], ans: String(it[1]), unit: it[2], hint: it[3] };
+  },
+  gross(k) {
+    if (ri(0, 3) === 0) {
+      const pool = [['Ein Bleistift ist 15 ___ lang.', 'cm', ['cm', 'mm', 'm', 'km']], ['Eine Tür ist 2 ___ hoch.', 'm', ['cm', 'mm', 'm', 'km']], ['Der Schulweg ist 2 ___ lang.', 'km', ['cm', 'm', 'km', 'mm']], ['Ein Apfel wiegt 150 ___.', 'g', ['g', 'kg', 't', 'mm']], ['Ein Elefant wiegt etwa 4 ___.', 't', ['g', 'kg', 't', 'mg']], ['Eine Flasche Saft hat 1 ___ Inhalt.', 'l', ['ml', 'l', 'g', 'cm']], ['Ein Teelöffel fasst 5 ___.', 'ml', ['ml', 'l', 'kg', 'm']], ['Eine Schulstunde dauert 45 ___.', 'min', ['s', 'min', 'h', 'Tage']]];
+      const it = pk(pool); return { q: it[0], choice: shuf(it[2]), ans: it[1], hint: 'Stell dir vor, wie groß oder schwer es wirklich ist.' };
+    }
+    const a = ri(2, 9);
+    const p3 = [['m', 'cm', 100, a, 'Merke: 1 m = 100 cm.'], ['cm', 'mm', 10, ri(2, 40), 'Merke: 1 cm = 10 mm.'], ['kg', 'g', 1000, a, 'Merke: 1 kg = 1 000 g.'], ['l', 'ml', 1000, a, 'Merke: 1 l = 1 000 ml.']];
+    if (k === 3) {
+      if (ri(0, 3) === 0) { const m = ri(1, 9), c = pk([20, 25, 40, 50, 75]); return { q: m + ' m ' + c + ' cm = ? cm', ans: String(m * 100 + c), unit: 'cm', hint: '1 m = 100 cm. Rechne ' + m + ' m um und addiere die cm.' }; }
+      const it = pk(p3); return { q: it[3] + ' ' + it[0] + ' = ? ' + it[1], ans: String(it[3] * it[2]), unit: it[1], hint: it[4] };
+    }
+    const t = ri(0, 5);
+    if (t === 0) { const km = ri(1, 9), m = ri(1, 9) * 100; return { q: km + ' km ' + m + ' m = ? m', ans: String(km * 1000 + m), unit: 'm', hint: '1 km = 1 000 m.' }; }
+    if (t === 1) { const x = ri(1, 9) * 100 + pk([0, 500, 250, 750]); return { q: g(x) + ' g = ? kg', ans: String(x / 1000).replace('.', ','), kb: 'c', unit: 'kg', hint: '1 000 g = 1 kg. Verschiebe das Komma um drei Stellen nach links.' }; }
+    if (t === 2) { const x = ri(11, 98) * 100; return { q: g(x) + ' m = ? km', ans: String(x / 1000).replace('.', ','), kb: 'c', unit: 'km', hint: '1 000 m = 1 km.' }; }
+    if (t === 3) { const x = pk([250, 500, 750, 125]); return { q: x + ' ml = ? l', ans: String(x / 1000).replace('.', ','), kb: 'c', unit: 'l', hint: '1 000 ml = 1 l. Verschiebe das Komma um drei Stellen.' }; }
+    if (t === 4) { const x = ri(2, 9); return { q: x + ' t = ? kg', ans: String(x * 1000), unit: 'kg', hint: '1 t = 1 000 kg.' }; }
+    const x = ri(2, 9), y = pk([250, 500, 750]); return { q: x + ' kg ' + y + ' g = ? g', ans: String(x * 1000 + y), unit: 'g', hint: '1 kg = 1 000 g.' };
+  },
+  geom(k) {
+    const a = ri(4, 12), b = ri(3, a - 1);
+    if (k === 3) {
+      const t = ri(0, 2);
+      if (t === 0) return { q: 'Wie groß ist der Umfang des Rechtecks?', img: rectSvg(a, b, 'cm', false), imgH: 150, ans: String(2 * (a + b)), unit: 'cm', hint: 'Umfang = alle vier Seiten zusammen: ' + a + ' + ' + b + ' + ' + a + ' + ' + b + '.' };
+      if (t === 1) return { q: 'Wie groß ist der Umfang des Quadrats?', img: rectSvg(a, a, 'cm', true), imgH: 150, ans: String(4 * a), unit: 'cm', hint: 'Ein Quadrat hat vier gleich lange Seiten: 4 · ' + a + '.' };
+      const s = ri(3, 12); return { q: 'Ein Quadrat hat den Umfang ' + 4 * s + ' cm. Wie lang ist eine Seite?', ans: String(s), unit: 'cm', hint: 'Teile den Umfang durch 4.' };
+    }
+    const t = ri(0, 4);
+    if (t === 0) return { q: 'Wie groß ist die Fläche des Rechtecks?', img: rectSvg(a, b, 'cm', false), imgH: 150, ans: String(a * b), unit: 'cm²', hint: 'Fläche = Länge mal Breite: ' + a + ' · ' + b + '.' };
+    if (t === 1) return { q: 'Wie groß ist der Umfang des Rechtecks?', img: rectSvg(a, b, 'cm', false), imgH: 150, ans: String(2 * (a + b)), unit: 'cm', hint: 'Umfang = 2 · (Länge + Breite).' };
+    if (t === 2) { const s = ri(3, 12); return { q: 'Ein Quadrat hat die Seitenlänge ' + s + ' m. Wie groß ist die Fläche?', ans: String(s * s), unit: 'm²', hint: 'Fläche = Seite mal Seite: ' + s + ' · ' + s + '.' }; }
+    if (t === 3) return { q: 'Ein Rechteck ist ' + a * b + ' cm² groß und ' + a + ' cm lang. Wie breit ist es?', ans: String(b), unit: 'cm', hint: 'Rechne die Umkehraufgabe: ' + a * b + ' : ' + a + '.' };
+    return { q: 'Ein Rechteck ist ' + a + ' m lang und ' + b + ' m breit. Wie groß ist die Fläche?', ans: String(a * b), unit: 'm²', hint: 'Fläche = Länge mal Breite.' };
+  },
+  form(k) {
+    const P = [
+      ['Wie viele Spiegelachsen hat ein Quadrat?', '4', ['1', '2', '4', '8'], 3],
+      ['Wie viele Spiegelachsen hat ein Rechteck (kein Quadrat)?', '2', ['1', '2', '3', '4'], 3],
+      ['Wie viele Spiegelachsen hat ein gleichseitiges Dreieck?', '3', ['1', '2', '3', '6'], 3],
+      ['Wie viele Spiegelachsen hat der Buchstabe H?', '2', ['0', '1', '2', '4'], 3],
+      ['Wie viele Ecken hat ein Würfel?', '8', ['6', '8', '10', '12'], 3],
+      ['Wie viele Kanten hat ein Würfel?', '12', ['6', '8', '12', '14'], 3],
+      ['Wie viele Flächen hat ein Würfel?', '6', ['4', '6', '8', '12'], 3],
+      ['Wie viele Ecken hat ein Quader?', '8', ['4', '6', '8', '12'], 3],
+      ['Wie viele Ecken hat ein Sechseck?', '6', ['4', '5', '6', '8'], 3],
+      ['Wie viele Seiten hat ein Achteck?', '8', ['6', '7', '8', '10'], 4],
+      ['Welche Figur hat vier gleich lange Seiten und vier rechte Winkel?', 'Quadrat', ['Quadrat', 'Rechteck', 'Raute', 'Dreieck'], 3],
+      ['Welche Figur hat vier rechte Winkel, aber zwei lange und zwei kurze Seiten?', 'Rechteck', ['Quadrat', 'Rechteck', 'Kreis', 'Dreieck'], 3],
+      ['Aus 6 gleichen Quadraten entsteht ein …', 'Würfel', ['Würfel', 'Zylinder', 'Pyramide', 'Kugel'], 3],
+      ['Wie viele Ecken hat eine Pyramide mit quadratischer Grundfläche?', '5', ['4', '5', '6', '8'], 4],
+      ['Wie viele Kanten hat eine Pyramide mit quadratischer Grundfläche?', '8', ['5', '6', '8', '10'], 4],
+      ['Wie viele Flächen hat ein Zylinder?', '3', ['2', '3', '4', '6'], 4],
+      ['Zwei Linien kreuzen sich im rechten Winkel. Sie sind …', 'senkrecht', ['parallel', 'senkrecht', 'schief', 'gebogen'], 4],
+      ['Linien, die überall gleich weit auseinander sind, heißen …', 'parallel', ['parallel', 'senkrecht', 'schief', 'gebogen'], 4],
+      ['Zwei Paar parallele Seiten, aber keine rechten Winkel: Das ist ein …', 'Parallelogramm', ['Quadrat', 'Rechteck', 'Parallelogramm', 'Kreis'], 4]
+    ];
+    const it = pk(P.filter((x) => x[3] <= k));
+    return { q: it[0], choice: shuf(it[2]), ans: it[1], hint: 'Stell dir die Figur oder den Körper genau vor. Du kannst auch einen im Zimmer suchen.' };
+  },
+  sach(k) {
+    const T3 = [
+      () => { const a = ri(40, 70), b = ri(8, 25), c = ri(5, 30); return { q: 'Im Bus sitzen ' + a + ' Kinder. An der Haltestelle steigen ' + b + ' aus und ' + c + ' ein. Wie viele Kinder sind jetzt im Bus?', ans: String(a - b + c), hint: 'Erst die Kinder abziehen, die aussteigen, dann die einsteigenden dazu.' }; },
+      () => { const n = ri(3, 6), p = pk([80, 120, 150, 200]); return { q: n + ' Kinder kaufen je ein Eis für ' + money(p) + ' €. Wie viel zahlen sie zusammen?', ans: money(n * p), kb: 'c', unit: '€', hint: 'Rechne ' + n + ' · ' + money(p) + ' €.' }; },
+      () => { const a = pk([6, 10, 12]), n = ri(3, 9); return { q: 'In einer Packung sind ' + a + ' Eier. Wie viele Eier sind in ' + n + ' Packungen?', ans: String(a * n), hint: 'Mal-Aufgabe: ' + n + ' · ' + a + '.' }; },
+      () => { const d = ri(3, 6), n = ri(4, 8), r = ri(1, d - 1), kids = n * d + r; return { q: kids + ' Kinder sitzen auf Bänken mit je ' + d + ' Plätzen. Wie viele Bänke werden gebraucht?', ans: String(n + 1), hint: 'Teile mit Rest. Für den Rest braucht ihr noch eine Bank.' }; },
+      () => { const v = pk([60, 80, 90, 100, 120]), h = ri(2, 5); return { q: 'Ein Zug fährt ' + v + ' km in einer Stunde. Wie weit fährt er in ' + h + ' Stunden?', ans: String(v * h), unit: 'km', hint: 'Rechne ' + h + ' · ' + v + '.' }; },
+      () => { const a = ri(12, 40), b = ri(5, 20); return { q: 'Elli hat ' + a + ' Sticker. Ihre Freundin hat ' + b + ' mehr. Wie viele Sticker haben beide zusammen?', ans: String(a + a + b), hint: 'Erst ausrechnen, wie viele die Freundin hat. Dann beide zusammen.' }; }
+    ];
+    const T4 = [
+      () => { const a = pk([12000, 25000, 40000, 50000]), b = ri(2000, 11000) + ri(0, 9) * 10; return { q: 'Ein Stadion hat ' + g(a) + ' Plätze. ' + g(b) + ' Plätze sind besetzt. Wie viele sind noch frei?', ans: String(a - b), hint: 'Das ist eine Minus-Aufgabe: ' + g(a) + ' − ' + g(b) + '.' }; },
+      () => { const d = ri(3, 7), s = ri(120, 380); return { q: 'Familie Meyer fährt ' + d + ' Tage lang jeden Tag ' + s + ' km. Wie viele Kilometer sind das insgesamt?', ans: String(d * s), unit: 'km', hint: 'Rechne ' + d + ' · ' + s + '.' }; },
+      () => { const n = ri(3, 9), e = ri(12, 95); return { q: n * e + ' Bonbons werden gerecht auf ' + n + ' Kinder verteilt. Wie viele Bonbons bekommt jedes Kind?', ans: String(e), hint: 'Teile ' + n * e + ' durch ' + n + '.' }; },
+      () => { const n = ri(2, 4), p = pk([149, 199, 249, 275]), pay = n * p <= 1000 ? 10 : 20; return { q: 'Papa kauft ' + n + ' Packungen Müsli für je ' + money(p) + ' € und bezahlt mit ' + pay + ' €. Wie viel Rückgeld bekommt er?', ans: money(pay * 100 - n * p), kb: 'c', unit: '€', hint: 'Erst den Preis für alle Packungen, dann das Rückgeld.' }; },
+      () => { const a = ri(120, 480), n = ri(4, 9); return { q: 'Ein Bagger bringt bei jeder Fahrt ' + a + ' kg Sand. Wie viele kg sind es nach ' + n + ' Fahrten?', ans: String(a * n), unit: 'kg', hint: 'Rechne ' + n + ' · ' + a + '.' }; },
+      () => { const a = ri(12, 60) * 100, b = ri(12, 60) * 100; return { q: 'Am Samstag kamen ' + g(a) + ' Besucher in den Zoo, am Sonntag ' + g(b) + '. Wie viele Besucher waren es an dem Wochenende?', ans: String(a + b), hint: 'Plus-Aufgabe. Rechne erst mit den Hundertern.' }; }
+    ];
+    const t = pk(k === 3 ? T3 : T3.concat(T4, T4))();
+    t.hint = t.hint + ' Unterstreiche, was gesucht ist.';
+    return t;
+  },
+  daten(k) {
+    const sets = [['Pizza', 'Nudeln', 'Burger', 'Salat'], ['Hund', 'Katze', 'Hase', 'Fisch'], ['Rot', 'Blau', 'Grün', 'Gelb'], ['Fußball', 'Turnen', 'Reiten', 'Tanzen']];
+    const t = ri(0, 9);
+    if (t < 6) {
+      const cats = pk(sets), vals = shuf([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).slice(0, 4), i = ri(0, 3), img = chartSvg(cats, vals);
+      const base = { img: img, imgH: 220, kind: 'Diagramm lesen' };
+      if (t < 3) return Object.assign(base, { q: 'Wie viele Kinder mögen ' + cats[i] + '?', ans: String(vals[i]), hint: 'Geh vom oberen Ende des Balkens nach links zur Zahl.' });
+      if (t === 3) { const mx = vals.indexOf(Math.max.apply(null, vals)); return Object.assign(base, { q: 'Was mögen die meisten Kinder?', choice: cats.slice(), ans: cats[mx], hint: 'Suche den höchsten Balken.' }); }
+      if (t === 4) { const j = (i + 1) % 4, hi = vals[i] > vals[j] ? i : j, lo = hi === i ? j : i; return Object.assign(base, { q: 'Wie viele Kinder mehr mögen ' + cats[hi] + ' als ' + cats[lo] + '?', ans: String(vals[hi] - vals[lo]), hint: 'Lies beide Balken ab und rechne den Unterschied.' }); }
+      return Object.assign(base, { q: 'Wie viele Kinder wurden insgesamt gefragt?', ans: String(vals[0] + vals[1] + vals[2] + vals[3]), hint: 'Lies alle vier Balken ab und rechne zusammen.' });
+    }
+    if (t < 9 || k === 3) {
+      const P = [['Du würfelst mit einem normalen Würfel. Eine 7 zu würfeln ist …', 'unmöglich'], ['Du würfelst mit einem normalen Würfel. Eine Zahl von 1 bis 6 zu würfeln ist …', 'sicher'], ['Du würfelst mit einem normalen Würfel. Eine 6 zu würfeln ist …', 'möglich'], ['In der Tüte sind nur rote Kugeln. Du ziehst eine blaue. Das ist …', 'unmöglich'], ['In der Tüte sind nur rote Kugeln. Du ziehst eine rote. Das ist …', 'sicher'], ['Du wirfst eine Münze. Sie zeigt Zahl. Das ist …', 'möglich'], ['Morgen scheint die Sonne den ganzen Tag. Das ist …', 'möglich']];
+      const it = pk(P); return { q: it[0], choice: ['sicher', 'möglich', 'unmöglich'], ans: it[1], kind: 'Zufall', hint: 'Sicher passiert es immer, unmöglich nie. Dazwischen ist es möglich.' };
+    }
+    const a = ri(2, 4), b = ri(2, 4), c = pk([2, 3]);
+    return { q: 'Du hast ' + a + ' T-Shirts und ' + b + ' Hosen. Wie viele verschiedene Outfits kannst du anziehen?', ans: String(a * b), kind: 'Kombinieren', hint: 'Jedes T-Shirt passt zu jeder Hose. Rechne ' + a + ' · ' + b + '.' };
+  }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.topics = [
+      { key: 'mal', ic: '✖️', title: 'Einmaleins', ks: [3, 4], sub: { 3: 'Malnehmen & Teilen', 4: 'auch mit Zehnern' }, grp: 0 },
+      { key: 'plus', ic: '➕', title: 'Plus & Minus', ks: [3, 4], sub: { 3: 'bis 1 000', 4: 'bis 1 Million' }, grp: 0 },
+      { key: 'schradd', ic: '📝', title: 'Schriftlich + −', ks: [3, 4], sub: { 3: 'untereinander', 4: 'große Zahlen' }, grp: 0 },
+      { key: 'schrmal', ic: '🧮', title: 'Schriftlich mal', ks: [4], sub: { 4: 'mehrstellig' }, grp: 0 },
+      { key: 'schrdiv', ic: '➗', title: 'Schriftlich geteilt', ks: [4], sub: { 4: 'auch mit Rest' }, grp: 0 },
+      { key: 'rest', ic: '🍕', title: 'Teilen mit Rest', ks: [3, 4], sub: { 3: 'Rest finden', 4: 'größere Zahlen' }, grp: 0 },
+      { key: 'zahl', ic: '🔢', title: 'Zahlen-Detektiv', ks: [3, 4], sub: { 3: 'bis 1 000', 4: 'bis 1 Million' }, grp: 1 },
+      { key: 'rund', ic: '🎯', title: 'Runden & Schätzen', ks: [3, 4], sub: { 3: 'Zehner, Hunderter', 4: 'bis Zehntausender' }, grp: 1 },
+      { key: 'geld', ic: '💶', title: 'Geld', ks: [3, 4], sub: { 3: 'Euro & Cent', 4: 'Einkaufen' }, grp: 2 },
+      { key: 'zeit', ic: '🕒', title: 'Uhr & Zeit', ks: [3, 4], sub: { 3: 'Uhr lesen', 4: 'Zeitspannen' }, grp: 2 },
+      { key: 'gross', ic: '📏', title: 'Messen', ks: [3, 4], sub: { 3: 'm, cm, kg, g, l', 4: 'auch km, t, Komma' }, grp: 2 },
+      { key: 'geom', ic: '📐', title: 'Umfang & Fläche', ks: [3, 4], sub: { 3: 'Umfang', 4: 'Fläche in cm²' }, grp: 3 },
+      { key: 'form', ic: '🔷', title: 'Formen & Körper', ks: [3, 4], sub: { 3: 'Ecken, Spiegeln', 4: 'Körper, parallel' }, grp: 3 },
+      { key: 'daten', ic: '📊', title: 'Daten & Zufall', ks: [3, 4], sub: { 3: 'Diagramme lesen', 4: 'auch Kombinieren' }, grp: 3 },
+      { key: 'sach', ic: '📖', title: 'Sachaufgaben', ks: [3, 4], sub: { 3: 'Rechengeschichten', 4: 'mehrere Schritte' }, grp: 3 }
+    ];
+    this.grps = [
+      { title: 'Rechen-Vulkan', ic: '🌋', bg: '#FFE9D6', bd: '#F2B98A', sub: 'Kopfrechnen & schriftlich' },
+      { title: 'Zahlen-Insel', ic: '🏝️', bg: '#E8F4E1', bd: '#A9D49A', sub: 'Zahlenraum & Runden' },
+      { title: 'Größen-Hafen', ic: '⚓', bg: '#E3F2FB', bd: '#9CC6FF', sub: 'Geld, Zeit, Messen' },
+      { title: 'Form-Wald', ic: '🌲', bg: '#EFE8F8', bd: '#C4A9E8', sub: 'Formen, Daten, Sachaufgaben' }
+    ];
+    this.prog = this.load();
+    this.state = { screen: 'hub', klasse: this.prog.k || 3, topic: '', tasks: [], qi: 0, input: '', tries: 0, answered: false, msg: '', ok: null, results: [], wrongs: [], err: false, doneNote: '' };
+  }
+  load() {
+    try { const o = JSON.parse(window.localStorage.getItem('wsi.mathe.v1') || 'null'); if (o && o.s) return o; } catch (e) {}
+    return { k: 3, s: {} };
+  }
+  save() { try { window.localStorage.setItem('wsi.mathe.v1', JSON.stringify(this.prog)); } catch (e) {} }
+  setK(k) { this.prog.k = k; this.save(); this.setState({ klasse: k }); }
+  tp(key) { return this.topics.filter((t) => t.key === key)[0]; }
+  start(key) {
+    const k = this.state.klasse, seen = {}, tasks = [];
+    let guard = 0;
+    while (tasks.length < 8 && guard++ < 80) {
+      const t = GEN[key](k);
+      if (seen[t.q + (t.img || '').length]) continue;
+      seen[t.q + (t.img || '').length] = 1;
+      t.kb = t.kb || 'n'; t.unit = t.unit || ''; t.mode = t.choice ? 'choice' : 'num';
+      tasks.push(t);
+    }
+    this.setState({ screen: 'play', topic: key, tasks: tasks, qi: 0, input: '', tries: 0, answered: false, msg: '', ok: null, results: [], wrongs: [], err: false });
+  }
+  press(key) {
+    const s = this.state, t = s.tasks[s.qi];
+    if (!t || s.answered || t.mode !== 'num') return;
+    if (key === 'OK') { this.check(); return; }
+    let v = s.input;
+    if (key === 'DEL') v = v.slice(0, -1);
+    else if (key === ',') { if (t.kb === 'c' && v && v.indexOf(',') < 0 && v.indexOf('R') < 0) v += ','; }
+    else if (key === 'R') { if (t.kb === 'r' && v && v.indexOf('R') < 0) v += 'R'; }
+    else if (v.length < 9) { if (v !== '0' || t.kb === 'c') v += key; else v = key; }
+    this.setState({ input: v, err: false, msg: s.msg && s.tries === 0 ? '' : s.msg });
+  }
+  isRight(t, v) {
+    if (t.kb === 'r') return v === t.ans;
+    const a = parseFloat(v.replace(',', '.')), b = parseFloat(t.ans.replace(',', '.'));
+    return !isNaN(a) && Math.abs(a - b) < 1e-9;
+  }
+  show(t) { return t.ans.replace('R', ' Rest ') + (t.unit ? ' ' + t.unit : ''); }
+  check() {
+    const s = this.state, t = s.tasks[s.qi];
+    if (!s.input || /[,R]$/.test(s.input)) { this.setState({ msg: t.kb === 'r' ? 'Tippe die Zahl, dann Rest und den Rest.' : 'Gib erst eine Zahl ein.', err: false }); return; }
+    if (this.isRight(t, s.input)) { this.good(); return; }
+    this.bad(t, s.input);
+  }
+  good() {
+    const s = this.state, first = s.tries === 0;
+    const praise = first ? pk(['Richtig!', 'Super!', 'Genau!', 'Stark gerechnet!', 'Prima!']) : 'Jetzt stimmt es.';
+    this.setState({ answered: true, ok: true, err: false, msg: praise, results: s.results.concat([first ? 1 : 0]) });
+  }
+  bad(t, v) {
+    const s = this.state;
+    if (s.tries >= 1) { this.setState({ answered: true, ok: false, err: true, msg: 'Nicht ganz. Richtig ist: ' + this.show(t), results: s.results.concat([0]), tries: s.tries + 1 }); return; }
+    let extra = '';
+    if (t.mode === 'num') {
+      if (t.kb === 'r' && v.indexOf('R') < 0) extra = 'Vergiss den Rest nicht. ';
+      else { const a = parseFloat(v.replace(',', '.').split('R')[0]), b = parseFloat(t.ans.replace(',', '.').split('R')[0]); if (!isNaN(a) && !isNaN(b) && a !== b) extra = a > b ? 'Deine Zahl ist zu groß. ' : 'Deine Zahl ist zu klein. '; }
+    }
+    this.setState({ tries: s.tries + 1, err: true, msg: 'Noch nicht ganz. ' + extra + 'Tipp: ' + t.hint });
+  }
+  pick(text) {
+    const s = this.state, t = s.tasks[s.qi];
+    if (s.answered || s.wrongs.indexOf(text) >= 0) return;
+    if (text === t.ans) { this.good(); return; }
+    if (s.tries >= 1) { this.setState({ answered: true, ok: false, wrongs: s.wrongs.concat([text]), msg: 'Nicht ganz. Richtig ist: ' + t.ans, results: s.results.concat([0]), tries: s.tries + 1 }); return; }
+    this.setState({ tries: s.tries + 1, wrongs: s.wrongs.concat([text]), msg: 'Noch nicht ganz. Tipp: ' + t.hint });
+  }
+  next() {
+    const s = this.state;
+    if (s.qi + 1 >= s.tasks.length) { this.finish(); return; }
+    this.setState({ qi: s.qi + 1, input: '', tries: 0, answered: false, msg: '', ok: null, wrongs: [], err: false });
+  }
+  finish() {
+    const s = this.state, right = s.results.reduce((a, b) => a + b, 0), stars = right >= 8 ? 3 : (right >= 7 ? 2 : (right >= 5 ? 1 : 0));
+    const key = s.klasse + '.' + s.topic, old = this.prog.s[key] || 0;
+    let note = '';
+    if (stars > old) { this.prog.s[key] = stars; this.save(); note = old ? 'Neuer Rekord!' : 'Dein erster Stern in diesem Thema!'; }
+    else if (stars === 0) note = 'Mit 5 richtigen bekommst du den ersten Stern.';
+    this.setState({ screen: 'done', doneNote: note });
+  }
+  stars(n) { return (n >= 1 ? '★' : '☆') + (n >= 2 ? '★' : '☆') + (n >= 3 ? '★' : '☆'); }
+  renderVals() {
+    const s = this.state, k = s.klasse, self = this;
+    const v = { isHub: s.screen === 'hub', isPlay: s.screen === 'play', isDone: s.screen === 'done' };
+    v.c3 = k === 3 ? 'btn-on' : 'btn-soft'; v.c4 = k === 4 ? 'btn-on' : 'btn-soft';
+    v.setK3 = () => this.setK(3); v.setK4 = () => this.setK(4);
+    let tot = 0; Object.keys(this.prog.s).forEach((x) => { tot += this.prog.s[x]; });
+    v.starTotal = tot;
+    v.groups = this.grps.map((gr, gi) => ({
+      title: gr.title, ic: gr.ic, bg: gr.bg, bd: gr.bd, sub: gr.sub,
+      cards: this.topics.filter((t) => t.grp === gi && t.ks.indexOf(k) >= 0).map((t) => ({ ic: t.ic, title: t.title, sub: t.sub[k], stars: self.stars(self.prog.s[k + '.' + t.key] || 0), open: () => self.start(t.key) }))
+    }));
+    v.toHub = () => this.setState({ screen: 'hub' });
+    v.again = () => this.start(s.topic);
+    v.klasse = k;
+    const tp = s.topic ? this.tp(s.topic) : null;
+    v.topicIc = tp ? tp.ic : ''; v.topicTitle = tp ? tp.title : '';
+    const t = s.tasks[s.qi] || { q: '', mode: 'num', kb: 'n', unit: '', ans: '' };
+    v.num = s.qi + 1; v.kind = t.kind || (tp ? tp.title : ''); v.q = t.q;
+    const L = t.q.length; v.qSize = L <= 24 ? '56px' : (L <= 50 ? '42px' : (L <= 100 ? '30px' : '25px'));
+    v.hasImg = !!t.img; v.img = t.img || ''; v.imgH = t.imgH || 150;
+    v.isNum = t.mode === 'num'; v.isChoice = t.mode === 'choice';
+    v.unit = t.unit;
+    const shown = (s.input || '').replace(/\d+/g, (m) => grp(m)).replace('R', ' Rest ');
+    v.shown = shown || ' ';
+    v.boxBd = s.ok === true ? '#0C7C74' : (s.err ? '#E5484D' : '#C9DDE4');
+    v.boxBg = s.ok === true ? '#E6F5F2' : (s.err ? '#FDE7E5' : '#FAFAF5');
+    v.msg = s.msg; v.msgColor = s.ok === true ? '#075A54' : (s.ok === false ? '#9B1C1C' : (s.tries ? '#B34700' : '#3E5A6E'));
+    v.answered = s.answered; v.nextLabel = s.qi + 1 >= s.tasks.length ? 'Fertig' : 'Weiter';
+    v.dots = s.tasks.map((x, i) => {
+      const done = i < s.results.length;
+      return { bg: done ? (s.results[i] ? '#4CAF50' : '#F08A24') : (i === s.qi ? '#FFC23D' : '#fff'), bd: done ? (s.results[i] ? '#3A8A3E' : '#C46A12') : '#C9DDE4' };
+    });
+    v.opts = (t.choice || []).map((o) => {
+      const wrong = s.wrongs.indexOf(o) >= 0, rev = s.answered && o === t.ans;
+      return { t: o, cls: rev ? 'btn-good' : (wrong ? 'btn-red' : 'btn-soft'), pick: () => self.pick(o) };
+    });
+    const key = (l, press, bg, fg, edge, size) => ({ l: l, press: press, bg: bg, fg: fg, edge: edge, size: size || '36px' });
+    const dig = (d) => key(d, () => self.press(d), '#fff', '#10304A', '#D9C79A');
+    const extra = t.kb === 'c' ? key(',', () => self.press(','), '#FFF4D6', '#10304A', '#D9A93A') : (t.kb === 'r' ? key('Rest', () => self.press('R'), '#FFF4D6', '#10304A', '#D9A93A', '24px') : key('', () => {}, 'transparent', '#10304A', 'transparent'));
+    v.padRows = [
+      { keys: [dig('7'), dig('8'), dig('9')] }, { keys: [dig('4'), dig('5'), dig('6')] }, { keys: [dig('1'), dig('2'), dig('3')] },
+      { keys: [extra, dig('0'), key('⌫', () => self.press('DEL'), '#FDE7E5', '#9B1C1C', '#E5A3A3', '32px')] },
+      { keys: [key('Prüfen', () => self.press('OK'), '#0C7C74', '#fff', '#075A54', '28px')] }
+    ];
+    const right = s.results.reduce((a, b) => a + b, 0);
+    v.right = right;
+    const st = right >= 8 ? 3 : (right >= 7 ? 2 : (right >= 5 ? 1 : 0));
+    v.doneStars = this.stars(st);
+    v.doneTitle = ['Üb weiter – du schaffst das!', 'Gut gemacht!', 'Stark gerechnet!', 'Mathe-Meister!'][st];
+    v.doneNote = s.doneNote; v.next = () => this.next();
+    return v;
+  }
+}
+</script>
+</body>
+</html>

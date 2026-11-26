@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# version 165a8a1f2cad79e4ad51094671f3d347
+# version 9c07908f2896f46e8cd9e198ff4a28d1
 CACHE:
 index.html
 EchoHoehle.html
@@ -9,6 +9,7 @@ KoerperEnglisch.html
 Lernwoche.html
 Logbuch.html
 Main.html
+Mathe.html
 Sammelbuch.html
 Start.html
 Vokabeltrainer.html
@@ -43,6 +44,7 @@ js/KoerperEnglisch.js
 js/Lernwoche.js
 js/Logbuch.js
 js/Main.js
+js/Mathe.js
 js/Sammelbuch.js
 js/Start.js
 js/Vokabeltrainer.js
